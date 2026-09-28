@@ -1,0 +1,11 @@
+export * from './waterData';
+export { useModalScrollLock } from './useModalScrollLock';
+export { WaterCoverScreen } from './WaterCoverScreen';
+export { HydrologicalCycleScreen } from './HydrologicalCycleScreen';
+export { WaterSourcesScreen } from './WaterSourcesScreen';
+export { GlobalWaterScreen } from './GlobalWaterScreen';
+export { RiversIndiaScreen } from './RiversIndiaScreen';
+export { WaterUsesScreen } from './WaterUsesScreen';
+export { WaterConservationScreen } from './WaterConservationScreen';
+export { WaterCurriculumChapters } from './WaterCurriculumChapters';
+export { WaterSummaryScreen } from './WaterSummaryScreen';
