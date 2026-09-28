@@ -1,0 +1,157 @@
+/* Responsive layouts for the dense interactive figures. Keep diagrams legible
+   and operable on narrow screens rather than shrinking them into columns. */
+.range-line input:focus-visible,
+.mini-range input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+.forest-slider-scene:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+@media (max-width: 920px) {
+  .earth-cutaway-layout,
+  .water-globe-layout,
+  .india-map-layout,
+  .India-map-layout,
+  .linking-layout,
+  .ground-region-layout,
+  .air-composition-layout,
+  .aqi-layout,
+  .body-map-layout,
+  .equipment-layout,
+  .value-wheel-layout,
+  .climate-globe,
+  .eia-process-layout,
+  .report-layout,
+  .benefits-split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+
+  .earth-cutaway { width: min(100%, 260px); }
+  .land-cover-layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .earth-fact-panel,
+  .aqi-category,
+  .value-detail,
+  .climate-globe-read,
+  .equipment-cutaway,
+  .human-figure,
+  .india-map-frame,
+  .region-map,
+  .link-map,
+  .contribution-chart {
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding: 12px 0 0;
+  }
+
+  .earth-fact-panel { min-height: 0; }
+  .earth-fact-panel p { min-height: 0; }
+  .water-sphere { width: 145px; height: 145px; }
+  .water-sphere.scale-fresh { width: 112px; height: 112px; }
+  .water-sphere.scale-access { width: 72px; height: 72px; }
+  .india-map-frame,
+  .link-map,
+  .region-map { height: 205px; }
+  .india-map { height: 190px; max-width: 100%; }
+  .link-map .india-map,
+  .region-map .india-map { height: 190px; }
+  .human-figure { height: 220px; }
+  .human-figure svg { height: 205px; max-width: 100%; }
+  .equipment-cutaway { height: auto; min-height: 165px; padding: 31px 0 8px; }
+  .value-wheel { width: min(190px, 72vw); height: min(190px, 72vw); }
+  .value-detail { min-height: 0; }
+  .value-detail p { min-height: 0; }
+  .climate-globe-sphere { width: min(175px, 66vw); height: min(175px, 66vw); }
+  .climate-globe-read { min-height: 0; }
+  .eia-phase-detail { min-height: 0; }
+  .benefits-orbit { margin: 8px auto; }
+}
+
+@media (max-width: 700px) {
+  .chapter-visual-shell { padding: 13px 12px 11px; }
+  .interactive-tag { margin-top: 12px; }
+  .air-donut { width: 137px; height: 137px; }
+  .air-donut::before { inset: 18px; }
+  .land-donut .donut { width: 132px; height: 132px; }
+  .land-donut .donut::after { inset: 16px; }
+  .source-card-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .basin-selector { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .basin-transfer-scene { grid-template-columns: minmax(0, 82px) minmax(24px, 1fr) minmax(0, 82px); }
+  .basin-pool { width: 78px; height: 78px; }
+  .damage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .damage-grid button { min-height: 102px; }
+  .conservation-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .driver-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .effect-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .climate-indicator-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .naaqs-foot { flex-direction: column; }
+  .naaqs-foot p { max-width: none; text-align: left; }
+  .scale-stepper,
+  .recharge-selector,
+  .benefit-toggle { flex-wrap: wrap; }
+  .naaqs-table { min-width: 410px; }
+  .pollutant-pills button { min-height: 30px; }
+  .classifier-tabs button,
+  .segmented-control button,
+  .scale-stepper button,
+  .device-picker button,
+  .biome-selector button,
+  .cycle-controls button,
+  .cycle-tabs button,
+  .landform-picker button,
+  .region-switch button,
+  .recharge-selector button,
+  .contamination-toggle button,
+  .benefit-toggle button,
+  .report-mode button,
+  .layer-selector button,
+  .checklist-visual button,
+  .strategy-toggles button,
+  .timeline-rail button,
+  .usage-row,
+  .region-selector button,
+  .management-list button,
+  .air-gases button,
+  .smoke-methods button,
+  .scale-selector button,
+  .threat-toggle-grid button,
+  .component-switch button,
+  .effect-selector button,
+  .climate-indicator-grid button,
+  .health-flow-col button,
+  .eia-journey button,
+  .eia-history-line button,
+  .eia-phase-list button,
+  .phase-navigation button,
+  .branch-decision,
+  .report-tabs button,
+  .report-crosslink { min-height: 32px; }
+  .source-hotspot { width: 32px; height: 32px; }
+  .range-line { min-height: 34px; }
+  .range-line input { height: 34px; background-size: 100% 2px; background-repeat: no-repeat; background-position: center; touch-action: pan-y; }
+  .range-line input::-webkit-slider-runnable-track { height: 2px; background: transparent; }
+  .range-line input::-moz-range-track { height: 2px; background: transparent; }
+  .range-line input::-webkit-slider-thumb { width: 14px; height: 14px; }
+  .mini-range input { min-height: 30px; touch-action: pan-y; }
+}
+
+@media (max-width: 420px) {
+  .air-donut { width: 124px; height: 124px; }
+  .air-donut::before { inset: 16px; }
+  .basin-transfer-scene { grid-template-columns: minmax(0, 72px) minmax(18px, 1fr) minmax(0, 72px); }
+  .basin-pool { width: 69px; height: 69px; }
+  .basin-pool strong { font-size: 12px; }
+  .basin-pool > span { font-size: 4px; }
+  .transfer-actions { align-items: flex-start; flex-direction: column; }
+  .economic-metric-strip { gap: 9px; }
+  .economic-metric-strip strong { font-size: 23px; }
+  .reaction-equation { flex-wrap: wrap; justify-content: center; }
+  .health-flow { grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); gap: 5px; }
+  .health-flow-col button { padding: 7px 5px; }
+  .eia-journey { gap: 3px; }
+  .eia-journey button { font-size: 5px; }
+  .report-page { padding: 9px; }
+}

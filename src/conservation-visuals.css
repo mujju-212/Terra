@@ -1,0 +1,958 @@
+/* ============================================================
+   CHAPTER 08: CONSERVATION OF LAND FORMS
+   Matching User Reference Mockup media_1790797747982.jpg
+   ============================================================ */
+
+.land-conservation-screen {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cons-backdrop-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 32%;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.cons-backdrop-scrim {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(90deg, rgba(8, 11, 16, 0.94) 0%, rgba(8, 11, 16, 0.85) 32%, rgba(8, 11, 16, 0.42) 54%, rgba(8, 11, 16, 0.12) 75%, rgba(8, 11, 16, 0.28) 100%),
+    linear-gradient(180deg, rgba(8, 11, 16, 0.65) 0%, transparent 22%, transparent 68%, rgba(8, 11, 16, 0.92) 100%);
+  pointer-events: none;
+}
+
+.cons-screen-content-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 16px 40px 14px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+/* Upper Hero Stage: Left Col + Interactive Hotspot Callout Badges Layer */
+.cons-upper-hero-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 520px 1fr;
+  gap: 32px;
+  align-items: start;
+  min-height: 290px;
+}
+
+.cons-hero-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 520px;
+  z-index: 3;
+}
+
+.cons-screen-headline {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(38px, 3.8vw, 56px);
+  line-height: 1.05;
+  color: #ffffff;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.cons-title-accent {
+  font-style: italic;
+  color: #f1cb74;
+  font-weight: 400;
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  margin-left: 6px;
+}
+
+.cons-screen-subheadline {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(18px, 1.6vw, 23px);
+  color: #f5f2ed;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.cons-screen-lead-copy {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: rgba(245, 242, 237, 0.78);
+  margin: 0;
+  max-width: 500px;
+}
+
+/* "Why Conservation Matters" Container Box */
+.cons-why-matters-card {
+  background: rgba(14, 19, 26, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.cons-why-matters-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+
+.cons-why-factors-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cons-why-factor-cell {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.cons-why-factor-cell:hover {
+  background: rgba(22, 29, 40, 0.9);
+  border-color: rgba(241, 203, 116, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 14px rgba(241, 203, 116, 0.15);
+}
+
+.cons-why-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cons-why-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cons-why-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.cons-why-sub {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: rgba(245, 242, 237, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 5 Landscape Callout Pins Layer */
+.cons-pins-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.cons-map-pin {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+.cons-map-pin:hover,
+.cons-map-pin.is-pin-hovered {
+  transform: translate(-50%, -56%) scale(1.06);
+  z-index: 10;
+}
+
+.cons-map-pin.is-pin-selected {
+  transform: translate(-50%, -56%) scale(1.1);
+  z-index: 12;
+}
+
+.cons-pin-card-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px 5px 7px;
+  border-radius: 9px;
+  background: rgba(14, 18, 25, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.2px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 16px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  transition: all 0.22s ease;
+}
+
+.cons-map-pin:hover .cons-pin-card-badge,
+.cons-map-pin.is-pin-hovered .cons-pin-card-badge {
+  border-color: #f1cb74;
+  background: rgba(22, 28, 38, 0.96);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(241, 203, 116, 0.3);
+}
+
+.cons-map-pin.is-pin-selected .cons-pin-card-badge {
+  border-color: #f1cb74;
+  background: rgba(26, 32, 44, 0.98);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 24px rgba(241, 203, 116, 0.45);
+}
+
+.cons-pin-badge-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cons-pin-badge-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.cons-pin-badge-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+
+.cons-pin-badge-sub {
+  font-size: 8.5px;
+  color: rgba(245, 242, 237, 0.62);
+}
+
+.cons-pin-leader-line {
+  width: 1.5px;
+  height: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, var(--pin-theme, #f1cb74) 100%);
+  margin: 1px 0;
+}
+
+.cons-pin-anchor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 16px var(--pin-theme, #f1cb74);
+  position: relative;
+}
+
+.cons-pin-anchor-dot::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pin-theme, #f1cb74);
+  animation: pinPulseRing 2.2s infinite ease-out;
+}
+
+/* Lower Section Split: Key Methods (Left) & The Bigger Impact (Right) */
+.cons-lower-split-row {
+  display: grid;
+  grid-template-columns: 1fr 370px;
+  gap: 14px;
+  align-items: stretch;
+  z-index: 3;
+}
+
+.cons-methods-container-card {
+  background: rgba(12, 16, 22, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.cons-methods-header,
+.cons-impact-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cons-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.cons-panel-subtitle {
+  font-size: 10.5px;
+  color: rgba(245, 242, 237, 0.62);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.cons-methods-cards-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+}
+
+.cons-method-mini-card {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 155px;
+  text-align: left;
+}
+
+.cons-method-mini-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(241, 203, 116, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(241, 203, 116, 0.15);
+}
+
+.cons-method-mini-card.is-card-selected {
+  border-color: #f1cb74;
+  background: rgba(241, 203, 116, 0.08);
+  box-shadow: 0 0 16px rgba(241, 203, 116, 0.25);
+}
+
+.cons-method-thumb {
+  width: 100%;
+  height: 66px;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cons-method-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(9, 12, 17, 0.45) 100%);
+}
+
+.cons-method-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  padding: 0 2px;
+}
+
+.cons-method-title-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cons-method-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.cons-method-desc {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: rgba(245, 242, 237, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.cons-card-action-btn {
+  align-self: flex-end;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: auto;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.cons-method-mini-card:hover .cons-card-action-btn,
+.cons-method-mini-card.is-card-selected .cons-card-action-btn {
+  background: #f1cb74;
+  border-color: #f1cb74;
+  color: #0d1117;
+}
+
+/* Panel 2: The Bigger Impact */
+.cons-impact-container-card {
+  background: rgba(12, 16, 22, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.cons-impact-body-layout {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+
+.cons-impact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cons-impact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+}
+
+.cons-impact-icon-wrap {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.cons-impact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cons-impact-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.cons-impact-sub {
+  font-size: 8.5px;
+  color: rgba(245, 242, 237, 0.62);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Globe Visual */
+.cons-impact-globe-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cons-globe-glow-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cons-globe-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8), 0 0 24px rgba(47, 128, 237, 0.45);
+  animation: globeSubtlePulse 6s ease-in-out infinite;
+}
+
+@keyframes globeSubtlePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8), 0 0 24px rgba(47, 128, 237, 0.45);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8), 0 0 32px rgba(47, 128, 237, 0.65);
+  }
+}
+
+.cons-globe-atmosphere-halo {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(80, 160, 255, 0.45);
+  box-shadow: 0 0 16px rgba(80, 160, 255, 0.35);
+  pointer-events: none;
+}
+
+/* Bottom Navigation */
+.cons-bottom-navigation-bar {
+  margin-top: 2px;
+}
+
+/* Conservation Detail Modal */
+.cons-modal-card {
+  max-width: 520px;
+  border-color: var(--modal-accent, #f1cb74);
+}
+
+
+/* ============================================================
+   CHAPTER 07: LAND FORMS SCREEN (GUARANTEED STYLES)
+   ============================================================ */
+
+.land-forms-screen {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.landforms-backdrop-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 25%;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.landforms-backdrop-scrim {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(90deg, rgba(8, 11, 16, 0.94) 0%, rgba(8, 11, 16, 0.82) 34%, rgba(8, 11, 16, 0.38) 54%, rgba(8, 11, 16, 0.08) 78%, rgba(8, 11, 16, 0.25) 100%),
+    linear-gradient(180deg, rgba(8, 11, 16, 0.65) 0%, transparent 22%, transparent 68%, rgba(8, 11, 16, 0.88) 100%);
+  pointer-events: none;
+}
+
+.landforms-screen-content-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 18px 40px 14px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+.landforms-upper-hero-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 500px 1fr;
+  gap: 32px;
+  align-items: start;
+  min-height: 310px;
+}
+
+.landforms-hero-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 500px;
+  z-index: 3;
+}
+
+.landforms-screen-headline {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(40px, 4vw, 58px);
+  line-height: 1.05;
+  color: #ffffff;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.landforms-title-accent {
+  font-style: italic;
+  color: #f1cb74;
+  font-weight: 400;
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  margin-left: 6px;
+}
+
+.landforms-screen-subheadline {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(18px, 1.6vw, 24px);
+  color: #f5f2ed;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.landforms-screen-lead-copy {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: rgba(245, 242, 237, 0.75);
+  margin: 0;
+  max-width: 480px;
+}
+
+.landforms-top-factors-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.landforms-factor-glass-card {
+  background: rgba(14, 19, 26, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 10px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.landforms-factor-glass-card:hover {
+  background: rgba(22, 29, 40, 0.9);
+  border-color: rgba(241, 203, 116, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), 0 0 14px rgba(241, 203, 116, 0.12);
+}
+
+.landforms-factor-icon-wrap {
+  color: #f1cb74;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.landforms-factor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landforms-factor-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.landforms-factor-sub {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: rgba(245, 242, 237, 0.55);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Pins Layer */
+.landforms-pins-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.landform-map-pin,
+.landforms-map-pin {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+.landform-map-pin:hover,
+.landform-map-pin.is-pin-hovered,
+.landforms-map-pin:hover,
+.landforms-map-pin.is-pin-hovered {
+  transform: translate(-50%, -58%) scale(1.08);
+  z-index: 10;
+}
+
+.landform-map-pin.is-pin-selected,
+.landforms-map-pin.is-pin-selected {
+  transform: translate(-50%, -58%) scale(1.12);
+  z-index: 12;
+}
+
+.pin-anchor-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px var(--pin-theme, #f1cb74);
+  position: relative;
+}
+
+.pin-anchor-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pin-theme, #f1cb74);
+  animation: pinPulseRing 2.2s infinite ease-out;
+}
+
+.pin-leader-line {
+  width: 1.5px;
+  height: 12px;
+  background: linear-gradient(180deg, var(--pin-theme, #f1cb74) 0%, rgba(255, 255, 255, 0.7) 100%);
+  margin: 1px 0;
+}
+
+.pin-glass-badge {
+  padding: 4px 11px;
+  border-radius: 18px;
+  background: rgba(14, 18, 24, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.2px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+  transition: all 0.2s ease;
+}
+
+.landform-map-pin:hover .pin-glass-badge,
+.landform-map-pin.is-pin-hovered .pin-glass-badge,
+.landforms-map-pin:hover .pin-glass-badge,
+.landforms-map-pin.is-pin-hovered .pin-glass-badge {
+  border-color: #f1cb74;
+  background: rgba(22, 28, 38, 0.95);
+  color: #f1cb74;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 16px rgba(241, 203, 116, 0.35);
+}
+
+.landform-map-pin.is-pin-selected .pin-glass-badge,
+.landforms-map-pin.is-pin-selected .pin-glass-badge {
+  border-color: #f1cb74;
+  background: #f1cb74;
+  color: #0c1017;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7), 0 0 20px rgba(241, 203, 116, 0.5);
+}
+
+/* Lower Container Card: 8 Major Earth Landforms */
+.landforms-lower-container-card {
+  background: rgba(12, 16, 22, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+}
+
+.landforms-lower-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landforms-lower-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.landforms-lower-subtitle {
+  font-size: 10.5px;
+  color: rgba(245, 242, 237, 0.6);
+  margin: 0;
+}
+
+.landforms-eight-cards-track {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.landform-mini-card {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 160px;
+  text-align: left;
+}
+
+.landform-mini-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(241, 203, 116, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(241, 203, 116, 0.12);
+}
+
+.landform-mini-card.is-card-selected {
+  border-color: #f1cb74;
+  background: rgba(241, 203, 116, 0.08);
+  box-shadow: 0 0 16px rgba(241, 203, 116, 0.2);
+}
+
+.landform-mini-thumb {
+  width: 100%;
+  height: 68px;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mini-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(9, 12, 17, 0.4) 100%);
+}
+
+.landform-mini-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  padding: 0 2px;
+}
+
+.landform-mini-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.landform-mini-desc {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: rgba(245, 242, 237, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.landform-card-action-btn {
+  align-self: flex-end;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: auto;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.landform-mini-card:hover .landform-card-action-btn,
+.landform-mini-card.is-card-selected .landform-card-action-btn {
+  background: #f1cb74;
+  border-color: #f1cb74;
+  color: #0d1117;
+}
+
+/* Modal styling for Landforms */
+.landforms-modal-card {
+  max-width: 520px;
+  border-color: var(--modal-accent, #f1cb74);
+}
