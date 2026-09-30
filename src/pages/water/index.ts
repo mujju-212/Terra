@@ -1,11 +1,23 @@
 export * from './waterData';
 export { useModalScrollLock } from './useModalScrollLock';
 export { WaterCoverScreen } from './WaterCoverScreen';
+export { default as WaterIntroTransition } from './WaterIntroTransition';
 export { HydrologicalCycleScreen } from './HydrologicalCycleScreen';
 export { WaterSourcesScreen } from './WaterSourcesScreen';
 export { GlobalWaterScreen } from './GlobalWaterScreen';
 export { RiversIndiaScreen } from './RiversIndiaScreen';
 export { WaterUsesScreen } from './WaterUsesScreen';
 export { WaterConservationScreen } from './WaterConservationScreen';
+export { InterBasinTransferScreen } from './InterBasinTransferScreen';
+export { RiverInterlinkingScreen } from './RiverInterlinkingScreen';
+export { GroundwaterScreen } from './GroundwaterScreen';
+export { GroundwaterPotentialScreen } from './GroundwaterPotentialScreen';
+export { ConjunctiveUseScreen } from './ConjunctiveUseScreen';
+export { GroundwaterManagementScreen } from './GroundwaterManagementScreen';
+export { GroundwaterDepletionScreen } from './GroundwaterDepletionScreen';
+export { GroundwaterContaminationScreen } from './GroundwaterContaminationScreen';
+export { GroundwaterRechargeScreen } from './GroundwaterRechargeScreen';
+export { SeawaterIngressScreen } from './SeawaterIngressScreen';
 export { WaterCurriculumChapters } from './WaterCurriculumChapters';
 export { WaterSummaryScreen } from './WaterSummaryScreen';
+
