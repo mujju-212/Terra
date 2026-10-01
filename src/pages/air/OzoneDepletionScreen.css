@@ -1,0 +1,987 @@
+/* ═════════════════════════════════════════════════════════════════════
+   CHAPTER 11: OZONE DEPLETION
+   Reference: Image 1 UI Layout & Image 2 Orbital Earth Atmosphere
+   ═════════════════════════════════════════════════════════════════════ */
+
+.air-ozone-section {
+  position: relative;
+  min-height: 100vh;
+  padding: 56px clamp(20px, 3.5vw, 52px) 80px clamp(20px, 3.5vw, 52px);
+  background-color: #050913;
+  color: #f8fafc;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ─── ATMOSPHERIC HERO BACKGROUND (Image 2: Orbital Earth Horizon) ─── */
+.air-ozone-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: clamp(520px, 75vw, 1200px);
+  height: 560px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.air-ozone-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right 25%;
+  filter: brightness(0.95) contrast(1.1) saturate(1.15);
+  opacity: 0.95;
+}
+
+/* Atmosphere layer callout annotations */
+.air-ozone-strato-annotation {
+  position: absolute;
+  top: 185px;
+  right: 38%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.strato-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(6, 18, 38, 0.88);
+  border: 1px solid #38bdf8;
+  border-radius: 9999px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.strato-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.strato-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.strato-pointer-line {
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.1) 100%);
+}
+
+/* Solar UV Radiation Rays */
+.air-ozone-uv-rays {
+  position: absolute;
+  top: 110px;
+  right: 21%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.uv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(136, 19, 55, 0.85);
+  border: 1px solid #f43f5e;
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.uv-sun-icon {
+  color: #fde047;
+}
+
+.uv-ray-arrows {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.uv-arrow {
+  width: 2px;
+  height: 48px;
+  background: linear-gradient(180deg, #f43f5e 0%, #fb7185 60%, transparent 100%);
+  transform: rotate(22deg);
+  opacity: 0.85;
+}
+
+.uv-arrow.ray-2 {
+  height: 58px;
+  opacity: 1;
+}
+
+.uv-arrow.ray-3 {
+  height: 52px;
+  opacity: 0.9;
+}
+
+.uv-arrow.ray-4 {
+  height: 44px;
+  opacity: 0.75;
+}
+
+/* Atmospheric Scrims */
+.air-ozone-scrim-left {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 62%;
+  background: linear-gradient(
+    90deg,
+    #050913 0%,
+    rgba(5, 9, 19, 0.95) 30%,
+    rgba(5, 9, 19, 0.6) 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.air-ozone-scrim-bottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 220px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(5, 9, 19, 0.65) 45%,
+    #050913 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.air-ozone-scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100px;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 9, 19, 0.85) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── HEADER ROW ─── */
+.air-ozone-header-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 36px;
+  margin-bottom: 28px;
+}
+
+.air-ozone-header-left {
+  flex: 1;
+  max-width: 680px;
+}
+
+.air-ozone-eyebrow {
+  display: block;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, monospace);
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.air-ozone-title {
+  font-family: var(--font-display, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(2.6rem, 4.8vw, 4.2rem);
+  line-height: 1.05;
+  color: #ffffff;
+  margin: 0 0 14px 0;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.air-ozone-title-accent {
+  background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 2px 16px rgba(56, 189, 248, 0.35));
+}
+
+.air-ozone-desc {
+  font-size: 0.94rem;
+  line-height: 1.62;
+  color: #cbd5e1;
+  margin: 0;
+  max-width: 620px;
+}
+
+/* Floating Quote Card */
+.air-ozone-quote-card {
+  width: clamp(280px, 28vw, 380px);
+  background: rgba(8, 20, 36, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 18px;
+  padding: 20px 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+
+.air-ozone-quote-mark {
+  display: block;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: #38bdf8;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.air-ozone-quote-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #e2e8f0;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ─── SHARED GLASS CARD STYLES ─── */
+.air-ozone-glass-card {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 22, 38, 0.9) 0%,
+    rgba(6, 15, 28, 0.96) 100%
+  );
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 16px;
+  padding: 18px 18px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.air-ozone-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.air-ozone-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.air-ozone-card-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* ─── ROW 1: 3 PRIMARY CARDS ─── */
+.air-ozone-top-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+/* Card 1: What is the Ozone Layer? */
+.ozone-what-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.ozone-what-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: #08111e;
+}
+
+.ozone-what-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ozone-what-thumb-caption {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  padding: 3px 8px;
+  background: rgba(6, 14, 26, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #7dd3fc;
+  backdrop-filter: blur(6px);
+}
+
+.ozone-what-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ozone-what-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #e2e8f0;
+}
+
+.ozone-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  margin-top: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+/* Card 2: How Ozone is Depleted? */
+.ozone-steps-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ozone-step-box {
+  background: rgba(14, 27, 45, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 10px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ozone-step-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.badge-1 {
+  background: #ef4444;
+}
+
+.step-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-2 {
+  background: #0284c7;
+}
+
+.step-uv-tag {
+  background: rgba(168, 85, 247, 0.3);
+  border: 1px solid #c084fc;
+  color: #f3e8ff;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.badge-3 {
+  background: #16a34a;
+}
+
+.ozone-step-box p {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #cbd5e1;
+}
+
+/* Reaction Diagram */
+.ozone-reaction-diagram {
+  background: rgba(8, 18, 32, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.reaction-cfc-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cfc-canisters-icon {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+  margin-bottom: 4px;
+}
+
+.canister {
+  width: 8px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%);
+  border: 1px solid #7dd3fc;
+}
+
+.can-1 { height: 22px; }
+.can-2 { height: 28px; }
+.can-3 { height: 18px; }
+
+.reaction-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+.reaction-arrow {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.reaction-plus {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.reaction-atom-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.atom-cl-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #16a34a;
+  border: 1px solid #4ade80;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+}
+
+.reaction-molecule-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.molecule-o3 {
+  position: relative;
+  width: 42px;
+  height: 32px;
+}
+
+.o-sphere {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.4), 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.sphere-blue {
+  background: radial-gradient(circle at 35% 35%, #7dd3fc 0%, #0284c7 70%, #034f77 100%);
+  border: 1px solid #bae6fd;
+}
+
+.s1 { top: 0; left: 13px; z-index: 2; }
+.s2 { bottom: 0; left: 2px; z-index: 1; }
+.s3 { bottom: 0; right: 2px; z-index: 1; }
+
+.o-bond {
+  position: absolute;
+  height: 3px;
+  background: rgba(148, 163, 184, 0.6);
+  z-index: 0;
+}
+
+.bond-1 {
+  width: 14px;
+  top: 13px;
+  left: 8px;
+  transform: rotate(55deg);
+}
+
+.bond-2 {
+  width: 14px;
+  top: 13px;
+  right: 8px;
+  transform: rotate(-55deg);
+}
+
+.molecule-o2 {
+  position: relative;
+  width: 34px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.sphere-red {
+  position: relative;
+  background: radial-gradient(circle at 35% 35%, #fca5a5 0%, #ef4444 70%, #991b1b 100%);
+  border: 1px solid #fecaca;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.4), 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.catalytic-stat-callout {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: #cbd5e1;
+  text-align: center;
+  background: rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.stat-highlight {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.stat-num {
+  color: #f87171;
+  font-weight: 700;
+}
+
+/* Card 3: Major Ozone Depleting Substances */
+.ods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+
+.ods-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(14, 27, 45, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ods-row:hover {
+  background: rgba(14, 27, 45, 0.85);
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateX(2px);
+}
+
+.ods-name-col {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ods-icon-pill {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.badge-red { background: rgba(239, 68, 68, 0.85); }
+.badge-yellow { background: rgba(234, 179, 8, 0.85); }
+.badge-green { background: rgba(34, 197, 94, 0.85); }
+.badge-blue { background: rgba(59, 130, 246, 0.85); }
+.badge-purple { background: rgba(168, 85, 247, 0.85); }
+.badge-pink { background: rgba(236, 72, 153, 0.85); }
+
+.ods-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.ods-name {
+  font-size: 0.78rem;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.ods-formula {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-family: var(--mono);
+}
+
+.ods-uses-col {
+  text-align: right;
+  flex: 1;
+}
+
+.ods-uses-text {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  line-height: 1.3;
+}
+
+/* ─── ROW 2: 3 BOTTOM CARDS ─── */
+.air-ozone-bottom-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+/* Card 1: Effects of Ozone Depletion */
+.effects-panels-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.effect-panel {
+  border-radius: 10px;
+  padding: 9px 12px;
+  background: rgba(14, 27, 45, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.panel-health { border-color: rgba(239, 68, 68, 0.3); }
+.panel-eco { border-color: rgba(34, 197, 94, 0.3); }
+.panel-mat { border-color: rgba(168, 85, 247, 0.3); }
+
+.effect-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.effect-panel-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-health { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.icon-eco { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.icon-mat { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+
+.effect-panel-title {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.effect-sublist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 10px;
+}
+
+.effect-sublist li {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #cbd5e1;
+  position: relative;
+  padding-left: 10px;
+}
+
+.effect-sublist li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #94a3b8;
+}
+
+/* Card 2: Evidence: Ozone Hole */
+.evidence-graphic-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: #08111e;
+  margin-bottom: 10px;
+}
+
+.evidence-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dobson-legend-explainer {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  font-size: 0.72rem;
+  color: #cbd5e1;
+}
+
+.legend-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.normal-du { background: #22c55e; }
+.hole-du { background: #ef4444; }
+
+/* Card 3: Control Measures */
+.control-measures-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.control-measure-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #e2e8f0;
+}
+
+.control-check-icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  box-shadow: 0 0 8px rgba(22, 163, 74, 0.4);
+}
+
+.control-measure-text {
+  flex: 1;
+}
+
+.montreal-callout-box {
+  background: rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.montreal-year {
+  font-family: var(--mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+}
+
+.montreal-callout-box strong {
+  display: block;
+  font-size: 0.78rem;
+  color: #ffffff;
+}
+
+.montreal-callout-box p {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+/* ─── ROW 3: KEY TAKEAWAYS BAR ─── */
+.air-ozone-takeaways-bar {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 22, 38, 0.9) 0%,
+    rgba(6, 15, 28, 0.96) 100%
+  );
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 16px;
+  padding: 16px 20px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.takeaways-header-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.takeaways-icon {
+  color: #38bdf8;
+}
+
+.takeaways-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.takeaway-pill {
+  background: rgba(14, 27, 45, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.takeaway-pill:hover {
+  background: rgba(14, 27, 45, 0.85);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+}
+
+.takeaway-pill-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.takeaway-pill-text {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #e2e8f0;
+  flex: 1;
+}
+
+/* ─── RESPONSIVE BREAKPOINTS ─── */
+@media (max-width: 1280px) {
+  .air-ozone-top-grid,
+  .air-ozone-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .takeaways-pills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .air-ozone-header-row {
+    flex-direction: column;
+  }
+
+  .air-ozone-quote-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .takeaways-pills-grid {
+    grid-template-columns: 1fr;
+  }
+}
