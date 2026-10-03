@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -16,12 +16,15 @@ import {
   ChevronUp,
   BookOpen,
   Droplet,
-  Layers,
+  Mountain,
+  Wind,
+  Sprout,
+  Flame,
   Award,
   BarChart3,
 } from 'lucide-react';
-import { modules } from '../content';
 import { quizQuestions, type QuizQuestion } from '../content/quiz';
+import Footer from '../components/Footer';
 import '../quiz.css';
 
 interface QuestionState {
@@ -30,12 +33,128 @@ interface QuestionState {
   isCorrect: boolean;
 }
 
+interface ModuleInfo {
+  slug: string;
+  num: string;
+  name: string;
+  shortEyebrow: string;
+  fullTitle: string;
+  subtitle: string;
+  accent: string;
+  accentGlow: string;
+  accentBg: string;
+  icon: typeof Mountain;
+  backPath: string;
+  nextModule?: { slug: string; name: string; path: string };
+}
+
+const MODULE_CONFIGS: Record<string, ModuleInfo> = {
+  land: {
+    slug: 'land',
+    num: '01',
+    name: 'Land',
+    shortEyebrow: 'MODULE 01 · LAND & SOIL CONSERVATION',
+    fullTitle: 'Land & Lithosphere Knowledge Check',
+    subtitle: 'Fifteen comprehensive syllabus questions covering planetary accretion, internal layers, pedogenesis, soil horizons, erosion mechanisms, and sustainable land-use planning.',
+    accent: '#deb87a',
+    accentGlow: 'rgba(222, 184, 122, 0.45)',
+    accentBg: 'rgba(222, 184, 122, 0.12)',
+    icon: Mountain,
+    backPath: '/module/land',
+    nextModule: { slug: 'water', name: 'Module 02: Water', path: '/module/water' },
+  },
+  water: {
+    slug: 'water',
+    num: '02',
+    name: 'Water',
+    shortEyebrow: 'MODULE 02 · WATER RESOURCES & HYDROGEOLOGY',
+    fullTitle: 'Water Resources & Hydrogeology Knowledge Check',
+    subtitle: 'Fifteen questions spanning global water distribution, Indian river interlinking (Himalayan & Peninsular), hard-rock vs alluvial aquifers, conjunctive use, and coastal seawater intrusion control.',
+    accent: '#38bdf8',
+    accentGlow: 'rgba(56, 189, 248, 0.45)',
+    accentBg: 'rgba(56, 189, 248, 0.12)',
+    icon: Droplet,
+    backPath: '/module/water',
+    nextModule: { slug: 'air', name: 'Module 03: Air', path: '/module/air' },
+  },
+  air: {
+    slug: 'air',
+    num: '03',
+    name: 'Air',
+    shortEyebrow: 'MODULE 03 · ATMOSPHERE & AIR QUALITY',
+    fullTitle: 'Atmosphere & Air Pollution Knowledge Check',
+    subtitle: 'Fifteen questions detailing dry air composition, primary vs secondary pollutants, NAAQS & AQI bands, industrial ESP & cyclone controls, and stratospheric ozone depletion.',
+    accent: '#a78bfa',
+    accentGlow: 'rgba(167, 139, 250, 0.45)',
+    accentBg: 'rgba(167, 139, 250, 0.12)',
+    icon: Wind,
+    backPath: '/module/air',
+    nextModule: { slug: 'biodiversity', name: 'Module 04: Biodiversity', path: '/module/biodiversity' },
+  },
+  biodiversity: {
+    slug: 'biodiversity',
+    num: '04',
+    name: 'Biodiversity',
+    shortEyebrow: 'MODULE 04 · BIODIVERSITY & ECOSYSTEMS',
+    fullTitle: 'Biodiversity & Ecological Systems Knowledge Check',
+    subtitle: 'Fifteen questions covering genetic/species/ecosystem diversity, in-situ vs ex-situ conservation, National Parks vs Sanctuaries, aquatic zonation, and trophic biomagnification.',
+    accent: '#34d399',
+    accentGlow: 'rgba(52, 211, 153, 0.45)',
+    accentBg: 'rgba(52, 211, 153, 0.12)',
+    icon: Sprout,
+    backPath: '/module/biodiversity',
+    nextModule: { slug: 'warming', name: 'Module 05: Warming & EIA', path: '/module/warming' },
+  },
+  warming: {
+    slug: 'warming',
+    num: '05',
+    name: 'Warming',
+    shortEyebrow: 'MODULE 05 · GLOBAL WARMING & EIA',
+    fullTitle: 'Global Warming & EIA Assessment Knowledge Check',
+    subtitle: 'Fifteen questions detailing planetary albedo, greenhouse mechanisms, climate change indicators, and the complete 9-phase Environmental Impact Assessment sequence.',
+    accent: '#fb923c',
+    accentGlow: 'rgba(251, 146, 60, 0.45)',
+    accentBg: 'rgba(251, 146, 60, 0.12)',
+    icon: Flame,
+    backPath: '/module/warming',
+    nextModule: { slug: 'all', name: 'All Modules Comprehensive', path: '/quiz?module=all' },
+  },
+  all: {
+    slug: 'all',
+    num: 'ALL',
+    name: 'All Modules',
+    shortEyebrow: 'BCV755B · FULL CURRICULUM EXAMINATION',
+    fullTitle: 'Comprehensive Planetary Resource Examination',
+    subtitle: 'Seventy-five questions covering all five natural resource conservation domains: Land, Water, Air, Biodiversity, and Global Warming & EIA.',
+    accent: '#38bdf8',
+    accentGlow: 'rgba(56, 189, 248, 0.45)',
+    accentBg: 'rgba(56, 189, 248, 0.12)',
+    icon: Sparkles,
+    backPath: '/#modules',
+    nextModule: undefined,
+  },
+};
+
+const MODULE_LIST = [
+  MODULE_CONFIGS.land,
+  MODULE_CONFIGS.water,
+  MODULE_CONFIGS.air,
+  MODULE_CONFIGS.biodiversity,
+  MODULE_CONFIGS.warming,
+  MODULE_CONFIGS.all,
+];
+
 export default function Quiz() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const requestedModule = searchParams.get('module') ?? 'land'; // Default to land module
+  const rawModule = searchParams.get('module') ?? 'land';
+  const activeModuleSlug = MODULE_CONFIGS[rawModule] ? rawModule : 'land';
+  const activeConfig = MODULE_CONFIGS[activeModuleSlug];
 
-  // Active module scope
-  const activeModuleSlug = requestedModule;
+  // Dynamic question counts
+  const getQuestionCount = useCallback((slug: string) => {
+    if (slug === 'all') return quizQuestions.length;
+    return quizQuestions.filter((q) => q.module === slug).length;
+  }, []);
 
   // Filter questions according to selected module
   const currentQuestions: QuizQuestion[] = useMemo(() => {
@@ -72,7 +191,7 @@ export default function Quiz() {
 
   // Select Option
   const handleSelectOption = (choiceIndex: number) => {
-    if (currentState.isSubmitted) return; // Cannot change after checking
+    if (currentState.isSubmitted) return;
     setUserAnswers((prev) => ({
       ...prev,
       [currentIndex]: {
@@ -84,7 +203,7 @@ export default function Quiz() {
   };
 
   // Submit / Check Answer
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = useCallback(() => {
     if (currentState.selectedChoice === null || currentState.isSubmitted || !currentQ) return;
     const isCorrect = currentState.selectedChoice === currentQ.answer;
     setUserAnswers((prev) => ({
@@ -95,22 +214,22 @@ export default function Quiz() {
         isCorrect,
       },
     }));
-  };
+  }, [currentState, currentQ, currentIndex]);
 
   // Navigation
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < currentQuestions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       setShowResults(true);
     }
-  };
+  }, [currentIndex, currentQuestions.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     }
-  };
+  }, [currentIndex]);
 
   const handleJumpToQuestion = (idx: number) => {
     if (idx >= 0 && idx < currentQuestions.length) {
@@ -124,6 +243,45 @@ export default function Quiz() {
     setShowResults(false);
     setShowReviewAccordion(false);
   };
+
+  // Keyboard navigation & quick shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is inside an input/textarea
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;
+
+      if (!showResults && currentQ) {
+        // Choice keys: 1-4 or A-D
+        if (!currentState.isSubmitted) {
+          if (e.key === '1' || e.key.toLowerCase() === 'a') handleSelectOption(0);
+          if (e.key === '2' || e.key.toLowerCase() === 'b') handleSelectOption(1);
+          if (e.key === '3' || e.key.toLowerCase() === 'c') handleSelectOption(2);
+          if (e.key === '4' || e.key.toLowerCase() === 'd') handleSelectOption(3);
+        }
+
+        // Enter key: check answer if unsubmitted, or next question if submitted
+        if (e.key === 'Enter') {
+          if (!currentState.isSubmitted && currentState.selectedChoice !== null) {
+            handleCheckAnswer();
+          } else if (currentState.isSubmitted) {
+            handleNext();
+          }
+        }
+
+        // Arrow navigation
+        if (e.key === 'ArrowRight' && currentState.isSubmitted) {
+          handleNext();
+        }
+        if (e.key === 'ArrowLeft') {
+          handlePrev();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showResults, currentQ, currentState, handleCheckAnswer, handleNext, handlePrev]);
 
   // Calculations for Score & Mastery
   const submittedCount = Object.values(userAnswers).filter((s) => s.isSubmitted).length;
@@ -152,37 +310,38 @@ export default function Quiz() {
 
   // Mastery Tier Info
   const masteryTier = useMemo(() => {
+    const modTitle = activeConfig.name;
     if (scorePercent >= 90) {
       return {
-        badge: '🏆 Master Land Ecologist',
+        badge: `🏆 Master ${modTitle} Ecologist`,
         title: 'Exceptional Scientific Mastery!',
-        desc: 'You demonstrated an authoritative understanding of planetary geology, soil horizons, deforestation drivers, and sustainable land management.',
+        desc: `You demonstrated authoritative, comprehensive recall of official BCV755B ${modTitle} curriculum concepts, standards, and conservation mechanisms.`,
         color: '#34d399',
       };
     }
     if (scorePercent >= 75) {
       return {
-        badge: '🌿 Field Conservation Specialist',
+        badge: `🌿 ${modTitle} Conservation Specialist`,
         title: 'Strong Planetary Understanding!',
-        desc: 'Great job! You have a firm grasp of essential land science concepts, degradation mechanisms, and conservation planning principles.',
+        desc: `Great job! You have a solid grasp of core ${modTitle} concepts, degradation pathways, and sustainable resource management principles.`,
         color: '#10b981',
       };
     }
     if (scorePercent >= 50) {
       return {
-        badge: '🌱 Environmental Practitioner',
+        badge: `🌱 Environmental Practitioner`,
         title: 'Solid Foundation — Review Recommended',
-        desc: 'You have grasped the core ideas. Review the detailed explanations below to master specific nuances in soil profiles and watershed dynamics.',
+        desc: `You have grasped the general framework. Review the detailed explanations and key takeaways below to master specific quantitative nuances.`,
         color: '#fbbf24',
       };
     }
     return {
       badge: '🔍 Apprentice Naturalist',
       title: 'Keep Exploring & Reviewing',
-      desc: 'Land systems are rich and complex. Take a moment to review the module chapters and retake the quiz to sharpen your recall.',
+      desc: `Natural resource systems are intricate. Review the module chapters and retake the assessment to reinforce your understanding.`,
       color: '#f87171',
     };
-  }, [scorePercent]);
+  }, [scorePercent, activeConfig.name]);
 
   // Questions for Review Filter
   const reviewQuestions = useMemo(() => {
@@ -196,103 +355,83 @@ export default function Quiz() {
     });
   }, [currentQuestions, userAnswers, reviewFilter]);
 
-  const activeModuleMeta = modules.find((m) => m.slug === activeModuleSlug);
-
   return (
-    <div className="quiz-page-container">
+    <div
+      className="quiz-page-container"
+      style={
+        {
+          '--module-accent': activeConfig.accent,
+          '--module-glow': activeConfig.accentGlow,
+          '--module-bg': activeConfig.accentBg,
+        } as React.CSSProperties
+      }
+    >
       {/* Ambient background glows */}
       <div className="quiz-ambient-glow" />
       <div className="quiz-grid-pattern" />
 
       {/* Top Header Navigation */}
       <nav className="quiz-nav-topbar" aria-label="Quiz Navigation">
-        <Link
-          to={activeModuleSlug === 'land' ? '/module/land' : activeModuleSlug === 'water' ? '/module/water' : '/#modules'}
-          className="quiz-back-link"
-        >
+        <Link to={activeConfig.backPath} className="quiz-back-link">
           <ArrowLeft size={15} />
-          <span>
-            {activeModuleSlug === 'land' ? 'Back to Module 01: Land' : 'Back to Field Guide'}
-          </span>
+          <span>Back to {activeConfig.name === 'All Modules' ? 'Field Guide' : `Module ${activeConfig.num}: ${activeConfig.name}`}</span>
         </Link>
+
+        <div className="quiz-top-brand-group">
+          <span className="quiz-brand-title">TERRA</span>
+          <span className="quiz-brand-divider">|</span>
+          <span className="quiz-brand-sub">BCV755B Conservation Assessment</span>
+        </div>
 
         <div className="quiz-top-badge">
           <span className="quiz-top-badge-dot" />
-          <span>BCV755B · KNOWLEDGE ASSESSMENT</span>
+          <span>{activeConfig.shortEyebrow}</span>
         </div>
       </nav>
 
       {/* Module Scope Tabs */}
       <div className="quiz-module-tabs" role="tablist" aria-label="Select Quiz Module">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'land'}
-          className={`quiz-module-tab ${activeModuleSlug === 'land' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('land')}
-        >
-          <span>Module 01: Land</span>
-          <span className="quiz-module-tab-count">15 Questions</span>
-        </button>
+        {MODULE_LIST.map((mod) => {
+          const isActive = activeModuleSlug === mod.slug;
+          const count = getQuestionCount(mod.slug);
+          const Icon = mod.icon;
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'water'}
-          className={`quiz-module-tab ${activeModuleSlug === 'water' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('water')}
-        >
-          <span>Module 02: Water</span>
-          <span className="quiz-module-tab-count">4</span>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'air'}
-          className={`quiz-module-tab ${activeModuleSlug === 'air' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('air')}
-        >
-          <span>Module 03: Air</span>
-          <span className="quiz-module-tab-count">4</span>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'biodiversity'}
-          className={`quiz-module-tab ${activeModuleSlug === 'biodiversity' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('biodiversity')}
-        >
-          <span>Module 04: Biodiversity</span>
-          <span className="quiz-module-tab-count">4</span>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'warming'}
-          className={`quiz-module-tab ${activeModuleSlug === 'warming' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('warming')}
-        >
-          <span>Module 05: Warming</span>
-          <span className="quiz-module-tab-count">4</span>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeModuleSlug === 'all'}
-          className={`quiz-module-tab ${activeModuleSlug === 'all' ? 'is-active' : ''}`}
-          onClick={() => handleSelectModule('all')}
-        >
-          <span>All Modules</span>
-          <span className="quiz-module-tab-count">{quizQuestions.length}</span>
-        </button>
+          return (
+            <button
+              key={mod.slug}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              className={`quiz-module-tab ${isActive ? 'is-active' : ''}`}
+              onClick={() => handleSelectModule(mod.slug)}
+              style={
+                isActive
+                  ? ({
+                      '--tab-accent': mod.accent,
+                      '--tab-glow': mod.accentGlow,
+                    } as React.CSSProperties)
+                  : undefined
+              }
+            >
+              <span className="quiz-tab-icon-wrap" style={{ color: isActive ? mod.accent : '#94a3b8' }}>
+                <Icon size={15} />
+              </span>
+              <span className="quiz-tab-title">
+                {mod.num === 'ALL' ? 'All Modules' : `Module ${mod.num}: ${mod.name}`}
+              </span>
+              <span className="quiz-module-tab-count">
+                {count} {count === 1 ? 'Question' : 'Questions'}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Main Container */}
       <main className="quiz-card-wrapper">
+        {/* Luminous Top Accent Bar */}
+        <div className="quiz-card-accent-bar" />
+
         {!showResults ? (
           /* ================================================================
              ACTIVE QUESTION VIEW
@@ -300,50 +439,52 @@ export default function Quiz() {
           <div className="quiz-question-active-view">
             {/* Header intro */}
             <div className="quiz-header-intro">
-              <p className="quiz-header-eyebrow">
-                MODULE {activeModuleMeta ? `0${activeModuleMeta.id} · ${activeModuleMeta.shortName.toUpperCase()}` : 'ASSESSMENT'}
-              </p>
-              <h1 className="quiz-header-title">
-                {activeModuleSlug === 'land' ? 'Module 01: Land & Soil Knowledge Check' : 'Planetary Resource Knowledge Check'}
-              </h1>
-              <p className="quiz-header-desc">
-                {activeModuleSlug === 'land'
-                  ? 'Fifteen comprehensive questions covering planetary formation, soil horizons, deforestation drivers, and sustainable land-use planning.'
-                  : 'Test your understanding of the core environmental science concepts covered across the curriculum.'}
-              </p>
+              <div className="quiz-header-eyebrow-row">
+                <span className="quiz-header-pulse-dot" />
+                <p className="quiz-header-eyebrow">{activeConfig.shortEyebrow}</p>
+              </div>
+              <h1 className="quiz-header-title">{activeConfig.fullTitle}</h1>
+              <p className="quiz-header-desc">{activeConfig.subtitle}</p>
             </div>
 
             {/* Matrix Quick-Jump Navigation */}
-            <div className="quiz-matrix-bar" aria-label="Question Jump Matrix">
-              {currentQuestions.map((_, idx) => {
-                const qState = userAnswers[idx];
-                const isCurrent = idx === currentIndex;
-                const isCorrect = qState?.isSubmitted && qState.isCorrect;
-                const isWrong = qState?.isSubmitted && !qState.isCorrect;
+            <div className="quiz-matrix-wrapper">
+              <div className="quiz-matrix-header">
+                <span className="quiz-matrix-label">QUESTION SELECTOR</span>
+                <span className="quiz-matrix-hint">Jump directly to any question</span>
+              </div>
+              <div className="quiz-matrix-bar" aria-label="Question Jump Matrix">
+                {currentQuestions.map((_, idx) => {
+                  const qState = userAnswers[idx];
+                  const isCurrent = idx === currentIndex;
+                  const isCorrect = qState?.isSubmitted && qState.isCorrect;
+                  const isWrong = qState?.isSubmitted && !qState.isCorrect;
 
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    className={`quiz-matrix-item ${isCurrent ? 'is-current' : ''} ${
-                      isCorrect ? 'is-correct' : ''
-                    } ${isWrong ? 'is-wrong' : ''}`}
-                    onClick={() => handleJumpToQuestion(idx)}
-                    title={`Question ${idx + 1}${
-                      qState?.isSubmitted ? (isCorrect ? ' (Correct)' : ' (Incorrect)') : ''
-                    }`}
-                  >
-                    {idx + 1}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`quiz-matrix-item ${isCurrent ? 'is-current' : ''} ${
+                        isCorrect ? 'is-correct' : ''
+                      } ${isWrong ? 'is-wrong' : ''}`}
+                      onClick={() => handleJumpToQuestion(idx)}
+                      title={`Question ${idx + 1}${
+                        qState?.isSubmitted ? (isCorrect ? ' (Correct)' : ' (Incorrect)') : ''
+                      }`}
+                    >
+                      {idx + 1}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Question Meta Tags & Live Score */}
             <div className="quiz-meta-row">
               <div className="quiz-meta-tags">
                 <span className="quiz-topic-pill">
-                  {currentQ?.topic || `Question ${currentIndex + 1}`}
+                  <Sparkles size={12} />
+                  <span>{currentQ?.topic || `Question ${currentIndex + 1}`}</span>
                 </span>
                 {currentQ?.difficulty && (
                   <span className={`quiz-difficulty-pill ${currentQ.difficulty.toLowerCase()}`}>
@@ -353,12 +494,12 @@ export default function Quiz() {
               </div>
 
               <div className="quiz-score-badge">
-                <span>Progress:</span>
+                <span className="quiz-score-label">Progress:</span>
                 <strong>
                   {submittedCount} / {currentQuestions.length} Answered
                 </strong>
                 {submittedCount > 0 && (
-                  <span style={{ color: '#34d399', marginLeft: 6 }}>
+                  <span className="quiz-score-correct-tag">
                     ({correctCount} Correct)
                   </span>
                 )}
@@ -366,7 +507,13 @@ export default function Quiz() {
             </div>
 
             {/* Progress Bar */}
-            <div className="quiz-progress-track" role="progressbar" aria-valuenow={currentIndex + 1} aria-valuemin={1} aria-valuemax={currentQuestions.length}>
+            <div
+              className="quiz-progress-track"
+              role="progressbar"
+              aria-valuenow={currentIndex + 1}
+              aria-valuemin={1}
+              aria-valuemax={currentQuestions.length}
+            >
               <div
                 className="quiz-progress-fill"
                 style={{
@@ -379,7 +526,11 @@ export default function Quiz() {
             {currentQ && (
               <div className="quiz-prompt-section">
                 <div className="quiz-prompt-number">
-                  QUESTION {String(currentIndex + 1).padStart(2, '0')} OF {String(currentQuestions.length).padStart(2, '0')}
+                  <span>QUESTION</span>
+                  <span className="quiz-num-highlight">
+                    {String(currentIndex + 1).padStart(2, '0')}
+                  </span>
+                  <span>OF {String(currentQuestions.length).padStart(2, '0')}</span>
                 </div>
                 <h2 className="quiz-prompt-text">{currentQ.prompt}</h2>
               </div>
@@ -394,11 +545,13 @@ export default function Quiz() {
                   const isSubmitted = currentState.isSubmitted;
                   const isCorrectChoice = choiceIdx === currentQ.answer;
                   const isWrongSelected = isSubmitted && isSelected && !isCorrectChoice;
+                  const isRevealedCorrect = isSubmitted && !isSelected && isCorrectChoice;
 
                   let optClass = 'quiz-option-btn';
                   if (isSelected && !isSubmitted) optClass += ' is-selected';
                   if (isSubmitted && isCorrectChoice) optClass += ' is-correct';
                   if (isWrongSelected) optClass += ' is-wrong';
+                  if (isRevealedCorrect) optClass += ' is-revealed-correct';
 
                   return (
                     <button
@@ -415,10 +568,22 @@ export default function Quiz() {
 
                       <div className="quiz-option-status-icon">
                         {isSubmitted && isCorrectChoice && (
-                          <CheckCircle2 size={18} color="#10b981" />
+                          <span className="quiz-icon-pill correct">
+                            <CheckCircle2 size={18} />
+                          </span>
                         )}
                         {isWrongSelected && (
-                          <XCircle size={18} color="#ef4444" />
+                          <span className="quiz-icon-pill wrong">
+                            <XCircle size={18} />
+                          </span>
+                        )}
+                        {isRevealedCorrect && (
+                          <span className="quiz-icon-pill revealed">
+                            <Check size={16} />
+                          </span>
+                        )}
+                        {!isSubmitted && (
+                          <span className="quiz-key-hint">{choiceIdx + 1}</span>
                         )}
                       </div>
                     </button>
@@ -427,7 +592,7 @@ export default function Quiz() {
               </div>
             )}
 
-            {/* Feedback & Detailed Scientific Explanation (Revealed when submitted) */}
+            {/* Feedback & Detailed Scientific Explanation */}
             {currentState.isSubmitted && currentQ && (
               <div
                 className={`quiz-feedback-box ${currentState.isCorrect ? 'is-success' : 'is-fail'}`}
@@ -436,13 +601,13 @@ export default function Quiz() {
                 <div className="quiz-feedback-header">
                   {currentState.isCorrect ? (
                     <>
-                      <CheckCircle2 size={18} />
+                      <CheckCircle2 size={20} className="quiz-feedback-status-icon" />
                       <span>Correct! Excellent scientific recall.</span>
                     </>
                   ) : (
                     <>
-                      <XCircle size={18} />
-                      <span>Not quite — review the explanation below:</span>
+                      <XCircle size={20} className="quiz-feedback-status-icon" />
+                      <span>Not quite — review the syllabus rationale below:</span>
                     </>
                   )}
                 </div>
@@ -453,7 +618,7 @@ export default function Quiz() {
                   <div className="quiz-takeaway-card">
                     <Lightbulb size={16} className="quiz-takeaway-icon" />
                     <div>
-                      <strong>Key Concept:</strong> {currentQ.takeaway}
+                      <strong>Core Exam Takeaway:</strong> {currentQ.takeaway}
                     </div>
                   </div>
                 )}
@@ -468,7 +633,7 @@ export default function Quiz() {
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
               >
-                <ArrowLeft size={15} />
+                <ArrowLeft size={16} />
                 <span>Previous</span>
               </button>
 
@@ -479,7 +644,7 @@ export default function Quiz() {
                   disabled={currentState.selectedChoice === null}
                   onClick={handleCheckAnswer}
                 >
-                  <Check size={16} />
+                  <Check size={17} />
                   <span>Check Answer</span>
                 </button>
               ) : (
@@ -493,7 +658,7 @@ export default function Quiz() {
                       ? 'View Results 🏆'
                       : 'Next Question'}
                   </span>
-                  <ArrowRight size={15} />
+                  <ArrowRight size={16} />
                 </button>
               )}
             </div>
@@ -505,11 +670,11 @@ export default function Quiz() {
           <div className="quiz-results-view">
             <div className="quiz-results-hero">
               <div className="quiz-results-trophy-wrap">
-                <Trophy size={36} strokeWidth={2.2} />
+                <Trophy size={42} strokeWidth={2.2} />
               </div>
 
               <div className="quiz-results-tier-badge">
-                <Award size={14} />
+                <Award size={15} />
                 <span>{masteryTier.badge}</span>
               </div>
 
@@ -521,25 +686,28 @@ export default function Quiz() {
             <div className="quiz-results-stats-grid">
               <div className="quiz-stat-card">
                 <span className="quiz-stat-label">
-                  <BarChart3 size={13} /> Final Score
+                  <BarChart3 size={14} /> Final Score
                 </span>
                 <span className="quiz-stat-value highlight">
-                  {correctCount} <small style={{ fontSize: 16, color: '#94a3b8' }}>/ {currentQuestions.length}</small>
+                  {correctCount}{' '}
+                  <small style={{ fontSize: 16, color: '#94a3b8' }}>
+                    / {currentQuestions.length}
+                  </small>
                 </span>
                 <span className="quiz-stat-sub">Total questions answered</span>
               </div>
 
               <div className="quiz-stat-card">
                 <span className="quiz-stat-label">
-                  <Sparkles size={13} /> Accuracy
+                  <Sparkles size={14} /> Accuracy
                 </span>
                 <span className="quiz-stat-value highlight">{scorePercent}%</span>
-                <span className="quiz-stat-sub">Percentage correct</span>
+                <span className="quiz-stat-sub">Overall score percentage</span>
               </div>
 
               <div className="quiz-stat-card">
                 <span className="quiz-stat-label">
-                  <CheckCircle2 size={13} color="#10b981" /> Correct Answers
+                  <CheckCircle2 size={14} color="#10b981" /> Correct Answers
                 </span>
                 <span className="quiz-stat-value" style={{ color: '#34d399' }}>
                   {correctCount}
@@ -549,7 +717,7 @@ export default function Quiz() {
 
               <div className="quiz-stat-card">
                 <span className="quiz-stat-label">
-                  <HelpCircle size={13} color="#f87171" /> Review Needed
+                  <HelpCircle size={14} color="#f87171" /> Review Needed
                 </span>
                 <span className="quiz-stat-value" style={{ color: '#f87171' }}>
                   {currentQuestions.length - correctCount}
@@ -564,7 +732,7 @@ export default function Quiz() {
                 <div className="quiz-breakdown-heading">
                   <span>Topic Breakdown & Strengths</span>
                   <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>
-                    Module 01 Knowledge Areas
+                    Module {activeConfig.num} Knowledge Areas
                   </span>
                 </div>
 
@@ -603,31 +771,35 @@ export default function Quiz() {
               className="quiz-review-toggle-btn"
               onClick={() => setShowReviewAccordion((prev) => !prev)}
             >
-              <span>{showReviewAccordion ? 'Hide Question Review' : 'Review All 15 Questions'}</span>
+              <span>
+                {showReviewAccordion
+                  ? 'Hide Question Review'
+                  : `Review All ${currentQuestions.length} Questions`}
+              </span>
               {showReviewAccordion ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
             {showReviewAccordion && (
               <div className="quiz-review-container">
                 {/* Filter pills */}
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 20 }}>
+                <div className="quiz-review-filter-row">
                   <button
                     type="button"
-                    className={`quiz-module-tab ${reviewFilter === 'all' ? 'is-active' : ''}`}
+                    className={`quiz-review-filter-btn ${reviewFilter === 'all' ? 'is-active' : ''}`}
                     onClick={() => setReviewFilter('all')}
                   >
                     All ({currentQuestions.length})
                   </button>
                   <button
                     type="button"
-                    className={`quiz-module-tab ${reviewFilter === 'correct' ? 'is-active' : ''}`}
+                    className={`quiz-review-filter-btn ${reviewFilter === 'correct' ? 'is-active' : ''}`}
                     onClick={() => setReviewFilter('correct')}
                   >
                     Correct ({correctCount})
                   </button>
                   <button
                     type="button"
-                    className={`quiz-module-tab ${reviewFilter === 'wrong' ? 'is-active' : ''}`}
+                    className={`quiz-review-filter-btn ${reviewFilter === 'wrong' ? 'is-active' : ''}`}
                     onClick={() => setReviewFilter('wrong')}
                   >
                     Incorrect ({currentQuestions.length - correctCount})
@@ -637,7 +809,10 @@ export default function Quiz() {
                 <div className="quiz-review-list">
                   {reviewQuestions.map(({ question, idx, state }) => {
                     const isCorrect = state.isSubmitted && state.isCorrect;
-                    const userSelected = state.selectedChoice !== null ? question.choices[state.selectedChoice] : 'Not answered';
+                    const userSelected =
+                      state.selectedChoice !== null
+                        ? question.choices[state.selectedChoice]
+                        : 'Not answered';
                     const correctAnswer = question.choices[question.answer];
 
                     return (
@@ -688,7 +863,7 @@ export default function Quiz() {
                         </p>
 
                         {question.takeaway && (
-                          <div style={{ marginTop: 8, fontSize: 12, color: '#fbbf24' }}>
+                          <div className="quiz-review-takeaway">
                             💡 <em>{question.takeaway}</em>
                           </div>
                         )}
@@ -706,29 +881,33 @@ export default function Quiz() {
                 className="quiz-cta-btn-primary"
                 onClick={handleRetake}
               >
-                <RotateCcw size={15} />
-                <span>Retake Quiz</span>
+                <RotateCcw size={16} />
+                <span>Retake Assessment</span>
               </button>
 
-              <Link
-                to={activeModuleSlug === 'land' ? '/module/land' : '/#modules'}
-                className="quiz-cta-btn-secondary"
-              >
-                <BookOpen size={15} />
+              <Link to={activeConfig.backPath} className="quiz-cta-btn-secondary">
+                <BookOpen size={16} />
                 <span>Revisit Module Chapters</span>
               </Link>
 
-              {activeModuleSlug === 'land' && (
-                <Link to="/module/water" className="quiz-cta-btn-primary" style={{ background: 'linear-gradient(135deg, #0284c7, #0369a1)' }}>
-                  <Droplet size={15} />
-                  <span>Proceed to Module 02: Water</span>
-                  <ArrowRight size={15} />
+              {activeConfig.nextModule && (
+                <Link
+                  to={activeConfig.nextModule.path}
+                  className="quiz-cta-btn-primary quiz-next-module-cta"
+                  style={{
+                    background: `linear-gradient(135deg, ${activeConfig.accent}, #0284c7)`,
+                  }}
+                >
+                  <Sparkles size={16} />
+                  <span>Proceed to {activeConfig.nextModule.name}</span>
+                  <ArrowRight size={16} />
                 </Link>
               )}
             </div>
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
