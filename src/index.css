@@ -86,8 +86,17 @@ img, svg { max-width: 100%; }
   }
 }
 
-.grain-overlay { position: fixed; inset: 0; z-index: 80; width: 100%; height: 100%; pointer-events: none; opacity: .045; mix-blend-mode: soft-light; }
-.grain-overlay rect { width: 100%; height: 100%; }
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
 .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none; border-radius: 50%; will-change: transform; }
 .cursor-dot { width: 5px; height: 5px; background: #fff; mix-blend-mode: difference; transition: opacity .3s ease; }
 .cursor-ring { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.44); transition: width .34s var(--ease-expo), height .34s var(--ease-expo), border-color .3s ease, background .3s ease, opacity .3s ease; }
@@ -868,6 +877,81 @@ img, svg { max-width: 100%; }
   letter-spacing: .12em;
   color: rgba(255, 255, 255, 0.48);
   text-transform: uppercase;
+}
+
+/* Hero Editorial Direct CTA Actions */
+.hero-editorial-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(22px, 3vh, 32px);
+  flex-wrap: wrap;
+}
+
+.hero-enter-module-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--btn-accent, #deb87a);
+  color: #03070b;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 24px var(--btn-accent, rgba(222, 184, 122, 0.4));
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.hero-enter-module-btn:hover {
+  background: #ffffff;
+  color: #03070b;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 32px var(--btn-accent, rgba(222, 184, 122, 0.6));
+}
+
+.hero-btn-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #03070b;
+  opacity: 0.7;
+}
+
+.hero-btn-arrow {
+  transition: transform 0.25s ease;
+}
+
+.hero-enter-module-btn:hover .hero-btn-arrow {
+  transform: translateX(4px);
+}
+
+.hero-notes-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  color: #fdfbf7;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.hero-notes-link-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 /* Hero Bottom Rail */
@@ -3447,113 +3531,6 @@ button.step-resource-item {
   position: relative;
 }
 
-.mod-search-pill {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 18px 7px 14px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 9999px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.25s ease;
-  min-width: 220px;
-}
-
-.mod-search-pill.has-focus {
-  background: rgba(14, 18, 22, 0.9);
-  border-color: rgba(222, 184, 122, 0.65);
-  box-shadow: 0 0 16px rgba(222, 184, 122, 0.25);
-}
-
-.mod-search-icon {
-  color: rgba(255, 255, 255, 0.55);
-  flex-shrink: 0;
-}
-
-.mod-search-pill input {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-size: 0.84rem;
-  outline: none;
-  width: 100%;
-}
-
-.mod-search-pill input::placeholder {
-  color: rgba(255, 255, 255, 0.48);
-}
-
-.mod-search-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 320px;
-  background: rgba(12, 15, 18, 0.96);
-  border: 1px solid rgba(222, 184, 122, 0.3);
-  border-radius: 14px;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
-  padding: 8px;
-  max-height: 380px;
-  overflow-y: auto;
-  z-index: 150;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.mod-search-result-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.2s ease;
-}
-
-.mod-search-result-item:hover {
-  background: rgba(222, 184, 122, 0.15);
-}
-
-.search-res-title {
-  font-size: 0.82rem;
-  color: #fdfbf7;
-  font-weight: 500;
-}
-
-.search-res-badge {
-  font-size: 0.68rem;
-  padding: 2px 7px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #deb87a;
-}
-
-.mod-user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.12);
-  display: grid;
-  place-items: center;
-  color: rgba(255, 255, 255, 0.88);
-  cursor: pointer;
-  transition: all 0.22s ease;
-}
-
-.mod-user-avatar:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-}
 
 .mod-sound-btn {
   width: 28px;
@@ -3815,12 +3792,28 @@ button.step-resource-item {
 
 /* ─── MAIN SCREENS CONTAINER ─── */
 .land-screens-container {
-  margin-left: clamp(200px, 16vw, 250px);
-  width: calc(100% - clamp(200px, 16vw, 250px));
+  width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
   box-sizing: border-box;
+}
+
+/* Chapter screens (indented to respect the sticky left rail) */
+.land-screens-container > section:not(.land-cover-screen):not(.land-intro-transition),
+.land-screen:not(.land-cover-screen) {
+  margin-left: clamp(200px, 16vw, 250px);
+  width: calc(100% - clamp(200px, 16vw, 250px));
+  box-sizing: border-box;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Cover and Intro Transition screens span the FULL 100% VIEWPORT WIDTH */
+.land-screen.land-cover-screen,
+.land-intro-transition {
+  margin-left: 0 !important;
+  width: 100% !important;
+  border-left: none !important;
 }
 
 .land-screen {
@@ -3835,35 +3828,15 @@ button.step-resource-item {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ─── LAND MODULE · scroll-scrubbed reveal + parallax (shared, all 15 screens) ─── */
-/* --enter (0→1) and --scrub (0→1) are written per-screen by JS on scroll.
-   Default --enter:1 keeps everything visible if JS / reduced-motion is off. */
-.land-screen { --enter: 1; }
-
-/* Content slides up + zooms in continuously as it is scrolled into view.
-   Each direct child travels a different distance → layered, parallax-y settle. */
-.land-screen > *:not([class*="backdrop"]) {
-  opacity: var(--enter);
-  transform:
-    translateY(calc((1 - var(--enter)) * 46px))
-    scale(calc(0.96 + 0.04 * var(--enter)));
-  will-change: opacity, transform;
-}
-.land-screen > *:not([class*="backdrop"]):nth-child(2) {
-  transform:
-    translateY(calc((1 - var(--enter)) * 68px))
-    scale(calc(0.96 + 0.04 * var(--enter)));
-}
-.land-screen > *:not([class*="backdrop"]):nth-child(3) {
-  transform:
-    translateY(calc((1 - var(--enter)) * 90px))
-    scale(calc(0.96 + 0.04 * var(--enter)));
+/* ─── LAND MODULE · clean hardware-accelerated motion system ─── */
+.land-screen {
+  --scrub: 0.5;
 }
 
-/* Backdrops drift against the scroll — deeper parallax than the content. */
+/* Backdrops drift smoothly against the scroll with pure GPU 3D transform */
 .land-screen [class*="backdrop"] {
-  transform: translate3d(0, calc((var(--scrub, 0.5) - 0.5) * -16%), 0) scale(1.18);
-  will-change: transform;
+  transform: translate3d(0, calc((var(--scrub, 0.5) - 0.5) * -12%), 0) scale(1.08);
+  transform-origin: center center;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3971,8 +3944,15 @@ button.step-resource-item {
 .intro-formation-copy {
   position: relative;
   z-index: 3;
-  padding: 0 clamp(28px, 6vw, 110px);
-  max-width: 920px;
+  padding: 0 clamp(28px, 6vw, 110px) 0 calc(clamp(200px, 16vw, 250px) + clamp(28px, 4vw, 60px));
+  max-width: 980px;
+}
+
+@media (max-width: 900px) {
+  .intro-cover-copy,
+  .intro-formation-copy {
+    padding: 0 clamp(20px, 4vw, 36px);
+  }
 }
 .intro-mod-tag,
 .intro-chapter-num {
@@ -4099,13 +4079,19 @@ button.step-resource-item {
   position: relative;
   min-height: 100vh;
   height: 100vh;
-  padding: 90px clamp(28px, 4vw, 56px) 24px 0;
+  padding: 90px clamp(28px, 4vw, 56px) 24px calc(clamp(200px, 16vw, 250px) + clamp(24px, 3vw, 40px));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   isolation: isolate;
+}
+
+@media (max-width: 900px) {
+  .land-screen.land-cover-screen {
+    padding-left: clamp(20px, 4vw, 36px);
+  }
 }
 
 .screen-backdrop-hero {
@@ -4599,34 +4585,36 @@ button.step-resource-item {
   flex-direction: column;
 }
 
-/* Interactive 3D WebGL Formation Globe Viewport (Upper Right - Zoomed out, perfectly above timeline) */
+/* Interactive 3D WebGL Formation Globe Viewport (Upper Right - Perfectly positioned, cinematic celestial canvas) */
 .interactive-formation-viewport {
   position: absolute;
-  top: 10px;
-  right: 25px;
-  width: min(440px, 34vw);
-  height: min(340px, 40vh);
-  max-height: 330px;
-  z-index: 1;
+  top: 24px;
+  right: max(20px, calc((100vw - 1360px) / 2 + 24px));
+  width: min(600px, 44vw);
+  height: 420px;
+  max-height: 440px;
+  z-index: 12;
   cursor: grab;
   user-select: none;
   touch-action: none;
+  pointer-events: auto;
 }
 
 .interactive-formation-viewport:active {
   cursor: grabbing;
 }
 
-/* 3D Drag Hint Badge */
+/* 3D Drag Hint Badge - Centered directly beneath the 3D globe */
 .formation-drag-badge {
   position: absolute;
   bottom: 8px;
-  right: 24px;
-  background: rgba(10, 14, 20, 0.75);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 14, 20, 0.85);
   border: 1px solid rgba(222, 184, 122, 0.35);
   border-radius: 999px;
-  padding: 4px 12px;
-  font-size: 8px;
+  padding: 4px 14px;
+  font-size: 7.5px;
   letter-spacing: 0.12em;
   color: #deb87a;
   backdrop-filter: blur(10px);
@@ -4635,6 +4623,7 @@ button.step-resource-item {
   font-weight: 600;
   pointer-events: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
 }
 
 .formation-screen-inner {
@@ -4648,6 +4637,15 @@ button.step-resource-item {
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  pointer-events: none;
+}
+
+/* Ensure all interactive controls inside formation screen receive pointer events */
+.formation-header-block,
+.formation-timeline-track,
+.formation-cards-row,
+.formation-bottom-bar {
+  pointer-events: auto;
 }
 
 /* Header Block matching Reference Image */
@@ -4711,19 +4709,20 @@ button.step-resource-item {
 /* Handwritten Cursive Accent: "From Dust to Home." */
 .formation-script-stamp {
   position: absolute;
-  left: 520px;
-  top: 15px;
+  left: clamp(440px, 36vw, 490px);
+  top: 20px;
   font-family: 'Caveat', 'Playfair Display', cursive, sans-serif;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
   color: #f0dfb8;
   line-height: 1.1;
-  transform: rotate(-9deg);
+  transform: rotate(-10deg);
   pointer-events: none;
   text-shadow: 0 0 16px rgba(222, 184, 122, 0.45);
   display: flex;
   flex-direction: column;
   white-space: nowrap;
+  z-index: 3;
 }
 
 /* ─── 6-STAGE TIMELINE TRACK WITH MINIATURE 3D SPHERES ─── */
@@ -5782,12 +5781,25 @@ button.step-resource-item {
   background: radial-gradient(circle at 65% 35%, rgba(20, 26, 38, 0.7) 0%, rgba(6, 8, 12, 0.98) 75%),
               #07090e;
   min-height: 100vh;
-  height: 100vh;
-  padding: 72px clamp(20px, 2.8vw, 42px) 14px clamp(16px, 2vw, 32px);
+  height: auto;
+  padding: 56px clamp(20px, 2.5vw, 40px) 36px clamp(16px, 2vw, 32px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
+  justify-content: flex-start;
+  gap: 16px;
+  overflow: visible;
+  position: relative;
+  /* Disable isolation so WebGL canvas composites directly with the page */
+  isolation: auto;
+}
+
+/* Cancel scroll-scrubbed will-change on all direct children of the layers screen.
+   The shared .land-screen rule sets will-change:opacity,transform which creates
+   a GPU compositing layer that blurs/obscures the WebGL canvas underneath. */
+.land-screen.land-layers-screen > *:not([class*="backdrop"]) {
+  will-change: auto;
+  opacity: 1;
+  transform: none;
 }
 
 .layers-backdrop {
@@ -5818,9 +5830,9 @@ button.step-resource-item {
 .layers-screen-inner {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 8px;
-  height: 100%;
+  justify-content: flex-start;
+  gap: 16px;
+  height: auto;
 }
 
 /* ─── Upper Grid: Left Details + Right Cutaway Stage ─── */
@@ -5940,16 +5952,22 @@ button.step-resource-item {
   justify-content: center;
   position: relative;
   width: 100%;
-  max-width: 720px;
-  gap: 6px;
+  max-width: 740px;
+  gap: 14px;
 }
 
 .cutaway-earth-viewport {
   position: relative;
-  width: min(390px, 35vw);
-  height: 310px;
+  width: min(440px, 42vw);
+  height: 340px;
   cursor: grab;
   touch-action: none;
+  pointer-events: auto;
+}
+
+.cutaway-earth-viewport > div {
+  width: 100%;
+  height: 100%;
 }
 
 .cutaway-earth-viewport:active {
@@ -5967,7 +5985,19 @@ button.step-resource-item {
 }
 
 .pointer-line-group {
-  transition: all 0.3s ease;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.25s ease;
+}
+
+.pointer-line-group:hover polyline {
+  filter: drop-shadow(0 0 8px rgba(222, 184, 122, 0.95));
+  stroke: #ffd98a !important;
+}
+
+.pointer-line-group:hover circle {
+  filter: drop-shadow(0 0 10px rgba(222, 184, 122, 1));
+  fill: #ffd98a !important;
 }
 
 .pointer-line-group.is-active-pointer polyline {
@@ -5980,23 +6010,72 @@ button.step-resource-item {
 
 .cutaway-drag-badge {
   position: absolute;
-  bottom: 4px;
+  bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10, 14, 20, 0.8);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 14, 20, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(222, 184, 122, 0.35);
   border-radius: 20px;
-  padding: 3px 12px;
+  padding: 4px 14px;
   pointer-events: none;
   z-index: 6;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .cutaway-drag-badge span {
-  font-size: 7px;
+  font-size: 7.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.75);
+  color: #deb87a;
+  text-transform: uppercase;
+}
+
+.cutaway-controls-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 14, 22, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(222, 184, 122, 0.35);
+  border-radius: 24px;
+  padding: 4px 10px;
+  z-index: 10;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+}
+
+.cutaway-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(222, 184, 122, 0.3);
+  color: #deb87a;
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cutaway-control-btn:hover {
+  background: rgba(222, 184, 122, 0.25);
+  border-color: #deb87a;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(222, 184, 122, 0.4);
+}
+
+.cutaway-drag-label {
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.65);
   text-transform: uppercase;
 }
 
@@ -6090,6 +6169,7 @@ button.step-resource-item {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 14px;
+  margin-bottom: 24px;
 }
 
 .layers-interactive-panel,
@@ -6380,11 +6460,23 @@ button.step-resource-item {
 .land-continents-screen {
   position: relative;
   min-height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 0 16px;
-  overflow: hidden;
+  padding: 56px clamp(20px, 2.5vw, 40px) 32px clamp(16px, 2vw, 32px);
+  overflow: visible;
+}
+
+.land-continents-screen .land-screen-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  height: auto;
 }
 
 .continents-backdrop {
@@ -6859,6 +6951,21 @@ button.step-resource-item {
   justify-content: space-between;
   padding: 24px 0 16px;
   overflow: hidden;
+  isolation: isolate;
+}
+
+.land-resource-screen .land-screen-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 48px);
+  padding: 0 clamp(20px, 2.5vw, 40px);
+  box-sizing: border-box;
 }
 
 .resource-backdrop {
@@ -6866,41 +6973,105 @@ button.step-resource-item {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 65% 30%, rgba(201, 161, 90, 0.06) 0%, rgba(9, 8, 7, 0.98) 70%);
+  background-image: url('/images/earth-resource-panorama.jpg');
+  background-size: cover;
+  background-position: 58% 30%;
+  background-repeat: no-repeat;
+}
+
+.resource-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(90deg, rgba(8, 12, 16, 0.88) 0%, rgba(8, 12, 16, 0.65) 28%, rgba(8, 12, 16, 0.05) 50%, rgba(8, 12, 16, 0.35) 100%),
+    linear-gradient(0deg, rgba(6, 9, 12, 0.95) 0%, rgba(6, 9, 12, 0.5) 24%, transparent 58%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .resource-top-stage {
   display: grid;
-  grid-template-columns: 1fr 1.15fr 0.75fr;
-  gap: 24px;
+  grid-template-columns: minmax(360px, 1.15fr) minmax(320px, 1.25fr) minmax(260px, 0.85fr);
+  gap: 20px;
   align-items: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .resource-header-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.resource-header-col .screen-ch-tag {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.resource-header-col .screen-ch-tag span {
+  color: #deb87a;
+}
+
+.resource-header-col .screen-main-title {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(34px, 3.2vw, 48px);
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.resource-header-col .screen-main-title em {
+  font-style: italic;
+  color: #f3cb7d;
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-weight: 400;
+}
+
+.resource-header-col .screen-sub-headline {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: #ded8cd;
+  font-weight: 400;
+  margin: 4px 0 8px;
+}
+
+.resource-header-col .screen-lead-copy {
+  font-size: clamp(12px, 0.95vw, 13px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 460px;
+  margin: 0;
 }
 
 /* Donut Infographic Card */
 .resource-donut-gauge {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 16px;
-  background: rgba(14, 18, 22, 0.88);
+  gap: 18px;
+  padding: 14px 18px;
+  background: rgba(12, 17, 23, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  backdrop-filter: blur(12px);
-  margin-top: 4px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  margin-top: 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  max-width: 440px;
 }
 
 .donut-circle-wrap {
-  width: 66px;
-  height: 66px;
+  width: 70px;
+  height: 70px;
   position: relative;
   display: grid;
   place-items: center;
@@ -6911,16 +7082,18 @@ button.step-resource-item {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  filter: drop-shadow(0 0 6px rgba(222, 184, 122, 0.25));
 }
 
 .donut-globe-center {
   position: absolute;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .donut-text-stats {
@@ -6931,8 +7104,8 @@ button.step-resource-item {
 
 .stat-chunk strong {
   display: block;
-  font-family: var(--serif);
-  font-size: 26px;
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: 28px;
   line-height: 1;
   color: #fff;
   margin-bottom: 2px;
@@ -6948,117 +7121,152 @@ button.step-resource-item {
 
 .stat-chunk span {
   display: block;
-  font-size: 7.5px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .stat-chunk small {
   display: block;
-  font-size: 7px;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
 }
 
 .stat-chunk-divider {
   width: 1px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.14);
+  height: 38px;
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Center Globe with Land 29% and Water 71% Badges */
+/* Center Interactive Space with Callouts Over Background Globe */
 .resource-globe-col {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 380px;
-}
-
-.resource-globe-frame {
-  position: relative;
-  width: 100%;
-  max-width: 540px;
-  height: 380px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(201, 161, 90, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.resource-globe-img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  filter: contrast(1.04) brightness(1.02);
+  pointer-events: none;
 }
 
 .callout-pill {
   position: absolute;
   padding: 6px 14px;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 8.5px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  z-index: 3;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+  z-index: 5;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+
+.callout-pill:hover {
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .pill-land-29 {
   top: 32%;
-  left: 62%;
+  left: 63%;
   transform: translate(-50%, -50%);
-  background: #fdfcf7;
-  color: #1a1612;
-  border: 1px solid rgba(201, 161, 90, 0.7);
+  background: #faf8f0;
+  color: #111;
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .pill-land-29 strong {
-  font-size: 8px;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 9px;
   font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin-bottom: 2px;
+  display: block;
 }
 
 .pill-land-29 span {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 800;
   color: #111;
   line-height: 1.1;
+  display: block;
+}
+
+.line-land {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 26px;
+  height: 1px;
+  background: rgba(250, 248, 240, 0.9);
+}
+
+.line-land .pointer-dot {
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #faf8f0;
+  box-shadow: 0 0 8px rgba(250, 248, 240, 0.9);
 }
 
 .pill-water-71 {
   top: 52%;
-  left: 32%;
+  left: 34%;
   transform: translate(-50%, -50%);
-  background: rgba(12, 26, 42, 0.92);
-  backdrop-filter: blur(10px);
+  background: rgba(10, 24, 42, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(79, 163, 199, 0.65);
   color: #fff;
 }
 
 .pill-water-71 strong {
-  font-size: 8px;
-  color: #4fa3c7;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 9px;
   font-weight: 700;
+  color: #62bfe6;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin-bottom: 2px;
+  display: block;
 }
 
 .pill-water-71 span {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 800;
-  color: #fff;
+  color: #ffffff;
   line-height: 1.1;
+  display: block;
 }
 
+.line-water {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 26px;
+  height: 1px;
+  background: rgba(79, 163, 199, 0.9);
+}
+
+.line-water .pointer-dot {
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4fa3c7;
+  box-shadow: 0 0 8px rgba(79, 163, 199, 0.9);
+}
 
 /* Land Supports Panel (Top Right Card) */
 .resource-supports-col {
@@ -7067,22 +7275,22 @@ button.step-resource-item {
 }
 
 .land-supports-panel {
-  border-radius: 10px;
-  background: rgba(14, 18, 22, 0.88);
-  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  background: rgba(13, 19, 25, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 12px 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 16px 18px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
 }
 
 .supports-title {
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
-  color: #c9a15a;
-  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #ffffff;
   font-weight: 700;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .supports-cards-grid {
@@ -7094,53 +7302,92 @@ button.step-resource-item {
 .support-service-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
-  border-radius: 6px;
+  gap: 12px;
+  padding: 5px 8px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
   transition: all 0.2s ease;
 }
 
 .support-service-item:hover {
-  background: rgba(111, 169, 107, 0.08);
-  border-color: rgba(111, 169, 107, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateX(2px);
 }
 
 .support-icon-wrap {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(111, 169, 107, 0.15);
-  border: 1px solid rgba(111, 169, 107, 0.3);
   display: grid;
   place-items: center;
-  color: #6fa96b;
   flex-shrink: 0;
 }
 
-.support-service-item strong {
-  display: block;
-  font-size: 8.5px;
-  color: #fff;
-  font-weight: 600;
+.support-icon-wrap.icon-food {
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #4ade80;
 }
 
-.support-service-item span {
-  font-size: 7px;
-  color: rgba(255, 255, 255, 0.5);
+.support-icon-wrap.icon-water {
+  background: rgba(14, 165, 233, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.support-icon-wrap.icon-habitat {
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #34d399;
+}
+
+.support-icon-wrap.icon-settlement {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+}
+
+.support-icon-wrap.icon-economy {
+  background: rgba(234, 179, 8, 0.18);
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  color: #facc15;
+}
+
+.support-icon-wrap.icon-cultural {
+  background: rgba(249, 115, 22, 0.18);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  color: #fb923c;
+}
+
+.support-text-wrap strong {
+  display: block;
+  font-size: 11.5px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.support-text-wrap span {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.55);
+  display: block;
+  line-height: 1.2;
 }
 
 /* Bottom: Where Land is Found Panel */
 .where-land-panel {
-  margin-top: 18px;
-  border-radius: 10px;
-  background: rgba(14, 18, 22, 0.82);
-  backdrop-filter: blur(14px);
+  margin-top: 16px;
+  border-radius: 14px;
+  background: rgba(11, 17, 23, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.11);
-  padding: 14px 16px;
+  padding: 14px 18px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .where-top-row {
@@ -7151,15 +7398,15 @@ button.step-resource-item {
 }
 
 .where-top-row h4 {
-  font-size: 13px;
+  font-size: 14.5px;
   color: #fff;
   margin: 0 0 2px;
   font-weight: 700;
 }
 
 .where-top-row p {
-  font-size: 8.5px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
   margin: 0;
 }
 
@@ -7167,21 +7414,21 @@ button.step-resource-item {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
-  color: #deb87a;
-  font-size: 8.5px;
+  color: #ffffff;
+  font-size: 10px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .view-map-link:hover {
-  background: rgba(201, 161, 90, 0.15);
-  border-color: #c9a15a;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #f3cb7d;
 }
 
 /* 7 Continents Row */
@@ -7195,25 +7442,26 @@ button.step-resource-item {
   display: flex;
   flex-direction: column;
   padding: 6px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
   cursor: pointer;
   transition: all 0.22s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .continent-chip-card:hover, .continent-chip-card.is-active-continent {
   border-color: #c9a15a;
   background: rgba(201, 161, 90, 0.08);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .continent-thumb {
   width: 100%;
-  height: 64px;
-  border-radius: 6px;
+  height: 66px;
+  border-radius: 7px;
   background-size: cover;
   background-position: center;
   margin-bottom: 6px;
@@ -7233,15 +7481,16 @@ button.step-resource-item {
 
 .continent-meta strong {
   display: block;
-  font-size: 9.5px;
+  font-size: 11px;
   color: #fff;
   font-weight: 700;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
+  letter-spacing: -0.01em;
 }
 
 .continent-meta span {
   display: block;
-  font-size: 7.5px;
+  font-size: 8.5px;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.25;
 }
@@ -7250,10 +7499,10 @@ button.step-resource-item {
   position: absolute;
   right: 8px;
   bottom: 8px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: rgba(14, 18, 22, 0.9);
+  background: rgba(14, 18, 22, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #c9a15a;
   display: grid;
@@ -7262,9 +7511,189 @@ button.step-resource-item {
 }
 
 .continent-chip-card:hover .continent-arrow-badge {
-  background: #c9a15a;
-  border-color: #c9a15a;
+  background: #f3cb7d;
+  border-color: #f3cb7d;
   color: #111;
+}
+
+/* ─── CHAPTER 05 SPECIFIC BOTTOM BAR STYLES ─── */
+.land-resource-screen .screen-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+  margin-top: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.land-resource-screen .bar-prev-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(201, 161, 90, 0.35);
+  background: rgba(12, 17, 23, 0.75);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.land-resource-screen .bar-prev-btn:hover {
+  border-color: #c9a15a;
+  background: rgba(201, 161, 90, 0.12);
+  transform: translateX(-2px);
+}
+
+.land-resource-screen .bar-prev-btn svg {
+  color: #deb87a;
+}
+
+.land-resource-screen .bar-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 24px;
+  border-radius: 30px;
+  background: #f3cb7d;
+  color: #0f1216;
+  border: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 18px rgba(243, 203, 125, 0.35);
+}
+
+.land-resource-screen .bar-next-btn:hover {
+  background: #f8d794;
+  transform: translateX(2px);
+  box-shadow: 0 6px 24px rgba(243, 203, 125, 0.5);
+}
+
+.land-resource-screen .bar-btn-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.land-resource-screen .bar-next-btn .bar-btn-text {
+  text-align: right;
+}
+
+.land-resource-screen .bar-btn-lead {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.land-resource-screen .bar-prev-btn .bar-btn-lead {
+  color: #f3cb7d;
+}
+
+.land-resource-screen .bar-next-btn .bar-btn-lead {
+  color: #0f1216;
+}
+
+.land-resource-screen .bar-btn-sub {
+  font-size: 9px;
+  line-height: 1.15;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.land-resource-screen .bar-prev-btn .bar-btn-sub {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.land-resource-screen .bar-next-btn .bar-btn-sub {
+  color: #2b2315;
+  font-weight: 600;
+}
+
+/* ─── GLOBAL LAND MAP MODAL STYLES ─── */
+.map-modal-dialog {
+  max-width: 880px;
+}
+
+.map-hero-frame {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: 55% 30%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+  margin-bottom: 18px;
+}
+
+.map-floating-overlay {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  z-index: 2;
+}
+
+.map-badge {
+  background: rgba(10, 16, 22, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 161, 90, 0.5);
+  color: #f3cb7d;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.map-continents-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-con-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 130px 140px;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.map-con-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.map-con-bar-track {
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.map-con-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #deb87a, #c29853);
+}
+
+.map-con-share {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f3cb7d;
+  text-align: right;
+}
+
+.map-con-area {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: right;
 }
 
 /* ─── INTERACTIVE CONTINENT DETAILS MODAL ─── */
@@ -9873,3 +10302,169 @@ button.step-resource-item {
 .soil-factor-row strong { display: block; font-size: 9px; color: #f5f2ed; margin-bottom: 2px; }
 .soil-factor-row p { font-size: 8px; color: rgba(255,255,255,0.5); line-height: 1.4; margin: 0; }
 
+
+/* Shared chapter dots (helpers/ChapterDots.tsx): dots were previously
+   decorative <span>s; they are now real <button>s, so strip UA chrome. */
+button.bar-dot,
+button.nav-chap-dot,
+button.pagination-bead,
+button.planning-nav-dot,
+button.soilcons-nav-dot {
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL PERFORMANCE & OPTIMIZATION LAYER
+   Applies to Landing + all 3 module experience pages.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Lazy Module Experience Loading Shell ─────────────────────────────── */
+.module-experience-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;
+  background: #090807;
+  color: rgba(255,255,255,0.55);
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+}
+
+/* ── 2. Image Performance ─────────────────────────────────────────────────
+   All images across the site get lazy decode so the main thread isn't
+   blocked by image decode. layout=auto avoids CLS.
+   ────────────────────────────────────────────────────────────────────────── */
+img {
+  decoding: async;
+  content-visibility: auto;
+}
+img:not([loading]) {
+  loading: lazy;
+}
+
+/* ── 3. Scroll Containment ───────────────────────────────────────────────── 
+   Prevents paint-invalidation cascades when sections scroll in/out.
+   ────────────────────────────────────────────────────────────────────────── */
+.air-screen,
+.water-screen,
+.land-screen,
+.bio-screen,
+section[class*="-section"],
+section[class*="Screen"],
+.chapter-section {
+  contain: layout style;
+}
+
+/* ── 4. Compositor Promotion & will-change Budget ────────────────────────── 
+   Promotes backdrop parallax layers to separate GPU compositing layers.
+   ────────────────────────────────────────────────────────────────────────── */
+.water-screen-backdrop,
+.air-screen-backdrop,
+.land-screen-backdrop,
+.bio-screen-backdrop {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.is-inview .air-screen,
+.is-inview .water-screen,
+.is-inview .land-screen,
+.is-inview .bio-screen {
+  will-change: auto;
+}
+
+/* ── 5. Universal Off-screen Rendering Skip (content-visibility) ──────────── 
+   Skips rendering, styling, and paint for all offscreen sections across
+   Water (18 screens), Land (16 screens), Air (14 screens), and Bio (11 screens).
+   contain-intrinsic-size: auto 900px allows the browser to remember exact rendered
+   height after first pass, completely eliminating scroll jumps or jank.
+   ────────────────────────────────────────────────────────────────────────── */
+.air-screen + .air-screen,
+.water-screen + .water-screen,
+.land-screen + .land-screen,
+.bio-screen + .bio-screen,
+.chapter-section + .chapter-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* ── 6. Scroll Performance: touch-action ─────────────────────────────────── 
+   Enables fast-tap on mobile, removes 300ms delay.
+   ────────────────────────────────────────────────────────────────────────── */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* ── 7. Pop-up / Modal Scroll Lock Safety ────────────────────────────────── 
+   When a modal or info panel is open, body scroll is locked.
+   Prevents the gap/jump that appears when scrollbar disappears.
+   ────────────────────────────────────────────────────────────────────────── */
+body.modal-open,
+body.scroll-locked {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px); /* compensate for lost scrollbar */
+}
+
+/* ── 8. Scrollbar Width Detection ────────────────────────────────────────── */
+:root {
+  --scrollbar-width: 0px;
+}
+@supports (scrollbar-width: thin) {
+  :root {
+    scrollbar-width: thin;
+  }
+}
+
+/* ── 9. Font Display Swap ────────────────────────────────────────────────── 
+   Ensures text is visible during font load (prevents invisible text flash).
+   ────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-display: swap;
+}
+
+/* ── 10. GPU Layer Hints for Animated Backdrops Only ─────────────────────── */
+.aintro-cover-bg,
+.aintro-chapter-bg,
+.wintro-cover-bg,
+.wintro-chapter-bg,
+[class*="intro-stage"],
+[class*="cover-bg"],
+[class*="canvas-bg"] {
+  transform: translateZ(0); /* promote to own GPU layer only for backdrop elements */
+  backface-visibility: hidden;
+}
+
+/* ── 11. Focus Ring System (accessibility + perf) ───────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── 12. Print / no-script fallbacks ─────────────────────────────────────── */
+@media print {
+  .air-left-rail,
+  .water-left-rail,
+  .land-left-rail,
+  .bio-left-rail,
+  .aintro-sticky,
+  .wintro-sticky,
+  .bintro-sticky,
+  .air-intro-transition,
+  .water-intro-transition,
+  .bio-intro-transition,
+  .module-experience-loading {
+    display: none !important;
+  }
+  body { background: white; color: black; }
+}

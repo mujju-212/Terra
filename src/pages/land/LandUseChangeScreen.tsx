@@ -1,166 +1,37 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Droplet, Trees, ArrowRight, Building2, Users2, ChevronRight, ChevronLeft, Thermometer, Sprout, X, Leaf, BarChart3, MapPin } from 'lucide-react';
 import '../../landuse.css';
 import { Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { useCompareSlider } from './helpers/useCompareSlider';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function LandUseChangeScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   // Hero Before/After Draggable Slider State (72% default matches mockup)
-  const [heroSliderPos, setHeroSliderPos] = useState<number>(72);
-  const [isHeroDragging, setIsHeroDragging] = useState<boolean>(false);
-  const heroSliderRef = useRef<HTMLDivElement>(null);
-
+  const hero = useCompareSlider({ initial: 72 });
   // Mini Case Study Before/After Draggable Slider State
-  const [miniSliderPos, setMiniSliderPos] = useState<number>(50);
-  const [isMiniDragging, setIsMiniDragging] = useState<boolean>(false);
-  const miniSliderRef = useRef<HTMLDivElement>(null);
+  const mini = useCompareSlider({ initial: 50, min: 10, max: 90 });
 
   // Modal States
   const [selectedStageIndex, setSelectedStageIndex] = useState<number | null>(null);
   const [isCaseStudyModalOpen, setIsCaseStudyModalOpen] = useState<boolean>(false);
   const [selectedImpactIndex, setSelectedImpactIndex] = useState<number | null>(null);
 
-  // Background Scroll Lock (Airtight Scroll Isolation)
-  useEffect(() => {
-    const isAnyModalOpen = selectedStageIndex !== null || isCaseStudyModalOpen || selectedImpactIndex !== null;
-    if (!isAnyModalOpen) return;
-
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-
-    const handleNativeWheel = (e: WheelEvent) => {
-      const target = e.target as HTMLElement | null;
-      const scrollable = target?.closest('.landuse-modal-body') as HTMLElement | null;
-
-      if (!scrollable) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        return;
-      }
-
-      const { scrollTop, scrollHeight, clientHeight } = scrollable;
-      const atTop = scrollTop <= 0;
-      const atBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1;
-
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-      }
-    };
-
-    window.addEventListener('wheel', handleNativeWheel, { capture: true, passive: false });
-
-    const handleNativeTouch = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target?.closest('.landuse-modal-body')) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-      }
-    };
-    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: false });
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedStageIndex(null);
-        setIsCaseStudyModalOpen(false);
-        setSelectedImpactIndex(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleNativeWheel, { capture: true });
-      window.removeEventListener('touchmove', handleNativeTouch, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedStageIndex, isCaseStudyModalOpen, selectedImpactIndex]);
-
-  // Hero Slider Drag Handlers
-  const handleHeroSliderMove = (clientX: number) => {
-    if (!heroSliderRef.current) return;
-    const rect = heroSliderRef.current.getBoundingClientRect();
-    const offsetX = clientX - rect.left;
-    const pct = Math.max(8, Math.min(92, (offsetX / rect.width) * 100));
-    setHeroSliderPos(pct);
+  const isAnyModalOpen = selectedStageIndex !== null || isCaseStudyModalOpen || selectedImpactIndex !== null;
+  const closeAnyModal = () => {
+    setSelectedStageIndex(null);
+    setIsCaseStudyModalOpen(false);
+    setSelectedImpactIndex(null);
   };
-
-  const onHeroSliderMouseDown = (e: React.MouseEvent) => {
-    setIsHeroDragging(true);
-    handleHeroSliderMove(e.clientX);
-  };
-
-  const onHeroSliderTouchMove = (e: React.TouchEvent) => {
-    if (e.touches[0]) {
-      handleHeroSliderMove(e.touches[0].clientX);
-    }
-  };
-
-  useEffect(() => {
-    if (!isHeroDragging) return;
-    const onMouseMove = (e: MouseEvent) => handleHeroSliderMove(e.clientX);
-    const onMouseUp = () => setIsHeroDragging(false);
-    const onTouchEnd = () => setIsHeroDragging(false);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    window.addEventListener('touchend', onTouchEnd);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [isHeroDragging]);
-
-  // Mini Case Study Slider Drag Handlers
-  const handleMiniSliderMove = (clientX: number) => {
-    if (!miniSliderRef.current) return;
-    const rect = miniSliderRef.current.getBoundingClientRect();
-    const offsetX = clientX - rect.left;
-    const pct = Math.max(10, Math.min(90, (offsetX / rect.width) * 100));
-    setMiniSliderPos(pct);
-  };
-
-  const onMiniSliderMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsMiniDragging(true);
-    handleMiniSliderMove(e.clientX);
-  };
-
-  const onMiniSliderTouchMove = (e: React.TouchEvent) => {
-    if (e.touches[0]) {
-      handleMiniSliderMove(e.touches[0].clientX);
-    }
-  };
-
-  useEffect(() => {
-    if (!isMiniDragging) return;
-    const onMouseMove = (e: MouseEvent) => handleMiniSliderMove(e.clientX);
-    const onMouseUp = () => setIsMiniDragging(false);
-    const onTouchEnd = () => setIsMiniDragging(false);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    window.addEventListener('touchend', onTouchEnd);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [isMiniDragging]);
+  // Airtight background scroll lock + Escape-to-close while a modal is open
+  useModalScrollLock(isAnyModalOpen, {
+    scrollableSelector: '.landuse-modal-body',
+    onClose: closeAnyModal,
+  });
 
   // 3 Stages of Land-Use Change Data
   const stagesData = [
@@ -327,11 +198,11 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             1. HERO BEFORE / AFTER SECTION (Interactive Draggable Split)
            ================================================================ */}
         <div
-          ref={heroSliderRef}
+          ref={hero.containerRef}
           className="landuse-hero-interactive"
-          onMouseDown={onHeroSliderMouseDown}
-          onTouchMove={onHeroSliderTouchMove}
-          style={{ '--split-pct': `${heroSliderPos}%` } as React.CSSProperties}
+          onMouseDown={hero.onMouseDown}
+          onTouchMove={hero.onTouchMove}
+          style={{ '--split-pct': `${hero.pos}%` } as React.CSSProperties}
           role="region"
           aria-label="Interactive before and after land-use comparison slider"
         >
@@ -349,8 +220,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             <div
               className="landuse-hero-copy"
               style={{
-                opacity: heroSliderPos < 18 ? 0 : Math.min(1, (heroSliderPos - 15) / 20),
-                pointerEvents: heroSliderPos < 18 ? 'none' : 'auto',
+                opacity: hero.pos < 18 ? 0 : Math.min(1, (hero.pos - 15) / 20),
+                pointerEvents: hero.pos < 18 ? 'none' : 'auto',
               }}
             >
               <span className="landuse-eyebrow">MODULE 01 &nbsp;|&nbsp; CHAPTER 10</span>
@@ -369,8 +240,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             <div
               className="landuse-pill-badge badge-natural"
               style={{
-                opacity: heroSliderPos < 46 ? 0 : Math.min(1, (heroSliderPos - 44) / 10),
-                pointerEvents: heroSliderPos < 46 ? 'none' : 'auto',
+                opacity: hero.pos < 46 ? 0 : Math.min(1, (hero.pos - 44) / 10),
+                pointerEvents: hero.pos < 46 ? 'none' : 'auto',
               }}
             >
               <div className="pill-icon-circle pill-icon-natural">
@@ -397,8 +268,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             <div
               className="landuse-pill-badge badge-developed"
               style={{
-                opacity: heroSliderPos > 86 ? 0 : Math.min(1, (88 - heroSliderPos) / 10),
-                pointerEvents: heroSliderPos > 86 ? 'none' : 'auto',
+                opacity: hero.pos > 86 ? 0 : Math.min(1, (88 - hero.pos) / 10),
+                pointerEvents: hero.pos > 86 ? 'none' : 'auto',
               }}
             >
               <div className="pill-icon-circle pill-icon-developed">
@@ -442,6 +313,7 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
                     <div
                       className="stage-step-card"
                       onClick={() => setSelectedStageIndex(idx)}
+                      onKeyDown={keyActivate(() => setSelectedStageIndex(idx))}
                       role="button"
                       tabIndex={0}
                       title={`Click to open deep dive on ${stage.title}`}
@@ -469,13 +341,15 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
 
                     {/* Arrow node between stages */}
                     {idx < stagesData.length - 1 && (
-                      <div
+                      <button
+                        type="button"
                         className="stage-arrow-node"
                         title="Progression transition"
+                        aria-label={`Skip to stage ${idx + 2}`}
                         onClick={() => setSelectedStageIndex(idx + 1)}
                       >
                         <ArrowRight size={14} />
-                      </div>
+                      </button>
                     )}
                   </div>
                 );
@@ -483,30 +357,30 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             </div>
           </div>
 
-          {/* RIGHT: Case Study: Shire River, England */}
+          {/* RIGHT: Case Study: Shire River, Malawi */}
           <div className="landuse-glass-card case-study-card">
             <div className="case-study-header">
               <div className="landuse-card-title-group">
-                <h3 className="landuse-card-heading">Case Study: Shire River, England</h3>
+                <h3 className="landuse-card-heading">Case Study: Shire River, Malawi</h3>
               </div>
-              <div
+              <button
+                type="button"
                 className="case-location-badge"
                 onClick={() => setIsCaseStudyModalOpen(true)}
-                style={{ cursor: 'pointer' }}
                 title="Click to view detailed case study"
               >
                 <MapPin size={11} />
-                <span>Shire River, England</span>
-              </div>
+                <span>Shire River, Malawi</span>
+              </button>
             </div>
 
             {/* Embedded Mini Draggable Before / After Comparison Slider */}
             <div
-              ref={miniSliderRef}
+              ref={mini.containerRef}
               className="case-mini-slider-wrap"
-              onMouseDown={onMiniSliderMouseDown}
-              onTouchMove={onMiniSliderTouchMove}
-              style={{ '--mini-split': `${miniSliderPos}%` } as React.CSSProperties}
+              onMouseDown={mini.onMouseDown}
+              onTouchMove={mini.onTouchMove}
+              style={{ '--mini-split': `${mini.pos}%` } as React.CSSProperties}
               title="Drag to compare Shire River Before vs After urbanization"
             >
               {/* Layer 1: Before (Left side, clipped to 0% -> mini-split) */}
@@ -518,8 +392,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
                 <div
                   className="mini-slider-pill mini-pill-before"
                   style={{
-                    opacity: miniSliderPos < 18 ? 0 : Math.min(1, (miniSliderPos - 14) / 10),
-                    pointerEvents: miniSliderPos < 18 ? 'none' : 'auto',
+                    opacity: mini.pos < 18 ? 0 : Math.min(1, (mini.pos - 14) / 10),
+                    pointerEvents: mini.pos < 18 ? 'none' : 'auto',
                   }}
                 >
                   <strong>Before</strong>
@@ -536,8 +410,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
                 <div
                   className="mini-slider-pill mini-pill-after"
                   style={{
-                    opacity: miniSliderPos > 82 ? 0 : Math.min(1, (84 - miniSliderPos) / 10),
-                    pointerEvents: miniSliderPos > 82 ? 'none' : 'auto',
+                    opacity: mini.pos > 82 ? 0 : Math.min(1, (84 - mini.pos) / 10),
+                    pointerEvents: mini.pos > 82 ? 'none' : 'auto',
                   }}
                 >
                   <strong>After</strong>
@@ -554,15 +428,15 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
               </div>
             </div>
 
-            <p
+            <button
+              type="button"
               className="case-study-summary-desc"
               onClick={() => setIsCaseStudyModalOpen(true)}
-              style={{ cursor: 'pointer' }}
               title="Click to read full syllabus findings"
             >
               The Shire River has undergone significant land-use change due to urbanization, leading to altered river
               flows, reduced wetlands and increased flood risk.
-            </p>
+            </button>
           </div>
         </Reveal>
 
@@ -585,6 +459,7 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
                   key={impact.id}
                   className={`landuse-impact-card ${impact.themeClass}`}
                   onClick={() => setSelectedImpactIndex(idx)}
+                  onKeyDown={keyActivate(() => setSelectedImpactIndex(idx))}
                   role="button"
                   tabIndex={0}
                   title={`Click to read details on ${impact.title}`}
@@ -617,15 +492,9 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
             </div>
           </button>
 
-          {/* 15 Chapter indicator dots (10th dot active in gold) */}
-          <div className="nav-center-dots-group" aria-label="Chapter progression indicator">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`nav-chap-dot ${idx === 9 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+          {/* 15 Chapter indicator dots (10th dot active in gold) — clickable */}
+          <div className="nav-center-dots-group">
+            <ChapterDots activeIndex={9} onJump={onJumpChapter} className="nav-center-dots-group" dotClassName="nav-chap-dot" activeClassName="is-active-dot" />
           </div>
 
           <button
@@ -660,6 +529,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
               >
                 <motion.div
                   className="landuse-modal-window"
+                  role="dialog"
+                  aria-modal="true"
                   data-lenis-prevent
                   initial={{ scale: 0.94, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -791,6 +662,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
               >
                 <motion.div
                   className="landuse-modal-window"
+                  role="dialog"
+                  aria-modal="true"
                   data-lenis-prevent
                   initial={{ scale: 0.94, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -926,6 +799,8 @@ export default function LandUseChangeScreen({ onPrev, onNext }: { onPrev: () => 
               >
                 <motion.div
                   className="landuse-modal-window"
+                  role="dialog"
+                  aria-modal="true"
                   data-lenis-prevent
                   initial={{ scale: 0.94, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}

@@ -32,6 +32,7 @@ import {
 import { Link } from 'react-router-dom';
 import Preloader from '../components/Preloader';
 import CountUp from '../components/CountUp';
+import Footer from '../components/Footer';
 
 interface HeroWorld {
   id: string;
@@ -216,18 +217,6 @@ function AnimatedWord({
     ? useTransform(progress, range, ['rgba(222, 184, 122, 0.22)', '#deb87a'])
     : useTransform(progress, range, ['rgba(255, 255, 255, 0.22)', '#fdfbf7']);
 
-  const shadow = isHighlight
-    ? useTransform(
-        progress,
-        range,
-        ['0 0 0px rgba(222, 184, 122, 0)', '0 0 24px rgba(222, 184, 122, 0.45)']
-      )
-    : useTransform(
-        progress,
-        range,
-        ['0 0 0px rgba(255, 255, 255, 0)', '0 2px 14px rgba(0, 0, 0, 0.6)']
-      );
-
   return (
     <motion.span
       className={`scroll-word ${isHighlight ? 'is-highlight' : ''}`}
@@ -235,7 +224,6 @@ function AnimatedWord({
         opacity,
         y,
         color,
-        textShadow: shadow,
         display: 'inline-block',
         marginRight: '0.24em',
       }}
@@ -494,6 +482,28 @@ export default function Landing() {
                       {stat.sub && <small>{stat.sub}</small>}
                     </div>
                   ))}
+                </div>
+
+                {/* Direct Action Buttons to Enter Module or Read Notes */}
+                <div className="hero-editorial-actions">
+                  <Link
+                    to={`/module/${currentHeroWorld.slug}`}
+                    className="hero-enter-module-btn"
+                    style={{ '--btn-accent': currentHeroWorld.accent } as React.CSSProperties}
+                  >
+                    <span className="hero-btn-pulse" />
+                    <span>Explore {currentHeroWorld.title} Module</span>
+                    <ArrowRight size={15} className="hero-btn-arrow" />
+                  </Link>
+
+                  <Link
+                    to={`/resources?mod=${currentHeroWorld.slug}`}
+                    className="hero-notes-link-btn"
+                    title={`Read or download ${currentHeroWorld.title} notes PDF`}
+                  >
+                    <FileText size={14} />
+                    <span>Study Notes (PDF)</span>
+                  </Link>
                 </div>
               </motion.div>
             </div>
@@ -1340,204 +1350,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ─── SECTION 06: SITE FOOTER (Image Reference: media_1790627931446.jpg) ─── */}
-      <footer className="site-footer-reference" id="footer" aria-label="Site Footer">
-        {/* Upper Banner: Same Planet. Brighter Tomorrow */}
-        <div className="footer-banner-header">
-          <div className="footer-banner-scrim" />
-          <div className="footer-banner-content">
-            <motion.div
-              className="footer-banner-left"
-              initial={reduced ? false : { opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="footer-brand-overline">
-                <span className="footer-brand-logo-mark">T</span>
-                <span>TERRA | Conservation of Natural Resources</span>
-              </div>
-              <h2 className="footer-banner-title">
-                Same Planet.
-                <br />
-                <em>Brighter Tomorrow.</em>
-              </h2>
-              <p className="footer-banner-desc">
-                Explore, learn and take action for a more sustainable and balanced planet through
-                land, water, air, biodiversity and global warming.
-              </p>
-            </motion.div>
-            <motion.div
-              className="footer-script-tag"
-              aria-hidden="true"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            >
-              A Greener
-              <br />
-              Future Together.
-            </motion.div>
-          </div>
-        </div>
-
-        {/* 4 Main Footer Columns */}
-        <div className="footer-main-columns">
-          {/* Column 1: Explore Modules */}
-          <motion.div
-            className="footer-col"
-            initial={reduced ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3 className="footer-col-title">Explore Modules</h3>
-            <div className="footer-module-list">
-              <Link to="/module/land" className="footer-module-item is-highlighted">
-                <Mountain size={14} />
-                <span className="footer-item-num">01</span>
-                <span>Land</span>
-              </Link>
-              <Link to="/module/water" className="footer-module-item">
-                <Droplet size={13} />
-                <span className="footer-item-num">02</span>
-                <span>Water</span>
-              </Link>
-              <Link to="/module/air" className="footer-module-item">
-                <Wind size={13} />
-                <span className="footer-item-num">03</span>
-                <span>Air</span>
-              </Link>
-              <Link to="/module/biodiversity" className="footer-module-item">
-                <Trees size={13} />
-                <span className="footer-item-num">04</span>
-                <span>Biodiversity</span>
-              </Link>
-              <Link to="/module/warming" className="footer-module-item">
-                <Globe size={13} />
-                <span className="footer-item-num">05</span>
-                <span>Global Warming</span>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Column 2: Quick Links */}
-          <motion.div
-            className="footer-col"
-            initial={reduced ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3 className="footer-col-title">Quick Links</h3>
-            <div className="footer-quick-list">
-              <a href="#hero">Home</a>
-              <Link to="/about">About</Link>
-              <a href="#modules">Modules</a>
-              <Link to="/quiz">Quiz</Link>
-              <a href="#how-it-works">Resources</a>
-              <a href="#about">FAQs</a>
-            </div>
-          </motion.div>
-
-          {/* Column 3: Resources */}
-          <motion.div
-            className="footer-col"
-            initial={reduced ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3 className="footer-col-title">Resources</h3>
-            <div className="footer-resources-list">
-              <a href="#modules" className="footer-resource-item">
-                <FileText size={13} />
-                <span>Study Materials</span>
-              </a>
-              <a href="#modules" className="footer-resource-item">
-                <Video size={13} />
-                <span>Videos</span>
-              </a>
-              <a href="#modules" className="footer-resource-item">
-                <BarChart3 size={13} />
-                <span>Infographics</span>
-              </a>
-              <a href="#modules" className="footer-resource-item">
-                <BookOpen size={13} />
-                <span>Articles</span>
-              </a>
-              <a href="#modules" className="footer-resource-item">
-                <Download size={13} />
-                <span>Downloads</span>
-              </a>
-              <a href="#about" className="footer-resource-item">
-                <ExternalLink size={13} />
-                <span>External Links</span>
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Column 4: Stay Connected */}
-          <motion.div
-            className="footer-col footer-stay-col"
-            initial={reduced ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3 className="footer-col-title">Stay Connected</h3>
-            <p className="footer-stay-desc">Get the latest updates, new modules and resources.</p>
-            <form className="footer-subscribe-box" onSubmit={(e) => e.preventDefault()}>
-              <Mail size={14} />
-              <input type="email" placeholder="Enter your email" aria-label="Email address" required />
-              <button type="submit" className="footer-subscribe-btn">
-                <span>Subscribe</span>
-                <ArrowRight size={11} />
-              </button>
-            </form>
-            <label className="footer-agree-row">
-              <input type="checkbox" defaultChecked />
-              <span>I agree to receive educational updates from TERRA.</span>
-            </label>
-          </motion.div>
-        </div>
-
-        {/* Bottom Bar: Brand | Motto | Socials */}
-        <motion.div
-          className="footer-bottom-reference"
-          initial={reduced ? false : { opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="footer-bottom-brand">
-            <span className="footer-bottom-brand-circle">T</span>
-            <span>TERRA | Conservation of Natural Resources</span>
-          </div>
-
-          <div className="footer-bottom-motto">
-            KNOWLEDGE TODAY. A BRIGHTER TOMORROW.
-          </div>
-
-          <div className="footer-bottom-socials">
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="footer-social-btn">
-              <Linkedin size={13} />
-            </a>
-            <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="footer-social-btn">
-              <Youtube size={13} />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="footer-social-btn">
-              <Instagram size={13} />
-            </a>
-            <a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X (formerly Twitter)" className="footer-social-btn">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-          </div>
-        </motion.div>
-      </footer>
+      {/* ─── SECTION 06: SITE FOOTER ─── */}
+      <Footer />
     </main>
   );
 }

@@ -14,8 +14,10 @@ declare global {
 
 const Landing = lazy(() => import('./pages/Landing'));
 const ModulePage = lazy(() => import('./pages/ModulePage'));
+const ModulesIndex = lazy(() => import('./pages/ModulesIndex'));
 const Quiz = lazy(() => import('./pages/Quiz'));
 const About = lazy(() => import('./pages/About'));
+const Resources = lazy(() => import('./pages/Resources'));
 
 function RouteModule() {
   const { slug = '' } = useParams();
@@ -165,6 +167,9 @@ export default function App() {
           <Routes location={location}>
             <Route path="/" element={<Landing />} />
             <Route path="/about" element={<About />} />
+            <Route path="/modules" element={<ModulesIndex />} />
+            <Route path="/module" element={<ModulesIndex />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/module/:slug" element={<RouteModule />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="*" element={<NotFound />} />

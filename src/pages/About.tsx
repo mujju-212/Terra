@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
+import Footer from '../components/Footer';
 import {
   Github,
   Youtube,
@@ -234,6 +235,8 @@ export default function About() {
           </span>
         </motion.div>
       </section>
+
+      <Footer />
     </main>
   );
 }

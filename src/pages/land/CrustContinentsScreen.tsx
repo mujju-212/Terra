@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Mountain, Waves, Globe, Play, Pause, ArrowRight, ArrowLeft, Flame, Layers, Activity } from 'lucide-react';
 import { Reveal } from './motion';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function CrustContinentsScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function CrustContinentsScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [driftStep, setDriftStep] = useState(0);
   const [isPlayingDrift, setIsPlayingDrift] = useState(false);
   const [plateFilter, setPlateFilter] = useState<'plates' | 'boundaries' | 'movement' | 'quakes' | 'volcanoes'>('plates');
@@ -145,13 +148,13 @@ export default function CrustContinentsScreen({ onPrev, onNext }: { onPrev: () =
               <div className="tectonic-filter-box">
                 <span className="filter-title">Tectonic Plates</span>
                 <div className="filter-options-list">
-                  {[
+                  {([
                     { id: 'plates', label: 'Plates' },
                     { id: 'boundaries', label: 'Boundaries' },
                     { id: 'movement', label: 'Movement' },
                     { id: 'quakes', label: 'Earthquakes' },
                     { id: 'volcanoes', label: 'Volcanoes' },
-                  ].map((f) => (
+                  ] as const).map((f) => (
                     <label
                       key={f.id}
                       className={`filter-radio-row ${plateFilter === f.id ? 'is-active-filter' : ''}`}
@@ -160,7 +163,7 @@ export default function CrustContinentsScreen({ onPrev, onNext }: { onPrev: () =
                         type="radio"
                         name="tectonic-filter"
                         checked={plateFilter === f.id}
-                        onChange={() => setPlateFilter(f.id as any)}
+                        onChange={() => setPlateFilter(f.id)}
                       />
                       <span>{f.label}</span>
                     </label>
@@ -219,6 +222,12 @@ export default function CrustContinentsScreen({ onPrev, onNext }: { onPrev: () =
                       setIsPlayingDrift(false);
                       setDriftStep(i);
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setIsPlayingDrift(false);
+                      setDriftStep(i);
+                    })}
+                    role="button"
+                    tabIndex={0}
                   >
                     <div
                       className="drift-stage-orb"
@@ -287,9 +296,7 @@ export default function CrustContinentsScreen({ onPrev, onNext }: { onPrev: () =
             <span>Previous: Earth Layers</span>
           </button>
           <div className="bar-dots-pills">
-            {[0, 1, 2, 3, 4].map((idx) => (
-              <span key={idx} className={`bar-dot ${idx === 3 ? 'is-active' : ''}`} />
-            ))}
+            <ChapterDots activeIndex={3} onJump={onJumpChapter} className="bar-dots-pills" dotClassName="bar-dot" activeClassName="is-active" />
           </div>
           <button type="button" className="bar-next-btn" onClick={onNext}>
             <span>Next: Land as a Resource</span>

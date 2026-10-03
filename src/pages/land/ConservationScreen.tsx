@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Mountain, Droplet, Trees, Globe, ArrowRight, ArrowLeft, Building2, Users2, Activity, Sprout, X, CloudRain, Leaf } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Mountain, Droplet, Trees, Globe, Building2, Users2, Activity, Sprout, X, CloudRain, Leaf } from 'lucide-react';
 import { TiltCard, Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function ConservationScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [activePin, setActivePin] = useState<string | null>(null);
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [activeMethod, setActiveMethod] = useState<number>(0);
@@ -15,6 +19,12 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
     quote: string;
     points: string[];
   } | null>(null);
+
+  // Airtight background scroll lock + Escape-to-close while the detail modal is open
+  useModalScrollLock(detailModal !== null, {
+    scrollableSelector: '.soil-detail-modal-card',
+    onClose: () => setDetailModal(null),
+  });
 
   // 4 Core Factors: Why Conservation Matters
   const whyFactors = [
@@ -308,6 +318,10 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
                 setActivePin(pin.id);
                 setDetailModal(pin);
               }}
+              onKeyDown={keyActivate(() => {
+                setActivePin(pin.id);
+                setDetailModal(pin);
+              })}
               onMouseEnter={() => setHoveredPin(pin.id)}
               onMouseLeave={() => setHoveredPin(null)}
               role="button"
@@ -372,6 +386,7 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
                       key={f.id}
                       className="cons-why-factor-cell"
                       onClick={() => setDetailModal(f)}
+                      onKeyDown={keyActivate(() => setDetailModal(f))}
                       role="button"
                       tabIndex={0}
                       title={`Inspect ${f.title}`}
@@ -418,6 +433,10 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
                       setActiveMethod(idx);
                       setDetailModal(m);
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setActiveMethod(idx);
+                      setDetailModal(m);
+                    })}
                     role="button"
                     tabIndex={0}
                     title={m.title}
@@ -509,14 +528,8 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
             </div>
           </button>
 
-          <div className="soil-pagination-dots-strip" aria-label="Module Chapter Progress">
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <span
-                key={i}
-                className={`pagination-bead ${i === 7 ? 'is-active-bead' : ''}`}
-                title={`Chapter ${String(i + 1).padStart(2, '0')}`}
-              />
-            ))}
+          <div className="soil-pagination-dots-strip">
+            <ChapterDots activeIndex={7} onJump={onJumpChapter} className="soil-pagination-dots-strip" />
           </div>
 
           <button type="button" className="soil-nav-btn next-btn is-gold-cta" onClick={onNext}>
@@ -533,9 +546,12 @@ export default function ConservationScreen({ onPrev, onNext }: { onPrev: () => v
 
       {/* Interactive Detail Modal for Conservation */}
       {detailModal && (
-        <div className="soil-detail-modal-overlay" onClick={() => setDetailModal(null)}>
+        <div className="soil-detail-modal-overlay" data-lenis-prevent onClick={() => setDetailModal(null)}>
           <div
             className="soil-detail-modal-card cons-modal-card"
+            role="dialog"
+            aria-modal="true"
+            data-lenis-prevent
             onClick={(e) => e.stopPropagation()}
             style={{ '--modal-accent': detailModal.color } as React.CSSProperties}
           >

@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowRight, ArrowLeft, Sparkles, Building2, Users2, Layers, Sprout, X, Clock, Leaf, BarChart3, MapPin, TreePine, ShieldCheck } from 'lucide-react';
 import '../../landplanning.css';
 import { TiltCard, Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function LandPlanningScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   // Modal states: 'evolution' | 'type' | 'nilgiris' | 'future' | null
   const [activeModal, setActiveModal] = useState<'evolution' | 'type' | 'nilgiris' | 'future' | null>(null);
   const [selectedEvolutionId, setSelectedEvolutionId] = useState<string | null>(null);
@@ -32,71 +36,12 @@ export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => v
     setActiveModal(null);
   };
 
-  // Lock background scroll when modal is active
-  useEffect(() => {
-    if (!activeModal) return;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-
-    const handleCaptureWheel = (e: WheelEvent) => {
-      const modalDialog = document.querySelector('.planning-modal-dialog');
-      if (modalDialog && modalDialog.contains(e.target as Node)) {
-        const scrollable = modalDialog.querySelector('.planning-modal-scrollable') as HTMLElement | null;
-        if (scrollable) {
-          // If cursor is on modal header, footer, or dialog border, route scroll to scrollable area
-          if (e.target !== scrollable && !scrollable.contains(e.target as Node)) {
-            scrollable.scrollTop += e.deltaY;
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-          }
-          const atTop = scrollable.scrollTop === 0 && e.deltaY < 0;
-          const atBottom =
-            Math.abs(scrollable.scrollHeight - scrollable.clientHeight - scrollable.scrollTop) <= 1 &&
-            e.deltaY > 0;
-          if (atTop || atBottom) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }
-      } else {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target?.closest('.planning-modal-scrollable')) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
-    };
-
-    window.addEventListener('wheel', handleCaptureWheel, { passive: false, capture: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleCaptureWheel, { capture: true });
-      window.removeEventListener('touchmove', handleTouchMove, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeModal]);
+  // Airtight background scroll lock + Escape-to-close while the modal is open.
+  // Wheel scrolls over the dialog's header/footer are routed into the scrollable body.
+  useModalScrollLock(activeModal !== null, {
+    scrollableSelector: '.planning-modal-scrollable',
+    onClose: closeModal,
+  });
 
   // 1. Four Stages of Land-Use Planning Evolution
   const evolutionStages = [
@@ -284,6 +229,7 @@ export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => v
                     ['--stage-glow' as string]: `${stage.color}35`,
                   }}
                   onClick={() => openEvolutionModal(stage.id)}
+                  onKeyDown={keyActivate(() => openEvolutionModal(stage.id))}
                   title={`Click for history & details on ${stage.num}`}
                   role="button"
                   tabIndex={0}
@@ -328,6 +274,7 @@ export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => v
                       } as React.CSSProperties
                     }
                     onClick={() => openTypeModal(type.id)}
+                    onKeyDown={keyActivate(() => openTypeModal(type.id))}
                     role="button"
                     tabIndex={0}
                     title={`Explore ${type.title}`}
@@ -361,6 +308,7 @@ export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => v
           <div
             className="planning-panel case-study-panel"
             onClick={openNilgirisModal}
+            onKeyDown={keyActivate(openNilgirisModal)}
             role="button"
             tabIndex={0}
             title="Click to explore the Nilgiris Regional Land-Use Planning Case Study"
@@ -518,13 +466,7 @@ export default function LandPlanningScreen({ onPrev, onNext }: { onPrev: () => v
           </button>
 
           <div className="planning-dots-tracker">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`planning-nav-dot ${idx === 13 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+            <ChapterDots activeIndex={13} onJump={onJumpChapter} className="planning-dots-tracker" dotClassName="planning-nav-dot" activeClassName="is-active-dot" />
           </div>
 
           <button type="button" className="planning-next-pill-btn" onClick={onNext}>

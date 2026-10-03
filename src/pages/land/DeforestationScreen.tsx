@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Droplet, Trees, ArrowRight, Flame, Building2, Users2, ChevronRight, ChevronLeft, Thermometer, Sprout, X, Leaf, PawPrint, Route, Pickaxe } from 'lucide-react';
 import '../../deforestation.css';
 import { Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { useCompareSlider } from './helpers/useCompareSlider';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
-  const [sliderPos, setSliderPos] = useState(58);
-  const [isDragging, setIsDragging] = useState(false);
+export default function DeforestationScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
+  const slider = useCompareSlider({ initial: 58 });
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [selectedCauseIndex, setSelectedCauseIndex] = useState<number | null>(null);
   const [activeModalTab, setActiveModalTab] = useState<'direct' | 'underlying' | 'agents' | 'concepts'>('direct');
@@ -18,116 +22,17 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
     x: number;
     y: number;
   } | null>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Background Scroll Lock (Locks HTML & Body, Stops Lenis, and Traps Wheel Events inside modal)
-  useEffect(() => {
-    const isAnyModalOpen = isExploreOpen || selectedCauseIndex !== null;
-    if (!isAnyModalOpen) return;
-
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-
-    // Native wheel event interceptor (capture phase): keeps scrolling inside modal, stops window/body background scroll
-    const handleNativeWheel = (e: WheelEvent) => {
-      const target = e.target as HTMLElement | null;
-      const scrollable = target?.closest('.cause-detail-body, .deforest-modal-body') as HTMLElement | null;
-
-      if (!scrollable) {
-        // Outside the scrollable container (e.g. backdrop, modal header, modal footer)
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        return;
-      }
-
-      // Inside scrollable area: allow internal scroll, but stop boundary overscroll from leaking to window
-      const { scrollTop, scrollHeight, clientHeight } = scrollable;
-      const atTop = scrollTop <= 0;
-      const atBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1;
-
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-      }
-    };
-
-    window.addEventListener('wheel', handleNativeWheel, { capture: true, passive: false });
-
-    // Touch event lock on backdrop
-    const handleNativeTouch = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target?.closest('.cause-detail-body, .deforest-modal-body')) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-      }
-    };
-    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: false });
-
-    // Keyboard ESC to close modal
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedCauseIndex(null);
-        setIsExploreOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleNativeWheel, { capture: true });
-      window.removeEventListener('touchmove', handleNativeTouch, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isExploreOpen, selectedCauseIndex]);
-
-  // Smooth drag handling for Before/After Hero
-  const handleSliderMove = (clientX: number) => {
-    if (!sliderRef.current) return;
-    const rect = sliderRef.current.getBoundingClientRect();
-    const offsetX = clientX - rect.left;
-    const pct = Math.max(8, Math.min(92, (offsetX / rect.width) * 100));
-    setSliderPos(pct);
+  const isAnyModalOpen = isExploreOpen || selectedCauseIndex !== null;
+  const closeAnyModal = () => {
+    setSelectedCauseIndex(null);
+    setIsExploreOpen(false);
   };
-
-  const onSliderMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    handleSliderMove(e.clientX);
-  };
-
-  const onSliderTouchMove = (e: React.TouchEvent) => {
-    if (e.touches[0]) {
-      handleSliderMove(e.touches[0].clientX);
-    }
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-    const onMouseMove = (e: MouseEvent) => handleSliderMove(e.clientX);
-    const onMouseUp = () => setIsDragging(false);
-    const onTouchEnd = () => setIsDragging(false);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    window.addEventListener('touchend', onTouchEnd);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [isDragging]);
+  // Airtight background scroll lock + Escape-to-close while a modal is open
+  useModalScrollLock(isAnyModalOpen, {
+    scrollableSelector: '.cause-detail-body, .deforest-modal-body',
+    onClose: closeAnyModal,
+  });
 
   // 6 Major causes with comprehensive syllabus data for detailed popup
   const causesList = [
@@ -403,13 +308,12 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
       <div className="deforest-screen-container">
         {/* ================================================================
             1. HERO BEFORE / AFTER SECTION (Interactive Draggable Split)
-           ================================================================ */}
-        <div
-          ref={sliderRef}
+           ================================================================ */}          <div
+          ref={slider.containerRef}
           className="deforest-hero-interactive"
-          onMouseDown={onSliderMouseDown}
-          onTouchMove={onSliderTouchMove}
-          style={{ '--split-pct': `${sliderPos}%` } as React.CSSProperties}
+          onMouseDown={slider.onMouseDown}
+          onTouchMove={slider.onTouchMove}
+          style={{ '--split-pct': `${slider.pos}%` } as React.CSSProperties}
           role="region"
           aria-label="Interactive before and after deforestation comparison slider"
         >
@@ -666,12 +570,7 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
                   onPointerDown={(e) => {
                     e.stopPropagation();
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedCauseIndex(index);
-                    }
-                  }}
+                  onKeyDown={keyActivate(() => setSelectedCauseIndex(index))}
                   role="button"
                   tabIndex={0}
                   aria-label={`Open syllabus details for ${cause.title}`}
@@ -745,15 +644,9 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
             </div>
           </button>
 
-          {/* 15 Chapter indicator dots (9th dot active) */}
-          <div className="nav-center-dots-group" aria-label="Chapter progression indicator">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`nav-chap-dot ${idx === 8 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+          {/* 15 Chapter indicator dots (9th dot active) — clickable */}
+          <div className="nav-center-dots-group">
+            <ChapterDots activeIndex={8} onJump={onJumpChapter} className="nav-center-dots-group" dotClassName="nav-chap-dot" activeClassName="is-active-dot" />
           </div>
 
           <button
@@ -782,10 +675,11 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedCauseIndex(null)}
-              >
-                <motion.div
-                  className="cause-detail-modal-window"
-                  data-lenis-prevent
+              >                <motion.div
+                className="cause-detail-modal-window"
+                role="dialog"
+                aria-modal="true"
+                data-lenis-prevent
                   initial={{ scale: 0.94, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.94, opacity: 0, y: 20 }}
@@ -933,10 +827,11 @@ export default function DeforestationScreen({ onPrev, onNext }: { onPrev: () => 
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsExploreOpen(false)}
-              >
-                <motion.div
-                  className="deforest-modal-window"
-                  data-lenis-prevent
+              >                <motion.div
+                className="deforest-modal-window"
+                role="dialog"
+                aria-modal="true"
+                data-lenis-prevent
                   initial={{ scale: 0.94, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.94, opacity: 0, y: 20 }}

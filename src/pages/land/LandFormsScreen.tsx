@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Mountain, Globe, ArrowRight, ArrowLeft, Layers, Sprout, X, Settings } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Layers, Globe, Sprout, X, Mountain, Settings } from 'lucide-react';
 import { TiltCard, Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
-  const [activeLandform, setActiveLandform] = useState(0);
+export default function LandFormsScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [activeCard, setActiveCard] = useState<number>(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [detailModal, setDetailModal] = useState<{
     name: string;
     subtitle: string;
@@ -18,6 +20,12 @@ export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void
     quote: string;
     points: string[];
   } | null>(null);
+
+  // Airtight background scroll lock + Escape-to-close while the detail modal is open
+  useModalScrollLock(detailModal !== null, {
+    scrollableSelector: '.soil-detail-modal-card',
+    onClose: () => setDetailModal(null),
+  });
 
   // 4 Core Factors / Geomorphology Pillars
   const heroFactors = [
@@ -236,6 +244,10 @@ export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void
               setActiveCard(idx);
               setDetailModal(item);
             }}
+            onKeyDown={keyActivate(() => {
+              setActiveCard(idx);
+              setDetailModal(item);
+            })}
             onMouseEnter={() => setHoveredCard(idx)}
             onMouseLeave={() => setHoveredCard(null)}
             role="button"
@@ -345,6 +357,10 @@ export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void
                   setActiveCard(idx);
                   setDetailModal(item);
                 }}
+                onKeyDown={keyActivate(() => {
+                  setActiveCard(idx);
+                  setDetailModal(item);
+                })}
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
                 style={{ '--card-tint': item.color } as React.CSSProperties}
@@ -388,14 +404,8 @@ export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void
             </div>
           </button>
 
-          <div className="soil-pagination-dots-strip" aria-label="Module Chapter Progress">
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-              <span
-                key={i}
-                className={`pagination-bead ${i === 6 ? 'is-active-bead' : ''}`}
-                title={`Chapter ${String(i + 1).padStart(2, '0')}`}
-              />
-            ))}
+          <div className="soil-pagination-dots-strip">
+            <ChapterDots activeIndex={6} onJump={onJumpChapter} className="soil-pagination-dots-strip" />
           </div>
 
           <button type="button" className="soil-nav-btn next-btn is-gold-cta" onClick={onNext}>
@@ -412,9 +422,12 @@ export default function LandFormsScreen({ onPrev, onNext }: { onPrev: () => void
 
       {/* Interactive Detail Modal for Landforms */}
       {detailModal && (
-        <div className="soil-detail-modal-overlay" onClick={() => setDetailModal(null)}>
+        <div className="soil-detail-modal-overlay" data-lenis-prevent onClick={() => setDetailModal(null)}>
           <div
             className="soil-detail-modal-card landforms-modal-card"
+            role="dialog"
+            aria-modal="true"
+            data-lenis-prevent
             onClick={(e) => e.stopPropagation()}
             style={{ '--modal-accent': detailModal.color } as React.CSSProperties}
           >

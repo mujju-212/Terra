@@ -1006,6 +1006,7 @@
   padding: 18px 24px;
   background: rgba(20, 28, 23, 0.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
 }
 
 .soilhealth-modal-title-wrap {
@@ -1066,8 +1067,11 @@
 
 .soilhealth-modal-body {
   padding: 22px 24px;
-  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: scroll !important;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -1075,12 +1079,12 @@
 }
 
 .soilhealth-modal-body::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .soilhealth-modal-body::-webkit-scrollbar-thumb {
-  background: rgba(234, 179, 8, 0.3);
-  border-radius: 3px;
+  background: rgba(234, 179, 8, 0.45);
+  border-radius: 4px;
 }
 
 .soilhealth-modal-overview-box {

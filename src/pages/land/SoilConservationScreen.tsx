@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Droplet, Trees, ArrowRight, ArrowLeft, Wheat, Layers, Activity, Sprout, X, Leaf, MapPin, Cloud, TreePine, RotateCw, ShieldCheck } from 'lucide-react';
 import '../../soilconservation.css';
 import { TiltCard, Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { useCompareSlider } from './helpers/useCompareSlider';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
-  const [sliderPos, setSliderPos] = useState<number>(50);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
+export default function SoilConservationScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
+  const slider = useCompareSlider({ initial: 50, min: 4, max: 96 });
 
   // Modal states: 'strategy' | 'benefit' | 'nilgiris' | null
   const [activeModal, setActiveModal] = useState<'strategy' | 'benefit' | 'nilgiris' | null>(null);
@@ -32,118 +35,12 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
     setActiveModal(null);
   };
 
-  // Slider drag interaction handlers
-  const handleSliderMove = (clientX: number) => {
-    if (!sliderRef.current) return;
-    const rect = sliderRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const pct = Math.min(96, Math.max(4, (x / rect.width) * 100));
-    setSliderPos(pct);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    handleSliderMove(e.clientX);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    if (e.touches[0]) handleSliderMove(e.touches[0].clientX);
-  };
-
-  useEffect(() => {
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      handleSliderMove(e.clientX);
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (!isDragging || !e.touches[0]) return;
-      handleSliderMove(e.touches[0].clientX);
-    };
-    const onStopDrag = () => {
-      if (isDragging) setIsDragging(false);
-    };
-
-    if (isDragging) {
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('touchmove', onTouchMove);
-      window.addEventListener('mouseup', onStopDrag);
-      window.addEventListener('touchend', onStopDrag);
-    }
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('mouseup', onStopDrag);
-      window.removeEventListener('touchend', onStopDrag);
-    };
-  }, [isDragging]);
-
-  // Lock background scroll when modal is active
-  useEffect(() => {
-    if (!activeModal) return;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-
-    const handleCaptureWheel = (e: WheelEvent) => {
-      const modalDialog = document.querySelector('.soilcons-modal-dialog');
-      if (modalDialog && modalDialog.contains(e.target as Node)) {
-        const scrollable = modalDialog.querySelector('.soilcons-modal-scrollable') as HTMLElement | null;
-        if (scrollable) {
-          // If cursor is on modal header, footer, or dialog border, route scroll to scrollable area
-          if (e.target !== scrollable && !scrollable.contains(e.target as Node)) {
-            scrollable.scrollTop += e.deltaY;
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-          }
-          const atTop = scrollable.scrollTop === 0 && e.deltaY < 0;
-          const atBottom =
-            Math.abs(scrollable.scrollHeight - scrollable.clientHeight - scrollable.scrollTop) <= 1 &&
-            e.deltaY > 0;
-          if (atTop || atBottom) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }
-      } else {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target?.closest('.soilcons-modal-scrollable')) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
-    };
-
-    window.addEventListener('wheel', handleCaptureWheel, { passive: false, capture: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleCaptureWheel, { capture: true });
-      window.removeEventListener('touchmove', handleTouchMove, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeModal]);
+  // Airtight background scroll lock + Escape-to-close while the modal is open.
+  // Wheel scrolls over the dialog's header/footer are routed into the scrollable body.
+  useModalScrollLock(activeModal !== null, {
+    scrollableSelector: '.soilcons-modal-scrollable',
+    onClose: closeModal,
+  });
 
   
   // Pedagogical Database: 8 Key Strategies
@@ -394,10 +291,10 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
 
               {/* Split Before/After Slider */}
               <div
-                ref={sliderRef}
+                ref={slider.containerRef}
                 className="farm-split-slider"
-                onMouseDown={handleMouseDown}
-                onTouchStart={handleTouchStart}
+                onMouseDown={slider.onMouseDown}
+                onTouchMove={slider.onTouchMove}
                 title="Drag or click to compare Without Conservation vs With Conservation"
               >
                 {/* Background: Without Conservation (Degraded, eroded soil) */}
@@ -411,7 +308,7 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
                   className="farm-slider-fg-layer"
                   style={{
                     backgroundImage: `url('/images/degradation-healthy.jpg')`,
-                    clipPath: `inset(0 0 0 ${sliderPos}%)`,
+                    clipPath: `inset(0 0 0 ${slider.pos}%)`,
                   }}
                 />
 
@@ -428,7 +325,7 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
                 </div>
 
                 {/* Center Draggable Bar & Pill */}
-                <div className="farm-slider-bar" style={{ left: `${sliderPos}%` }}>
+                <div className="farm-slider-bar" style={{ left: `${slider.pos}%` }}>
                   <div className="farm-slider-pill">&lang; &rang;</div>
                 </div>
               </div>
@@ -457,6 +354,7 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
                         } as React.CSSProperties
                       }
                       onClick={() => openBenefitModal(b.id)}
+                      onKeyDown={keyActivate(() => openBenefitModal(b.id))}
                       title={`Click for details on ${b.title}`}
                       role="button"
                       tabIndex={0}
@@ -504,6 +402,7 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
                         } as React.CSSProperties
                       }
                       onClick={() => openStrategyModal(s.id)}
+                      onKeyDown={keyActivate(() => openStrategyModal(s.id))}
                       role="button"
                       tabIndex={0}
                       title={`Explore Strategy: ${s.title}`}
@@ -594,13 +493,7 @@ export default function SoilConservationScreen({ onPrev, onNext }: { onPrev: () 
           </button>
 
           <div className="soilcons-dots-tracker">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`soilcons-nav-dot ${idx === 12 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+            <ChapterDots activeIndex={12} onJump={onJumpChapter} className="soilcons-dots-tracker" dotClassName="soilcons-nav-dot" activeClassName="is-active-dot" />
           </div>
 
           <button type="button" className="soilcons-next-pill-btn" onClick={onNext}>

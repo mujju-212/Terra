@@ -28,30 +28,12 @@ import {
   ModuleSummaryScreen,
 } from './land';
 import LandIntroTransition from './land/LandIntroTransition';
+import { LAND_CHAPTERS } from './land/helpers/chapters';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
 
 interface LandModuleProps {
   module: ModuleContent;
 }
-
-// 15 chapters list matching the PRD and user specs
-const landChaptersNav = [
-  { id: 'cover', num: '01', title: 'Land Module Intro', fullTitle: 'Module Intro / Cover' },
-  { id: 'ch-formation', num: '02', title: 'Earth Formation', fullTitle: 'Earth Formation (4.6 Bya)' },
-  { id: 'ch-layers', num: '03', title: 'Earth Layers', fullTitle: 'Earth Layers Cutaway' },
-  { id: 'ch-continents', num: '04', title: 'Crust & Continents', fullTitle: 'Crust & Continental Drift' },
-  { id: 'ch-resource', num: '05', title: 'Land as a Resource', fullTitle: 'Land as a Resource (20%)' },
-  { id: 'ch-soil', num: '06', title: 'Soil Formation', fullTitle: 'Soil Horizons & Weathering' },
-  { id: 'ch-landforms', num: '07', title: 'Land Forms', fullTitle: 'Land Forms Explorer' },
-  { id: 'ch-conservation', num: '08', title: 'Conservation of Land Forms', fullTitle: 'Conservation of Land Forms' },
-  { id: 'ch-deforestation', num: '09', title: 'Deforestation', fullTitle: 'Deforestation & Forest Loss' },
-  { id: 'ch-landuse', num: '10', title: 'Land-Use Change', fullTitle: 'Land-Use & Shire River Case Study' },
-  { id: 'ch-soilhealth', num: '11', title: 'Soil Health & Composition', fullTitle: 'Soil Health & Composition' },
-  { id: 'ch-degradation', num: '12', title: 'Land Degradation', fullTitle: '6 Pathways to Degradation' },
-  { id: 'ch-soilconservation', num: '13', title: 'Soil Conservation', fullTitle: '8 Conservation Strategies' },
-  { id: 'ch-planning', num: '14', title: 'Sustainable Land-Use Planning', fullTitle: 'Sustainable Planning & Future' },
-  { id: 'ch-summary', num: '15', title: 'Module Summary', fullTitle: 'Summary & Knowledge Quiz' },
-];
 
 // 5 Modules List for Cover Rail (media_1790680046348.jpg)
 const modulesNav = [
@@ -69,7 +51,7 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
   // Scroll smoothly to any section
   const scrollToChapter = (index: number) => {
     setActiveChapterIndex(index);
-    const targetId = landChaptersNav[index]?.id;
+    const targetId = LAND_CHAPTERS[index]?.id;
     if (!targetId) return;
     const el = document.getElementById(targetId);
     if (el) {
@@ -95,7 +77,7 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
   // Track the active chapter using a center-band (robust even for very tall
   // sections, which a fixed 0.25 threshold could never satisfy).
   useEffect(() => {
-    const sectionIds = landChaptersNav.map((c) => c.id);
+    const sectionIds = LAND_CHAPTERS.map((c) => c.id);
     const elements = sectionIds.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
 
     const observer = new IntersectionObserver(
@@ -141,134 +123,55 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
     return () => io.disconnect();
   }, [reducedMotion]);
 
-  // Scroll-scrubbed parallax: expose a 0..1 --scrub variable per screen so the
-  // CSS can drift each backdrop against the scroll (landing-hero style motion).
+  // Production-Grade Parallax Engine: batched reads & writes, cached DOM references, zero layout thrashing
   useEffect(() => {
     if (reducedMotion) return;
     const screens = Array.from(document.querySelectorAll<HTMLElement>('.land-screen'));
+    if (!screens.length) return;
+
     let raf = 0;
+    const count = screens.length;
+    const prevScrub = new Float32Array(count).fill(-1);
+    const rects: (DOMRect | null)[] = new Array(count);
+
     const update = () => {
       raf = 0;
       const vh = window.innerHeight;
-      screens.forEach((s) => {
-        const r = s.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) return;
-        // --scrub: 0→1 across the whole section travel (drives backdrop parallax)
-        const p = (vh - r.top) / (vh + r.height);
-        s.style.setProperty('--scrub', Math.min(1, Math.max(0, p)).toFixed(4));
-        // --enter: 0→1 while the section top travels from viewport bottom up to
-        // 40% of the viewport (drives the scroll-scrubbed content reveal)
-        const e = (vh - r.top) / (vh * 0.6);
-        s.style.setProperty('--enter', Math.min(1, Math.max(0, e)).toFixed(4));
-      });
+
+      // Phase 1: Pure DOM Reads (NO writes — zero layout thrashing)
+      for (let i = 0; i < count; i++) {
+        const r = screens[i].getBoundingClientRect();
+        if (r.bottom <= 0 || r.top >= vh) {
+          rects[i] = null;
+        } else {
+          rects[i] = r;
+        }
+      }
+
+      // Phase 2: Pure DOM Writes (only update when delta exceeds threshold)
+      for (let i = 0; i < count; i++) {
+        const r = rects[i];
+        if (!r) continue;
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+        if (Math.abs(p - prevScrub[i]) > 0.002) {
+          prevScrub[i] = p;
+          screens[i].style.setProperty('--scrub', p.toFixed(3));
+        }
+      }
     };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [reducedMotion]);
-
-  // Per-element scroll text reveal for headings / paragraphs / list items.
-  // Uses the Web Animations API so it is fail-safe: an element is only hidden if
-  // it starts below the fold, and its inline style is cleared the moment the
-  // reveal finishes, so text can never get stuck invisible.
-  useEffect(() => {
-    if (reducedMotion) return;
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        '.land-screen h1, .land-screen h2, .land-screen h3, .land-screen h4, .land-screen p, .land-screen li, .land-screen blockquote'
-      )
-    );
-    if (!nodes.length) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target as HTMLElement;
-          io.unobserve(el);
-          try {
-            const anim = el.animate(
-              [
-                { opacity: 0, transform: 'translateY(0.5em)', clipPath: 'inset(0 0 100% 0)' },
-                { opacity: 1, transform: 'translateY(0)', clipPath: 'inset(0 0 -20% 0)' },
-              ],
-              { duration: 720, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-            );
-            anim.onfinish = () => { el.style.opacity = ''; };
-          } catch {
-            el.style.opacity = '';
-          }
-        });
-      },
-      { rootMargin: '0px 0px -6% 0px', threshold: 0.08 }
-    );
-
-    nodes.forEach((n) => {
-      // Pre-hide only what begins below the fold (keeps above-the-fold content
-      // visible and avoids a flash on load).
-      if (n.getBoundingClientRect().top > window.innerHeight * 0.92) {
-        n.style.opacity = '0';
-      }
-      io.observe(n);
-    });
-
-    return () => io.disconnect();
-  }, [reducedMotion]);
-
-  // Scroll reveal for the VISUAL BLOCKS (cards, panels, tiles, stat boxes,
-  // chips, figures, list items…) so every section animates in as you scroll —
-  // not just its text. Innermost matches only (a container and its children
-  // never both animate), siblings stagger, and fill:'backwards' keeps it
-  // flash-free. Fail-safe: if animate() throws, the element simply stays put.
-  useEffect(() => {
-    if (reducedMotion) return;
-    const tokens = ['card', 'panel', 'tile', 'stat', 'metric', 'chip', 'badge', 'node', 'step', 'figure', 'cell', 'pill', 'preview', 'item'];
-    const SEL = tokens.map((t) => `.land-screen [class*="${t}"]`).join(', ');
-    const all = Array.from(document.querySelectorAll<HTMLElement>(SEL));
-    if (!all.length) return;
-    const matched = new Set<HTMLElement>(all);
-    const targets = all.filter(
-      (el) => !Array.from(el.querySelectorAll('*')).some((d) => matched.has(d as HTMLElement))
-    );
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target as HTMLElement;
-          io.unobserve(el);
-          const siblings = el.parentElement ? Array.from(el.parentElement.children) : [];
-          const idx = Math.max(siblings.indexOf(el), 0);
-          const delay = Math.min(idx, 6) * 70;
-          try {
-            el.animate(
-              [
-                { opacity: 0, transform: 'translateY(32px) scale(0.955)' },
-                { opacity: 1, transform: 'translateY(0) scale(1)' },
-              ],
-              { duration: 720, delay, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' }
-            );
-          } catch {
-            /* element simply stays visible */
-          }
-        });
-      },
-      { rootMargin: '0px 0px -6% 0px', threshold: 0.06 }
-    );
-
-    targets.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      const alreadyInView = r.top < window.innerHeight && r.bottom > 0;
-      if (!alreadyInView) io.observe(el); // leave load-visible blocks untouched (no blink)
-    });
-
-    return () => io.disconnect();
   }, [reducedMotion]);
 
   // Auto-scroll the sidebar rail so the active chapter is always in view
@@ -328,7 +231,7 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {landChaptersNav.map((ch, idx) => {
+            {LAND_CHAPTERS.map((ch, idx) => {
               const isActive = activeChapterIndex === idx;
               return (
                 <button
@@ -357,7 +260,7 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
       {/* ─── MOBILE CHAPTER NAV (the left rail is hidden on small screens) ─── */}
       <nav className="land-mobile-chapternav" aria-label="Chapter navigation">
         <div className="lmn-track">
-          {landChaptersNav.map((ch, idx) => (
+          {LAND_CHAPTERS.map((ch, idx) => (
             <button
               key={ch.id}
               type="button"
@@ -387,78 +290,91 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
         <EarthFormationScreen
           onPrev={() => scrollToChapter(0)}
           onNext={() => scrollToChapter(2)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 03: EARTH LAYERS */}
         <EarthLayersScreen
           onPrev={() => scrollToChapter(1)}
           onNext={() => scrollToChapter(3)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 04: CRUST & CONTINENTS */}
         <CrustContinentsScreen
           onPrev={() => scrollToChapter(2)}
           onNext={() => scrollToChapter(4)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 05: LAND AS A RESOURCE */}
         <LandResourceScreen
           onPrev={() => scrollToChapter(3)}
           onNext={() => scrollToChapter(5)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 06: SOIL FORMATION */}
         <SoilFormationScreen
           onPrev={() => scrollToChapter(4)}
           onNext={() => scrollToChapter(6)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 07: LAND FORMS */}
         <LandFormsScreen
           onPrev={() => scrollToChapter(5)}
           onNext={() => scrollToChapter(7)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 08: CONSERVATION OF LAND FORMS */}
         <ConservationScreen
           onPrev={() => scrollToChapter(6)}
           onNext={() => scrollToChapter(8)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 09: DEFORESTATION */}
         <DeforestationScreen
           onPrev={() => scrollToChapter(7)}
           onNext={() => scrollToChapter(9)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 10: LAND-USE CHANGE */}
         <LandUseChangeScreen
           onPrev={() => scrollToChapter(8)}
           onNext={() => scrollToChapter(10)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 11: SOIL HEALTH & COMPOSITION */}
         <SoilHealthScreen
           onPrev={() => scrollToChapter(9)}
           onNext={() => scrollToChapter(11)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 12: LAND DEGRADATION */}
         <LandDegradationScreen
           onPrev={() => scrollToChapter(10)}
           onNext={() => scrollToChapter(12)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 13: SOIL CONSERVATION */}
         <SoilConservationScreen
           onPrev={() => scrollToChapter(11)}
           onNext={() => scrollToChapter(13)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 14: SUSTAINABLE LAND-USE PLANNING */}
         <LandPlanningScreen
           onPrev={() => scrollToChapter(12)}
           onNext={() => scrollToChapter(14)}
+          onJumpChapter={scrollToChapter}
         />
 
         {/* SCREEN 15: MODULE SUMMARY & QUIZ CALL TO ACTION */}

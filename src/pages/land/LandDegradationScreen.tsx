@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Droplet, ArrowRight, ArrowLeft, Wheat, Building2, Users2, ChevronRight, ChevronLeft, Sprout, X, Leaf, PawPrint, Pickaxe, BarChart3, Bug, Cloud, Sun, TreePine } from 'lucide-react';
 import '../../degradation.css';
 import { TiltCard, Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { useCompareSlider } from './helpers/useCompareSlider';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
-  const [sliderPos, setSliderPos] = useState<number>(67);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const sliderContainerRef = useRef<HTMLDivElement>(null);
+export default function LandDegradationScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
+  const slider = useCompareSlider({ initial: 67, min: 4, max: 96 });
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedModalItem, setSelectedModalItem] = useState<string>('deforestation');
@@ -21,94 +24,11 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
     setActiveModal(null);
   };
 
-  // Slider dragging logic
-  const handleSliderMove = (clientX: number) => {
-    if (!sliderContainerRef.current) return;
-    const rect = sliderContainerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const pct = Math.min(96, Math.max(4, (x / rect.width) * 100));
-    setSliderPos(pct);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    handleSliderMove(e.clientX);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    if (e.touches[0]) handleSliderMove(e.touches[0].clientX);
-  };
-
-  useEffect(() => {
-    const handleWindowMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      handleSliderMove(e.clientX);
-    };
-    const handleWindowTouchMove = (e: TouchEvent) => {
-      if (!isDragging || !e.touches[0]) return;
-      handleSliderMove(e.touches[0].clientX);
-    };
-    const handleWindowMouseUp = () => {
-      if (isDragging) setIsDragging(false);
-    };
-
-    if (isDragging) {
-      window.addEventListener('mousemove', handleWindowMouseMove);
-      window.addEventListener('touchmove', handleWindowTouchMove);
-      window.addEventListener('mouseup', handleWindowMouseUp);
-      window.addEventListener('touchend', handleWindowMouseUp);
-    }
-
-    return () => {
-      window.removeEventListener('mousemove', handleWindowMouseMove);
-      window.removeEventListener('touchmove', handleWindowTouchMove);
-      window.removeEventListener('mouseup', handleWindowMouseUp);
-      window.removeEventListener('touchend', handleWindowMouseUp);
-    };
-  }, [isDragging]);
-
-  // Lock background scroll when any modal is open
-  useEffect(() => {
-    if (!activeModal) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-    const handleCaptureWheel = (e: WheelEvent) => {
-      const modalWindow = document.querySelector('.degradation-modal-window');
-      if (modalWindow && modalWindow.contains(e.target as Node)) {
-        const scrollable = modalWindow.querySelector('.degradation-modal-body');
-        if (scrollable) {
-          const atTop = scrollable.scrollTop === 0 && e.deltaY < 0;
-          const atBottom =
-            Math.abs(scrollable.scrollHeight - scrollable.clientHeight - scrollable.scrollTop) <= 1 &&
-            e.deltaY > 0;
-          if (atTop || atBottom) {
-            e.preventDefault();
-          }
-        }
-      } else {
-        e.preventDefault();
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
-    };
-
-    window.addEventListener('wheel', handleCaptureWheel, { passive: false, capture: true });
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleCaptureWheel, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeModal]);
+  // Airtight background scroll lock + Escape-to-close while the modal is open
+  useModalScrollLock(activeModal !== null, {
+    scrollableSelector: '.degradation-modal-body',
+    onClose: closeModal,
+  });
 
   // Causes pedagogical database
   const causesList = [
@@ -250,10 +170,10 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
             1. TOP HERO SECTION (Interactive Before/After Split Comparison)
             ────────────────────────────────────────────────────────────────── */}
         <div
-          ref={sliderContainerRef}
+          ref={slider.containerRef}
           className="degradation-hero-wrap"
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
+          onMouseDown={slider.onMouseDown}
+          onTouchMove={slider.onTouchMove}
           role="region"
           aria-label="Interactive Land Degradation Before and After Comparison Slider"
           title="Drag or click to compare Healthy Land vs Degraded Land"
@@ -269,7 +189,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
             className="degradation-hero-layer degradation-layer-healthy"
             style={{
               backgroundImage: `url('/images/degradation-healthy.jpg')`,
-              clipPath: `inset(0 calc(100% - ${sliderPos}%) 0 0)`,
+              clipPath: `inset(0 calc(100% - ${slider.pos}%) 0 0)`,
             }}
           />
 
@@ -292,7 +212,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
           <div
             className="healthy-land-badge"
             style={{
-              opacity: sliderPos > 24 ? 1 : Math.max(0, (sliderPos - 8) / 16),
+              opacity: slider.pos > 24 ? 1 : Math.max(0, (slider.pos - 8) / 16),
             }}
           >
             <div className="badge-icon-healthy">
@@ -308,7 +228,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
           <div
             className="degraded-land-badge"
             style={{
-              opacity: sliderPos < 76 ? 1 : Math.max(0, (92 - sliderPos) / 16),
+              opacity: slider.pos < 76 ? 1 : Math.max(0, (92 - slider.pos) / 16),
             }}
           >
             <div className="badge-icon-degraded">
@@ -321,8 +241,8 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
           </div>
 
           {/* Draggable Divider Line & Handle */}
-          <div className="degradation-slider-line" style={{ left: `${sliderPos}%` }} />
-          <div className="degradation-slider-handle" style={{ left: `${sliderPos}%` }}>
+          <div className="degradation-slider-line" style={{ left: `${slider.pos}%` }} />
+          <div className="degradation-slider-handle" style={{ left: `${slider.pos}%` }}>
             <ChevronLeft size={14} style={{ marginRight: -3 }} />
             <ChevronRight size={14} style={{ marginLeft: -3 }} />
           </div>
@@ -345,6 +265,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
                   key={cause.id}
                   className="cause-tile-card"
                   onClick={() => openModal('cause', cause.id)}
+                  onKeyDown={keyActivate(() => openModal('cause', cause.id))}
                   title={`Click to explore ${cause.title}`}
                   style={{ '--cause-accent': cause.color } as React.CSSProperties}
                   spotlight
@@ -390,6 +311,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
                     key={imp.id}
                     className="impact-tile-card"
                     onClick={() => openModal('impact', imp.id)}
+                    onKeyDown={keyActivate(() => openModal('impact', imp.id))}
                     title={`Click to explore ${imp.title}`}
                     spotlight
                     max={6}
@@ -416,6 +338,9 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
           <div
             className="food-security-card-box"
             onClick={() => openModal('food')}
+            onKeyDown={keyActivate(() => openModal('food'))}
+            role="button"
+            tabIndex={0}
             title="Click to view Global Food Security & Land Degradation Deep Dive"
           >
             <div className="food-security-header-row">
@@ -452,13 +377,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
           </button>
 
           <div className="nav-center-dots-group">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`nav-chap-dot ${idx === 11 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+            <ChapterDots activeIndex={11} onJump={onJumpChapter} className="nav-center-dots-group" dotClassName="nav-chap-dot" activeClassName="is-active-dot" />
           </div>
 
           <button type="button" className="nav-next-gold-pill" onClick={onNext}>
@@ -478,11 +397,12 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
         createPortal(
           <div
             className="degradation-modal-overlay"
+            data-lenis-prevent
             onClick={(e) => {
               if (e.target === e.currentTarget) closeModal();
             }}
           >
-            <div className="degradation-modal-window">
+            <div className="degradation-modal-window" role="dialog" aria-modal="true" data-lenis-prevent>
               {/* MODAL: CAUSE DEEP DIVE */}
               {activeModal === 'cause' && (() => {
                 const c = causesList.find((x) => x.id === selectedModalItem) || causesList[0];
@@ -505,7 +425,7 @@ export default function LandDegradationScreen({ onPrev, onNext }: { onPrev: () =
                       </button>
                     </div>
 
-                    <div className="degradation-modal-body">
+                    <div className="degradation-modal-body" data-lenis-prevent>
                       <div className="degradation-modal-overview-box">
                         <strong>Overview: </strong> {c.short}
                       </div>

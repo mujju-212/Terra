@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Mountain, ArrowRight, ArrowLeft, Users2, Activity, X, CloudRain, Clock, Leaf } from 'lucide-react';
 import { TiltCard, Reveal } from './motion';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function SoilFormationScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [activeHorizon, setActiveHorizon] = useState<number>(0);
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [activeFactor, setActiveFactor] = useState<string | null>(null);
@@ -151,6 +154,24 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
     },
   ];
 
+  const handleStepClick = (idx: number) => {
+    const step = formationProcessSteps[idx];
+    if (!step) return;
+    setActiveStep(idx);
+    setDetailModal({
+      title: step.title,
+      subtitle: 'Pedological Stage Breakdown',
+      badge: `STAGE 0${step.num}`,
+      color: '#f1cb74',
+      quote: step.fullText,
+      points: [
+        step.desc,
+        'Forms an integral mechanism of pedogenesis described in BCV755B notes.',
+        'Requires decades to centuries to stabilize and sustain terrestrial ecology.',
+      ],
+    });
+  };
+
   const factorsGrid = [
     {
       id: 'parent',
@@ -274,6 +295,21 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
                         ],
                       });
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setActiveFactor(f.id);
+                      setDetailModal({
+                        title: f.title,
+                        subtitle: 'Primary Soil Forming Factor',
+                        badge: 'PEDOLOGY FACTOR',
+                        color: '#c9a15a',
+                        quote: f.detail,
+                        points: [
+                          'Identified in lecture notes as a fundamental determinant of soil properties.',
+                          'Interacts dynamically with climate, organisms, and topography over time.',
+                          'Takes decades to centuries to establish stable soil equilibrium.',
+                        ],
+                      });
+                    })}
                     role="button"
                     tabIndex={0}
                     title="Click for factor syllabus details"
@@ -351,6 +387,17 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
                         points: h.points,
                       });
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setActiveHorizon(i);
+                      setDetailModal({
+                        title: h.name,
+                        subtitle: h.sub,
+                        badge: `HORIZON [${h.id}]`,
+                        color: h.dotColor,
+                        quote: h.quote,
+                        points: h.points,
+                      });
+                    })}
                     role="button"
                     tabIndex={0}
                   >
@@ -397,21 +444,8 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
                   <div key={step.num} className="soil-process-step-node">
                     <div
                       className={`process-step-thumb-circle ${isActive ? 'is-focused-step' : ''}`}
-                      onClick={() => {
-                        setActiveStep(idx);
-                        setDetailModal({
-                          title: step.title,
-                          subtitle: 'Pedological Stage Breakdown',
-                          badge: `STAGE 0${step.num}`,
-                          color: '#f1cb74',
-                          quote: step.fullText,
-                          points: [
-                            step.desc,
-                            'Forms an integral mechanism of pedogenesis described in BCV755B notes.',
-                            'Requires decades to centuries to stabilize and sustain terrestrial ecology.',
-                          ],
-                        });
-                      }}
+                      onClick={() => handleStepClick(idx)}
+                      onKeyDown={keyActivate(() => handleStepClick(idx))}
                       role="button"
                       tabIndex={0}
                       title="Click for stage breakdown"
@@ -466,6 +500,20 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
                         ],
                       });
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setDetailModal({
+                        title: f.title,
+                        subtitle: 'Environmental & Anthropogenic Driver',
+                        badge: 'SOIL FACTOR',
+                        color: '#c9a15a',
+                        quote: f.desc,
+                        points: [
+                          'Key physical/biological factor evaluated in Soil Science Society of America guidelines.',
+                          'Determines soil horizon depth, fertility, compaction, and nutrient availability.',
+                          'Human land-use changes can accelerate degradation if factors are disrupted.',
+                        ],
+                      });
+                    })}
                     role="button"
                     tabIndex={0}
                   >
@@ -509,6 +557,21 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
                         ],
                       });
                     }}
+                    onKeyDown={keyActivate(() => {
+                      setActiveEnv(env.id);
+                      setDetailModal({
+                        title: env.name,
+                        subtitle: 'Ecosystem Soil Horizon Adaptations',
+                        badge: 'BIOME PEDOLOGY',
+                        color: '#4fa3c7',
+                        quote: env.desc,
+                        points: [
+                          'Directly reflects regional precipitation, canopy cover, and biomass turnover.',
+                          'Vulnerable to deforestation, excessive tillage, and land degradation.',
+                          'Soil conservation methods must be tailored to these environmental conditions.',
+                        ],
+                      });
+                    })}
                     role="button"
                     tabIndex={0}
                   >
@@ -539,14 +602,8 @@ export default function SoilFormationScreen({ onPrev, onNext }: { onPrev: () => 
             </div>
           </button>
 
-          <div className="soil-pagination-dots-strip" aria-label="Module Chapter Progress">
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-              <span
-                key={i}
-                className={`pagination-bead ${i === 5 ? 'is-active-bead' : ''}`}
-                title={`Chapter ${String(i + 1).padStart(2, '0')}`}
-              />
-            ))}
+          <div className="soil-pagination-dots-strip">
+            <ChapterDots activeIndex={5} onJump={onJumpChapter} className="soil-pagination-dots-strip" />
           </div>
 
           <button type="button" className="soil-nav-btn next-btn is-gold-cta" onClick={onNext}>

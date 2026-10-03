@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Mountain, Play, ArrowRight, ArrowLeft, Sparkles, Layers, Thermometer, Compass, Activity, BookOpen } from 'lucide-react';
+import { Mountain, Play, ArrowRight, ArrowLeft, Sparkles, Layers, Thermometer, Compass, BookOpen } from 'lucide-react';
 import InteractiveCutawayEarth from '../../three/InteractiveCutawayEarth';
 import LayerDetailModal from '../../components/LayerDetailModal';
 import { EARTH_LAYERS_DATA } from '../../data/earthLayersData';
 import { TiltCard, Reveal } from './motion';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function EarthLayersScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function EarthLayersScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [selectedLayerKey, setSelectedLayerKey] = useState<'crust' | 'mantle' | 'outer' | 'inner'>('crust');
   const [detailModalLayer, setDetailModalLayer] = useState<'crust' | 'mantle' | 'outer' | 'inner' | null>(null);
 
@@ -13,10 +15,6 @@ export default function EarthLayersScreen({ onPrev, onNext }: { onPrev: () => vo
 
   return (
     <section className="land-screen land-layers-screen" id="ch-layers">
-      <div className="layers-backdrop">
-        <div className="layers-starfield" />
-      </div>
-
       <div className="land-screen-inner layers-screen-inner">
         {/* Upper Dashboard Grid: Left info & Badges + Right 3D Cutaway with Callout Cards */}
         <div className="layers-top-grid">
@@ -45,14 +43,14 @@ export default function EarthLayersScreen({ onPrev, onNext }: { onPrev: () => vo
                 <Thermometer size={18} className="badge-icon" />
                 <div className="badge-text">
                   <strong>~5,000°C</strong>
-                  <span>Inner Core temp<br />(Notes Line 48)</span>
+                  <span>Inner Core temperature</span>
                 </div>
               </div>
               <div className="layer-badge-box">
                 <Compass size={18} className="badge-icon" />
                 <div className="badge-text">
                   <strong>Iron &amp; Nickel</strong>
-                  <span>Core composition<br />(Notes Line 41)</span>
+                  <span>Core composition</span>
                 </div>
               </div>
             </div>
@@ -222,13 +220,7 @@ export default function EarthLayersScreen({ onPrev, onNext }: { onPrev: () => vo
           </button>
 
           <div className="formation-bar-dots">
-            <button type="button" className="bar-dot" onClick={onPrev} title="Chapter 01" />
-            <button type="button" className="bar-dot" onClick={onPrev} title="Chapter 02" />
-            <button type="button" className="bar-dot is-active" title="Chapter 03: Earth Layers" />
-            <button type="button" className="bar-dot" onClick={onNext} title="Chapter 04" />
-            <button type="button" className="bar-dot" onClick={onNext} title="Chapter 05" />
-            <button type="button" className="bar-dot" onClick={onNext} title="Chapter 06" />
-            <button type="button" className="bar-dot" onClick={onNext} title="Chapter 07" />
+            <ChapterDots activeIndex={2} onJump={onJumpChapter} className="formation-bar-dots" dotClassName="bar-dot" activeClassName="is-active" />
           </div>
 
           <button type="button" className="formation-bar-pill next-pill" onClick={onNext}>

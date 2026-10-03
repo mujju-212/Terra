@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Mountain, Droplet, Wind, Globe, ArrowRight, ArrowLeft, Sparkles, Wheat, ChevronRight, ChevronLeft, Layers, Activity, Sprout, X, Leaf, BarChart3, FlaskConical, Bug } from 'lucide-react';
 import '../../soilhealth.css';
 import { Reveal } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function SoilHealthScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [activeHorizon, setActiveHorizon] = useState<string | null>(null);
   const [activeDonutSlice, setActiveDonutSlice] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -19,47 +23,11 @@ export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => voi
     setActiveModal(null);
   };
 
-  // Lock background scroll when any modal is open
-  useEffect(() => {
-    if (!activeModal) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-    const handleCaptureWheel = (e: WheelEvent) => {
-      const modalWindow = document.querySelector('.soilhealth-modal-window');
-      if (modalWindow && modalWindow.contains(e.target as Node)) {
-        const scrollable = modalWindow.querySelector('.soilhealth-modal-body');
-        if (scrollable) {
-          const atTop = scrollable.scrollTop === 0 && e.deltaY < 0;
-          const atBottom =
-            Math.abs(scrollable.scrollHeight - scrollable.clientHeight - scrollable.scrollTop) <= 1 &&
-            e.deltaY > 0;
-          if (atTop || atBottom) {
-            e.preventDefault();
-          }
-        }
-      } else {
-        e.preventDefault();
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
-    };
-
-    window.addEventListener('wheel', handleCaptureWheel, { passive: false, capture: true });
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
-      window.removeEventListener('wheel', handleCaptureWheel, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [activeModal]);
+  // Airtight background scroll lock + Escape-to-close while the modal is open
+  useModalScrollLock(activeModal !== null, {
+    scrollableSelector: '.soilhealth-modal-body',
+    onClose: closeModal,
+  });
 
   // Horizons pedagogical database
   const horizonsData: Record<string, {
@@ -259,6 +227,7 @@ export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => voi
                 onMouseEnter={() => setActiveHorizon(h.id)}
                 onMouseLeave={() => setActiveHorizon(null)}
                 onClick={() => openModal('horizon', h.id)}
+                onKeyDown={keyActivate(() => openModal('horizon', h.id))}
                 role="button"
                 tabIndex={0}
                 title={`Click to inspect ${h.title}`}
@@ -432,6 +401,9 @@ export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => voi
                     onMouseEnter={() => setActiveDonutSlice(leg.id)}
                     onMouseLeave={() => setActiveDonutSlice(null)}
                     onClick={() => openModal('composition', leg.id)}
+                    onKeyDown={keyActivate(() => openModal('composition', leg.id))}
+                    role="button"
+                    tabIndex={0}
                     title={`Click for deep dive on ${leg.name}`}
                   >
                     <div className="legend-item-left">
@@ -648,13 +620,7 @@ export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => voi
           </button>
 
           <div className="nav-center-dots-group">
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <span
-                key={idx}
-                className={`nav-chap-dot ${idx === 10 ? 'is-active-dot' : ''}`}
-                title={`Chapter ${idx + 1}`}
-              />
-            ))}
+            <ChapterDots activeIndex={10} onJump={onJumpChapter} className="nav-center-dots-group" dotClassName="nav-chap-dot" activeClassName="is-active-dot" />
           </div>
 
           <button type="button" className="nav-next-gold-pill" onClick={onNext}>
@@ -674,11 +640,12 @@ export default function SoilHealthScreen({ onPrev, onNext }: { onPrev: () => voi
         createPortal(
           <div
             className="soilhealth-modal-overlay"
+            data-lenis-prevent
             onClick={(e) => {
               if (e.target === e.currentTarget) closeModal();
             }}
           >
-            <div className="soilhealth-modal-window">
+            <div className="soilhealth-modal-window" role="dialog" aria-modal="true" data-lenis-prevent>
               {/* MODAL: SOIL HORIZONS DEEP DIVE */}
               {activeModal === 'horizon' && (() => {
                 const hz = horizonsData[selectedModalItem] || horizonsData['O'];

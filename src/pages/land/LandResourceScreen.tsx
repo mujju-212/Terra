@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
 import { Mountain, Droplet, Trees, Globe, ArrowRight, ArrowLeft, Wheat, Building2, Factory, Users2, X } from 'lucide-react';
 import { Reveal, CountUp } from './motion';
+import { useModalScrollLock } from './helpers/useModalScrollLock';
+import { keyActivate } from './helpers/keyActivate';
+import ChapterDots from './helpers/ChapterDots';
+import type { ScreenNavProps } from './types';
 
-export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function LandResourceScreen({ onPrev, onNext, onJumpChapter }: ScreenNavProps) {
   const [selectedContinent, setSelectedContinent] = useState(0);
   const [activeContinentModal, setActiveContinentModal] = useState<number | null>(null);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+
+  // Airtight background scroll lock + Escape-to-close while the modal is open
+  useModalScrollLock(activeContinentModal !== null, {
+    scrollableSelector: '.continent-modal-dialog',
+    onClose: () => setActiveContinentModal(null),
+  });
+
+  useModalScrollLock(isMapModalOpen, {
+    scrollableSelector: '.map-modal-dialog',
+    onClose: () => setIsMapModalOpen(false),
+  });
 
   const continents = [
     {
@@ -143,35 +159,38 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
               <div className="donut-text-stats">
                 <div className="stat-chunk land-chunk">
                   <strong><CountUp to={20} suffix="%" /></strong>
-                  <span>OF EARTH'S SURFACE IS LAND</span>
+                  <span>OF EARTH'S<br />SURFACE IS LAND</span>
                   <small>~149 million km²</small>
                 </div>
                 <div className="stat-chunk-divider" />
                 <div className="stat-chunk water-chunk">
                   <strong><CountUp to={71} suffix="%" /></strong>
-                  <span>IS COVERED BY WATER</span>
+                  <span>IS COVERED<br />BY WATER</span>
                   <small>~361 million km²</small>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Center: Earth with Land 29% and Water 71% Badges */}
-          <div className="resource-globe-col">
-            <div className="resource-globe-frame">
-              <img
-                src="/images/earth-resource-globe.jpg"
-                alt="Planet Earth resting over fertile green land"
-                className="resource-globe-img"
-              />
-
-              {/* Badges on Globe */}
-              <div className="callout-pill pill-land-29">
+          {/* Center: Interactive Globe Space with Land 29% & Water 71% Pointer Callouts */}
+          <div className="resource-globe-col" aria-label="Global Land vs Water Distribution">
+            {/* Land 29% Callout with pointer */}
+            <div className="callout-pill pill-land-29" title="29% Land surface area">
+              <div className="callout-pill-body">
                 <strong>Land</strong>
                 <span>29%</span>
               </div>
+              <div className="callout-pointer-line line-land">
+                <span className="pointer-dot" />
+              </div>
+            </div>
 
-              <div className="callout-pill pill-water-71">
+            {/* Water 71% Callout with pointer */}
+            <div className="callout-pill pill-water-71" title="71% Water surface area">
+              <div className="callout-pointer-line line-water">
+                <span className="pointer-dot" />
+              </div>
+              <div className="callout-pill-body">
                 <strong>Water</strong>
                 <span>71%</span>
               </div>
@@ -184,60 +203,60 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
               <span className="supports-title">Land Supports</span>
               <div className="supports-cards-grid">
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Wheat size={13} />
+                  <span className="support-icon-wrap icon-food">
+                    <Wheat size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Food Production</strong>
                     <span>(Agriculture)</span>
                   </div>
                 </div>
 
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Droplet size={13} />
+                  <span className="support-icon-wrap icon-water">
+                    <Droplet size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Freshwater Systems</strong>
                     <span>(Rivers, Lakes, Aquifers)</span>
                   </div>
                 </div>
 
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Trees size={13} />
+                  <span className="support-icon-wrap icon-habitat">
+                    <Trees size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Habitats &amp; Biodiversity</strong>
                     <span>(Forests, Grasslands)</span>
                   </div>
                 </div>
 
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Building2 size={13} />
+                  <span className="support-icon-wrap icon-settlement">
+                    <Building2 size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Human Settlements</strong>
                     <span>(Cities, Infrastructure)</span>
                   </div>
                 </div>
 
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Factory size={13} />
+                  <span className="support-icon-wrap icon-economy">
+                    <Factory size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Economic Activities</strong>
                     <span>(Industries, Transport)</span>
                   </div>
                 </div>
 
                 <div className="support-service-item">
-                  <span className="support-icon-wrap">
-                    <Users2 size={13} />
+                  <span className="support-icon-wrap icon-cultural">
+                    <Users2 size={14} />
                   </span>
-                  <div>
+                  <div className="support-text-wrap">
                     <strong>Cultural &amp; Indigenous</strong>
                     <span>Land Use</span>
                   </div>
@@ -247,15 +266,20 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
           </div>
         </div>
 
-        {/* Bottom Panel: Where Land is Found (7 Continents Carousel) */}
+        {/* Bottom Panel: Where Land is Found (7 Continents Strip) */}
         <Reveal dir="up" className="where-land-panel">
           <div className="where-top-row">
             <div>
               <h4>Where Land is Found</h4>
               <p>Land is unevenly distributed across the globe, forming continents, islands and vast terrestrial ecosystems.</p>
             </div>
-            <button type="button" className="view-map-link">
-              <Globe size={12} />
+            <button
+              type="button"
+              className="view-map-link"
+              onClick={() => setIsMapModalOpen(true)}
+              title="Click to view full global land distribution map"
+            >
+              <Globe size={13} />
               <span>View Global Land Map</span>
               <ArrowRight size={11} />
             </button>
@@ -272,6 +296,10 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
                     setSelectedContinent(i);
                     setActiveContinentModal(i);
                   }}
+                  onKeyDown={keyActivate(() => {
+                    setSelectedContinent(i);
+                    setActiveContinentModal(i);
+                  })}
                   title={`Click to view details for ${con.name}`}
                   role="button"
                   tabIndex={0}
@@ -297,12 +325,15 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
         {activeContinentModal !== null && (
           <div
             className="continent-modal-overlay"
+            data-lenis-prevent
             onClick={() => setActiveContinentModal(null)}
             role="dialog"
             aria-modal="true"
+            aria-label="Continent ecosystem profile"
           >
             <div
               className="continent-modal-dialog"
+              data-lenis-prevent
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -392,11 +423,13 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
 
                 <div className="modal-nav-dots">
                   {continents.map((c, idx) => (
-                    <span
+                    <button
                       key={c.name}
+                      type="button"
                       className={`modal-nav-dot ${activeContinentModal === idx ? 'is-active' : ''}`}
                       onClick={() => setActiveContinentModal(idx)}
                       title={c.name}
+                      aria-label={`View ${c.name}`}
                     />
                   ))}
                 </div>
@@ -414,20 +447,86 @@ export default function LandResourceScreen({ onPrev, onNext }: { onPrev: () => v
           </div>
         )}
 
+        {/* Interactive Global Land Map Modal */}
+        {isMapModalOpen && (
+          <div
+            className="continent-modal-overlay"
+            data-lenis-prevent
+            onClick={() => setIsMapModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Global Land Distribution Map"
+          >
+            <div
+              className="continent-modal-dialog map-modal-dialog"
+              data-lenis-prevent
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header-row">
+                <div>
+                  <span className="modal-eyebrow">MODULE 01 · CHAPTER 05: GLOBAL TERRESTRIAL DISTRIBUTION</span>
+                  <h3 className="modal-title">
+                    Global Land Distribution <em>&amp; Continents</em>
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  className="modal-close-btn"
+                  onClick={() => setIsMapModalOpen(false)}
+                  aria-label="Close map"
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              <div className="map-modal-body">
+                <div
+                  className="map-hero-frame"
+                  style={{ backgroundImage: `url('/images/earth-resource-panorama.jpg')` }}
+                >
+                  <div className="map-floating-overlay">
+                    <span className="map-badge">Total Terrestrial Area: ~148.94 Million km² (29.2% of Earth)</span>
+                  </div>
+                </div>
+
+                <div className="map-continents-breakdown">
+                  {continents.map((c) => (
+                    <div key={c.name} className="map-con-row">
+                      <span className="map-con-name">{c.name}</span>
+                      <div className="map-con-bar-track">
+                        <div
+                          className="map-con-bar-fill"
+                          style={{ width: `${parseFloat(c.share)}%` }}
+                        />
+                      </div>
+                      <span className="map-con-share">{c.share}</span>
+                      <span className="map-con-area">{c.area}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Bottom Nav Bar */}
         <div className="screen-bottom-bar">
           <button type="button" className="bar-prev-btn" onClick={onPrev}>
-            <ArrowLeft size={13} />
-            <span>Previous: Crust &amp; Continents</span>
+            <ArrowLeft size={14} />
+            <div className="bar-btn-text">
+              <span className="bar-btn-lead">Previous</span>
+              <span className="bar-btn-sub">Crust &amp; Continents</span>
+            </div>
           </button>
           <div className="bar-dots-pills">
-            {[0, 1, 2, 3, 4].map((idx) => (
-              <span key={idx} className={`bar-dot ${idx === 4 ? 'is-active' : ''}`} />
-            ))}
+            <ChapterDots activeIndex={4} onJump={onJumpChapter} className="bar-dots-pills" dotClassName="bar-dot" activeClassName="is-active" />
           </div>
           <button type="button" className="bar-next-btn" onClick={onNext}>
-            <span>Next: Soil Formation</span>
-            <ArrowRight size={14} />
+            <div className="bar-btn-text">
+              <span className="bar-btn-lead">Next</span>
+              <span className="bar-btn-sub">Soil Formation</span>
+            </div>
+            <ArrowRight size={15} />
           </button>
         </div>
       </div>

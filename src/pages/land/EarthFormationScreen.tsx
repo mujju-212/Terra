@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Globe, ArrowRight, ArrowLeft, Layers, BookOpen } from 'lucide-react';
+import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
 import InteractiveFormationGlobe from '../../three/InteractiveFormationGlobe';
 import StageDetailModal from '../../components/StageDetailModal';
 import { FORMATION_STAGES } from '../../data/formationStagesData';
 import { TiltCard } from './motion';
+import type { ScreenNavProps } from './types';
 
-export default function EarthFormationScreen({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) {
+export default function EarthFormationScreen({ onPrev, onNext }: ScreenNavProps) {
   const [activeStage, setActiveStage] = useState(0);
   const [detailModalStage, setDetailModalStage] = useState<number | null>(null);
 

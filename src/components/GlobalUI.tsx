@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export function GrainOverlay() {
-  return (
-    <svg className="grain-overlay" aria-hidden="true" focusable="false">
-      <filter id="grainFilter">
-        <feTurbulence type="fractalNoise" baseFrequency=".84" numOctaves="3" stitchTiles="stitch" />
-      </filter>
-      <rect width="100%" height="100%" filter="url(#grainFilter)" />
-    </svg>
-  );
+  return <div className="grain-overlay" aria-hidden="true" />;
 }
 
 export function CustomCursor() {
@@ -52,27 +45,44 @@ export function CustomCursor() {
         '[data-interactive], a, button, [role="button"], input, label'
       );
       ringRef.current?.classList.toggle('is-active', Boolean(interactive));
+
+      // Wake up the lerp loop if it went to sleep
+      if (!frame) {
+        frame = requestAnimationFrame(tick);
+      }
     };
 
-    const leave = () => reveal(false);
+    const leave = () => {
+      reveal(false);
+      if (frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    };
 
     const tick = () => {
+      const dx = target.x - ring.x;
+      const dy = target.y - ring.y;
       // Critically-damped-ish lerp for a smooth, weighty trailing ring.
-      ring.x += (target.x - ring.x) * 0.16;
-      ring.y += (target.y - ring.y) * 0.16;
+      ring.x += dx * 0.16;
+      ring.y += dy * 0.16;
       if (ringRef.current) {
         ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0) translate(-50%, -50%)`;
       }
-      frame = requestAnimationFrame(tick);
+      // Only keep ticking if the ring hasn't settled yet
+      if (Math.abs(dx) > 0.08 || Math.abs(dy) > 0.08) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        frame = 0; // Sleep when settled to free 100% of CPU for 60/120fps scrolling
+      }
     };
 
     window.addEventListener('mousemove', move, { passive: true });
     document.addEventListener('mouseleave', leave);
-    frame = requestAnimationFrame(tick);
     return () => {
       window.removeEventListener('mousemove', move);
       document.removeEventListener('mouseleave', leave);
-      cancelAnimationFrame(frame);
+      if (frame) cancelAnimationFrame(frame);
     };
   }, []);
 
