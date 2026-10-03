@@ -25,6 +25,11 @@ import {
   Mountain,
   TrendingUp,
   Settings,
+  IndianRupee,
+  Scale,
+  Trees,
+  MapPin,
+  Compass,
 } from 'lucide-react';
 import type { ModuleContent } from '../../content/types';
 
@@ -60,8 +65,8 @@ export const sourcesData: WaterSource[] = [
     icon: CloudRain,
     desc: 'Collected directly from rainfall events and stored for later use.',
     thumb: '/images/water-source-rain-thumb.jpg',
-    pinX: '45%',
-    pinY: '20%',
+    pinX: '25%',
+    pinY: '22%',
     submethods: [
       {
         icon: Home,
@@ -92,8 +97,8 @@ export const sourcesData: WaterSource[] = [
     icon: Waves,
     desc: 'Water available on the surface earth, stored or flowing naturally.',
     thumb: '/images/water-source-surface-thumb.jpg',
-    pinX: '63%',
-    pinY: '26%',
+    pinX: '55%',
+    pinY: '34%',
     submethods: [
       {
         icon: ArrowRight,
@@ -130,8 +135,8 @@ export const sourcesData: WaterSource[] = [
     icon: Droplet,
     desc: 'Water stored below the ground in aquifers.',
     thumb: '/images/water-source-ground-thumb.jpg',
-    pinX: '58%',
-    pinY: '39%',
+    pinX: '43%',
+    pinY: '46%',
     submethods: [
       {
         icon: Sparkles,
@@ -166,8 +171,8 @@ export const sourcesData: WaterSource[] = [
     icon: RefreshCw,
     desc: 'Obtaining water through treatment and desalination.',
     thumb: '/images/water-source-reclaim-thumb.jpg',
-    pinX: '90%',
-    pinY: '32%',
+    pinX: '84%',
+    pinY: '48%',
     submethods: [
       {
         icon: Factory,
@@ -193,8 +198,8 @@ export const cycleStagesData = [
     title: 'Evaporation',
     icon: Sun,
     desc: 'Water heats up due to solar energy and evaporates into the atmosphere.',
-    x: '33.0%',
-    y: '52.0%',
+    x: '24%',
+    y: '45%',
     detail: 'Solar radiation warms oceans and surface reservoirs, transforming liquid water into invisible vapour that ascends into the air.',
   },
   {
@@ -202,8 +207,8 @@ export const cycleStagesData = [
     title: 'Condensation',
     icon: Cloud,
     desc: 'Water vapour cools and condenses to form clouds.',
-    x: '49.5%',
-    y: '28.0%',
+    x: '46%',
+    y: '22%',
     detail: 'As warm moisture ascends to higher and cooler altitudes, cooling air allows vapour to condense around microscopic aerosols.',
   },
   {
@@ -211,8 +216,8 @@ export const cycleStagesData = [
     title: 'Precipitation',
     icon: CloudRain,
     desc: 'Water falls from clouds as rain or snow.',
-    x: '69.5%',
-    y: '26.5%',
+    x: '68%',
+    y: '22%',
     detail: 'When aggregated droplets grow dense and heavy, gravity returns them to Earth as rainfall, snowfall, or hail over mountains and plains.',
   },
   {
@@ -220,8 +225,8 @@ export const cycleStagesData = [
     title: 'Surface Runoff',
     icon: Waves,
     desc: 'Water flows over land into rivers, lakes and oceans.',
-    x: '50.5%',
-    y: '51.5%',
+    x: '52%',
+    y: '50%',
     detail: 'Precipitation that does not soak into soil runs down natural topography, carving streams, feeding rivers, and discharging into the sea.',
   },
   {
@@ -229,8 +234,8 @@ export const cycleStagesData = [
     title: 'Infiltration',
     icon: ArrowDown,
     desc: 'Some water infiltrates into the soil.',
-    x: '79.5%',
-    y: '56.5%',
+    x: '74%',
+    y: '53%',
     detail: 'Water percolates through soil pores and porous strata, sustaining vegetation root systems and descending toward groundwater stores.',
   },
   {
@@ -238,8 +243,8 @@ export const cycleStagesData = [
     title: 'Underground Flow',
     icon: Droplet,
     desc: 'Water moves through soil and rock as groundwater to aquifers and eventually to rivers, lakes and oceans.',
-    x: '89.0%',
-    y: '68.5%',
+    x: '82%',
+    y: '68%',
     detail: 'Groundwater migrates through gravel, sandstone, and cavernous limestone aquifers under hydraulic gradients back to wetlands and coastlines.',
   },
 ];
@@ -1101,4 +1106,322 @@ export const waterStressBenchmarksData: Record<string, WaterStressBenchmark> = {
     syllabusNote: 'Reclamation and tertiary treatment strategy reducing freshwater withdrawal.',
   },
 };
+
+// ─── CHAPTER 08: INTER-BASIN WATER TRANSFER (IBWT) DATASETS ───
+
+export interface IBWTHotspot {
+  id: string;
+  title: string;
+  sub?: string;
+  color: string;
+  border: string;
+  glow: string;
+  badgeBg: string;
+  x: string;
+  y: string;
+  fullDescription: string;
+  keyStats: { label: string; value: string }[];
+}
+
+export const ibwtHotspotsData: IBWTHotspot[] = [
+  {
+    id: 'surplus',
+    title: 'Surplus Basin',
+    sub: '(High Rainfall, Higher Water Availability)',
+    color: '#22c55e',
+    border: 'rgba(34, 197, 94, 0.7)',
+    glow: 'rgba(34, 197, 94, 0.35)',
+    badgeBg: 'rgba(15, 35, 25, 0.88)',
+    x: '52.0%',
+    y: '22.0%',
+    fullDescription:
+      'Catchment or river basin receiving heavy monsoon rainfall where seasonal runoff significantly exceeds local ecological, agricultural, and human water requirements (e.g., Brahmaputra, Mahanadi, and Godavari during peak monsoon).',
+    keyStats: [
+      { label: 'Hydrologic Status', value: 'Water Surplus' },
+      { label: 'Catchment', value: 'High Orographic Rainfall' },
+    ],
+  },
+  {
+    id: 'reservoir',
+    title: 'Reservoir / Barrage',
+    sub: 'Storage & Diversion Headworks',
+    color: '#38bdf8',
+    border: 'rgba(56, 189, 248, 0.7)',
+    glow: 'rgba(56, 189, 248, 0.35)',
+    badgeBg: 'rgba(12, 30, 48, 0.88)',
+    x: '62.0%',
+    y: '45.0%',
+    fullDescription:
+      'Engineered multipurpose concrete dam or diversion barrage constructed on the surplus river to buffer peak monsoon flash floods, regulate draft, and feed water into conveyance link canals.',
+    keyStats: [
+      { label: 'Function', value: 'Flood Regulation & Storage' },
+      { label: 'Potential', value: '34,000–40,000 MW Hydropower' },
+    ],
+  },
+  {
+    id: 'link',
+    title: 'Transfer Link',
+    sub: '(Canal / Tunnel / Pipeline)',
+    color: '#a855f7',
+    border: 'rgba(168, 85, 247, 0.7)',
+    glow: 'rgba(168, 85, 247, 0.35)',
+    badgeBg: 'rgba(32, 18, 52, 0.88)',
+    x: '74.0%',
+    y: '48.0%',
+    fullDescription:
+      'Network of engineered contour canals, deep ridge cuts, mountain tunnels, and lift pipelines designed to transport water across geographical watersheds with minimal seepage and evaporation loss.',
+    keyStats: [
+      { label: 'Proposed Length', value: '10,880 – 12,500 km' },
+      { label: 'Conveyance', value: 'Gravity & Siphon Aqueducts' },
+    ],
+  },
+  {
+    id: 'deficit',
+    title: 'Deficit Basin',
+    sub: '(Low Rainfall, Water Scarcity)',
+    color: '#f59e0b',
+    border: 'rgba(245, 158, 11, 0.7)',
+    glow: 'rgba(245, 158, 11, 0.35)',
+    badgeBg: 'rgba(42, 26, 10, 0.88)',
+    x: '88.0%',
+    y: '34.0%',
+    fullDescription:
+      'Drought-prone, rain-shadow, or over-exploited river basin facing chronic water deficits, deep groundwater table declines, and severe crop failure risks without external water augmentation.',
+    keyStats: [
+      { label: 'Availability', value: '<1,000 m³/capita (Water Scarce)' },
+      { label: 'Irrigation Benefit', value: '35 Million Hectares' },
+    ],
+  },
+];
+
+export interface IBWTStep {
+  num: number;
+  icon: any;
+  title: string;
+  sub: string;
+  detail: string;
+}
+
+export const ibwtStepsData: IBWTStep[] = [
+  {
+    num: 1,
+    icon: CloudRain,
+    title: 'Excess water',
+    sub: 'in surplus basin during high rainfall',
+    detail:
+      'During the monsoons, surplus river basins receive torrential orographic rainfall, generating enormous peak runoff that frequently causes catastrophic floods and empties unutilized into the sea.',
+  },
+  {
+    num: 2,
+    icon: Building2,
+    title: 'Stored in',
+    sub: 'reservoirs or barrages',
+    detail:
+      'High-capacity storage reservoirs and diversion barrages impound surplus floodwaters, moderating downstream peak discharge while securing water for dry-season transfer.',
+  },
+  {
+    num: 3,
+    icon: Layers,
+    title: 'Transferred',
+    sub: 'through canals, tunnels or pipelines',
+    detail:
+      'Surplus water is routed across natural watershed divides through concrete-lined canals, mountain tunnels, cross-drainage aqueducts, and lift pumping networks.',
+  },
+  {
+    num: 4,
+    icon: Droplets,
+    title: 'Delivered to',
+    sub: 'deficit basin for various uses',
+    detail:
+      'Delivered into drought-stricken river channels, local reservoirs, and agricultural canal commands to replenish groundwater aquifers, irrigate crops, and supply drinking water.',
+  },
+];
+
+export interface IBWTExample {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  bullets: string[];
+  states: string;
+  description: string;
+}
+
+export const ibwtExamplesData: IBWTExample[] = [
+  {
+    id: 'ken-betwa',
+    title: 'Ken–Betwa Link',
+    subtitle: 'Ken (Yamuna basin) → Betwa (Yamuna basin)',
+    image: '/images/ibwt-ken-betwa.jpg',
+    bullets: [
+      'Augment water availability across drought-prone Bundelkhand',
+      'Support irrigation for over 10.6 lakh hectares and drinking water for 62 lakh people',
+      'First flagship project cleared under the National River Linking Project (NRLP)',
+    ],
+    states: 'Madhya Pradesh & Uttar Pradesh',
+    description:
+      'The Ken-Betwa Link Project transfers surplus water from the Ken River in Madhya Pradesh to the Betwa River in Uttar Pradesh. It involves the Daudhan Dam, a 221 km link canal, two tunnels, and generates 103 MW of clean hydropower.',
+  },
+  {
+    id: 'godavari-krishna',
+    title: 'Godavari–Krishna Link',
+    subtitle: 'Godavari basin → Krishna basin',
+    image: '/images/ibwt-godavari-krishna.jpg',
+    bullets: [
+      'Transfers surplus monsoon flows from Godavari to deficit Krishna basin',
+      'Supports irrigation and drinking water for drought-hit Krishna delta',
+      'Pioneered through Pattiseema Lift Scheme & Polavaram Right Main Canal',
+    ],
+    states: 'Andhra Pradesh & Telangana',
+    description:
+      'Historically linking the Godavari and Krishna rivers, this scheme diverts surplus floodwaters from the Godavari upstream into the Krishna River above the Prakasam Barrage, drought-proofing millions of acres of fertile delta farmlands.',
+  },
+];
+
+export const allIBWTProjectsNotes: { name: string; stateYear: string; detail: string }[] = [
+  { name: 'Periyar – Vaigai Project', stateYear: 'Kerala → Tamil Nadu, 1985', detail: 'Transfers west-flowing Periyar water through a Western Ghats tunnel to irrigate Madurai and Dindigul districts in drought-prone Tamil Nadu.' },
+  { name: 'Kurnool – Cuddapah (K-C) Canal', stateYear: 'Andhra Pradesh, 1863–1870', detail: 'Historic 300+ km canal linking the Tungabhadra River to the Pennar basin, serving over 1.7 lakh acres in Rayalaseema.' },
+  { name: 'Beas – Sutlej Link', stateYear: 'Himachal Pradesh & Punjab, 1983', detail: 'Diverts 4.7 BCM of Beas waters through two 13 km mountain tunnels into the Sutlej (Bhakra reservoir), generating 990 MW at Dehar power plant.' },
+  { name: 'Indira Gandhi Nahar (Rajasthan Canal)', stateYear: 'Rajasthan, 1958', detail: '650 km long main canal network taking water from Harike Barrage (Punjab) across the Thar Desert to green millions of hectares in arid western Rajasthan.' },
+  { name: 'Parambikulam – Aliyar Project', stateYear: 'Kerala & Tamil Nadu, 1962–1982', detail: 'Interstate multipurpose project linking 7 rivers in Anamalai hills with 8 dams and inter-connecting tunnels for irrigation and power.' },
+  { name: 'Telugu – Ganga Project', stateYear: 'Andhra Pradesh & Tamil Nadu', detail: 'Transfers Krishna River water from Srisailam reservoir to Poondi reservoir to provide drinking water to Chennai city and irrigate Rayalaseema.' },
+  { name: 'Sarada – Sahayak Project', stateYear: 'Uttar Pradesh, 1960', detail: 'Diverts surplus water from Ghagra and Sarada rivers into the Sai, Gomti, and Ganga basins to enhance agricultural irrigation.' },
+  { name: 'Ramganga – Ganga Link', stateYear: 'Uttarakhand & Uttar Pradesh, 1978', detail: 'Multipurpose link providing flood control, irrigation to 5.75 lakh hectares, and 198 MW hydro generation.' },
+  { name: 'Tehri Multipurpose Project', stateYear: 'Uttarakhand', detail: 'High dam on Bhagirathi river transferring regulated water supplies for Delhi drinking water, downstream Ganga irrigation, and 2,400 MW hydro capacity.' },
+];
+
+export interface IBWTBenefit {
+  id: string;
+  icon: any;
+  title: string;
+  detail: string;
+  color: string;
+  badgeBg: string;
+}
+
+export const ibwtBenefitsData: IBWTBenefit[] = [
+  {
+    id: 'scarcity',
+    icon: Sprout,
+    title: 'Reduces regional water scarcity',
+    detail: 'Balances geographic disparities by conveying water from water-rich catchments to chronic deficit belts.',
+    color: '#22c55e',
+    badgeBg: 'rgba(34, 197, 94, 0.16)',
+  },
+  {
+    id: 'agri',
+    icon: Sprout,
+    title: 'Supports agriculture and food security',
+    detail: 'Converts 35 Million Hectares of rain-fed parched lands into assured double-cropped irrigated farmlands.',
+    color: '#f59e0b',
+    badgeBg: 'rgba(245, 158, 11, 0.16)',
+  },
+  {
+    id: 'econ',
+    icon: TrendingUp,
+    title: 'Enhances economic development',
+    detail: 'Boosts national agricultural yield by 250–450 Million Tons, spurring agro-processing and rural prosperity.',
+    color: '#06b6d4',
+    badgeBg: 'rgba(6, 182, 212, 0.16)',
+  },
+  {
+    id: 'surplus',
+    icon: Droplet,
+    title: 'Utilizes surplus water effectively',
+    detail: 'Harnesses otherwise unutilized monsoon flood discharges, moderating flood devastation in northern plains.',
+    color: '#3b82f6',
+    badgeBg: 'rgba(59, 130, 246, 0.16)',
+  },
+];
+
+export const all18MeritsData: string[] = [
+  'Uniform and economic utilization of water resources ensuring optimal national output',
+  'Enhancement in irrigation potential (additional 35 Million Hectares)',
+  'Clean hydropower generation of 34,000 to 40,000 MW',
+  'Provides ample surface drinking and industrial water to water-stressed regions',
+  'Scope for Inland Navigation reducing stress on highways and rail networks',
+  'Minimizes the frequency and severity of both droughts and devastating floods',
+  'Protects approximately 40 Million Hectares and 260 Million people from annual floods',
+  'Saves an estimated Rs 1,200 crores per year in flood relief expenditures',
+  'Drought protection benefiting 86 Million people across 116 districts in 14 states',
+  'Helps substantially increase rural per capita income and living standards',
+  'Reduces unsustainable over-exploitation of underground aquifers',
+  'Creates immense direct and indirect employment during 40-year execution and operation',
+  'Promotes commercial inland fisheries in new canals and storage reservoirs',
+  'Salinity control: continuous freshwater drafts push back coastal saltwater ingress',
+  'Creates scenic water bodies and reservoirs for tourism and recreation',
+  'Triggers widespread infrastructural development (roads, power, communication)',
+  'Stemms distress migration of rural populations from drought-hit regions',
+  'Conversion of barren, degraded lands into cultivable, green arable lands',
+];
+
+export interface IBWTChallenge {
+  id: string;
+  icon: any;
+  title: string;
+  detail: string;
+  color: string;
+  badgeBg: string;
+}
+
+export const ibwtChallengesData: IBWTChallenge[] = [
+  {
+    id: 'eco',
+    icon: Sprout,
+    title: 'Environmental and ecological impact',
+    detail: 'Submersion of prime forest lands and alteration of natural downstream riverine and estuarine habitats.',
+    color: '#22c55e',
+    badgeBg: 'rgba(34, 197, 94, 0.16)',
+  },
+  {
+    id: 'displace',
+    icon: Users2,
+    title: 'Displacement of communities',
+    detail: 'Large-scale rehabilitation and resettlement required for populations displaced by reservoir submersion.',
+    color: '#38bdf8',
+    badgeBg: 'rgba(56, 189, 248, 0.16)',
+  },
+  {
+    id: 'cost',
+    icon: IndianRupee,
+    title: 'High cost and technical complexity',
+    detail: 'Estimated capital cost exceeding Rs 5,60,000 crores (2002 baseline) with massive recurring maintenance.',
+    color: '#60a5fa',
+    badgeBg: 'rgba(96, 165, 250, 0.16)',
+  },
+  {
+    id: 'disputes',
+    icon: Scale,
+    title: 'Inter-state water sharing disputes',
+    detail: 'Complex political and constitutional hurdles in resolving riparian water rights between upper and lower states.',
+    color: '#818cf8',
+    badgeBg: 'rgba(129, 140, 248, 0.16)',
+  },
+  {
+    id: 'downstream',
+    icon: Trees,
+    title: 'Impact on downstream flows and river ecosystems',
+    detail: 'Reduction in lean-season environmental flows, affecting estuarine silt replenishment and mangrove health.',
+    color: '#10b981',
+    badgeBg: 'rgba(16, 185, 129, 0.16)',
+  },
+];
+
+export const all14DemeritsData: string[] = [
+  'Large land areas liable for submersion due to storage reservoirs and canal rights-of-way',
+  'Substantial involuntary displacement of human settlements requiring extensive rehabilitation',
+  'Disruption of natural aquatic biodiversity, fish migratory paths, and riverine ecosystems',
+  'Interstate and international riparian disputes as riparian entities contest surplus declarations',
+  'Enormous capital expenditure (Rs 5,60,000 crores 2002 est.) and heavy operational upkeep',
+  'Vulnerability to conveyance pollution as open link canals traverse industrial and urban belts',
+  'Conveyance losses through open canals due to soil seepage and intense atmospheric evaporation',
+  'Loss of valuable natural forest cover and wildlife habitats necessitating compensatory afforestation',
+  'Very long gestation period (estimated 30–40 years), leading to cost overruns and demographic shifts',
+  'High-altitude lift conveyance requires vast electrical pumping energy and recurring tariffs',
+  'Intense political and public debates required at micro and macro levels to achieve consensus',
+  'Increased risk of soil erosion, reservoir siltation, and sedimentation within canal waterways',
+  'Undulated topographic terrain requires thousands of complex cross-drainage structures and siphons',
+  'Micro-climatic shifts and potential seismic vulnerabilities in tectonically active Himalayan storage zones',
+];
+
 

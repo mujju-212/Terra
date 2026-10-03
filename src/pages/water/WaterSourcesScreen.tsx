@@ -38,11 +38,13 @@ export function WaterSourcesScreen({ onNext }: WaterSourcesScreenProps = {}) {
   return (
     <>
         <section className="water-sources-chapter-section" id="ch-02" data-chapter="03">
-          {/* Background landscape canvas */}
-          <div className="water-sources-canvas-bg" />
-          <div className="water-sources-scrim-left" />
-          <div className="water-sources-scrim-top" />
-          <div className="water-sources-scrim-bottom" />
+          {/* Background landscape canvas - strictly clipped to right of sidebar */}
+          <div className="water-sources-canvas-stage" aria-hidden="true">
+            <div className="water-sources-canvas-bg" />
+            <div className="water-sources-scrim-left" />
+            <div className="water-sources-scrim-top" />
+            <div className="water-sources-scrim-bottom" />
+          </div>
 
           {/* Top Left Header */}
           <div className="water-sources-header">
@@ -101,8 +103,10 @@ export function WaterSourcesScreen({ onNext }: WaterSourcesScreenProps = {}) {
                         <Icon size={18} />
                       </div>
                     </div>
-                    <h3 className="water-source-card-title">{source.title}</h3>
-                    <p className="water-source-card-desc">{source.desc}</p>
+                    <div className="water-source-title-group">
+                      <h3 className="water-source-card-title">{source.title}</h3>
+                      <p className="water-source-card-desc">{source.desc}</p>
+                    </div>
                   </div>
 
                   <div className="water-submethods-list">

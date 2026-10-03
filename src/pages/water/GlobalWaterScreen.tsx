@@ -22,11 +22,71 @@ export function GlobalWaterScreen() {
 
   return (
         <section className="water-global-chapter-section" id="ch-03" data-chapter="04">
-          {/* Background Earth globe scenery */}
+          {/* Pristine Master Background Canvas */}
           <div className="water-global-canvas-bg" />
           <div className="water-global-scrim-left" />
           <div className="water-global-scrim-top" />
           <div className="water-global-scrim-bottom" />
+
+          {/* Holographic Projection SVG Layer over Earth Globe */}
+          <svg className="water-globe-svg-overlay" viewBox="0 0 1024 576" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="water-global-cyan-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <linearGradient id="freshwater-wedge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.15" />
+              </linearGradient>
+            </defs>
+
+            {/* Glowing Atmosphere Orbit Rings around the Earth Globe */}
+            <circle cx="635" cy="225" r="142" className="water-globe-orbit-ring" filter="url(#water-global-cyan-glow)" />
+            <ellipse cx="635" cy="225" rx="142" ry="26" className="water-globe-equator-ring" filter="url(#water-global-cyan-glow)" />
+
+            {/* 3D Holographic Freshwater Cone Slice (2.5% Freshwater Representation) */}
+            <path
+              className="water-globe-freshwater-wedge"
+              d="M 635 225 L 755 155 A 142 142 0 0 1 765 245 Z"
+              fill="url(#freshwater-wedge-grad)"
+              stroke="#38bdf8"
+              strokeWidth="2"
+              filter="url(#water-global-cyan-glow)"
+            />
+            {/* Perspective Grid Line inside Wedge */}
+            <line
+              x1="635"
+              y1="225"
+              x2="762"
+              y2="200"
+              stroke="#7dd3fc"
+              strokeWidth="1.2"
+              strokeDasharray="4 3"
+              opacity="0.8"
+            />
+
+            {/* Pointer 1: From Callout 1 (97.5% Saltwater) down into the Oceans */}
+            <g className="water-globe-pointer-group" filter="url(#water-global-cyan-glow)">
+              <line x1="547" y1="149" x2="558" y2="190" stroke="#38bdf8" strokeWidth="1.8" />
+              <circle cx="558" cy="190" r="3.5" fill="#38bdf8" />
+            </g>
+
+            {/* Pointer 2: From Callout 2 (2.5% Freshwater) into the Holographic Wedge */}
+            <g className="water-globe-pointer-group" filter="url(#water-global-cyan-glow)">
+              <line x1="750" y1="156" x2="702" y2="182" stroke="#38bdf8" strokeWidth="1.8" />
+              <circle cx="702" cy="182" r="3.5" fill="#38bdf8" />
+            </g>
+
+            {/* Pointer 3: From Callout 3 (~1% Accessible) to the Inner Cone Tip */}
+            <g className="water-globe-pointer-group" filter="url(#water-global-cyan-glow)">
+              <line x1="780" y1="220" x2="734" y2="228" stroke="#38bdf8" strokeWidth="1.8" />
+              <circle cx="734" cy="228" r="3.5" fill="#38bdf8" />
+            </g>
+          </svg>
 
           {/* Top Row: Header (Left) and Quote (Right) */}
           <div className="water-global-top-row">
@@ -65,7 +125,6 @@ export function GlobalWaterScreen() {
               <div className="water-globe-callout-val">97.5%</div>
               <div className="water-globe-callout-label">Saltwater</div>
               <div className="water-globe-callout-sub">(Oceans and Seas)</div>
-              <div className="water-globe-callout-pointer pointer-down" />
             </div>
 
             {/* Callout 2: 2.5% Freshwater (upper right) */}
@@ -82,7 +141,6 @@ export function GlobalWaterScreen() {
               <div className="water-globe-callout-val">2.5%</div>
               <div className="water-globe-callout-label">Freshwater</div>
               <div className="water-globe-callout-sub">(Total)</div>
-              <div className="water-globe-callout-pointer pointer-left-top" />
             </div>
 
             {/* Callout 3: ~1% Accessible (middle right) */}
@@ -99,7 +157,6 @@ export function GlobalWaterScreen() {
               <div className="water-globe-callout-val">~1%</div>
               <div className="water-globe-callout-label">Easily Accessible</div>
               <div className="water-globe-callout-sub">Freshwater</div>
-              <div className="water-globe-callout-pointer pointer-left-bottom" />
             </div>
           </div>
 
@@ -127,6 +184,12 @@ export function GlobalWaterScreen() {
                       className="water-droplet-img"
                     />
                     <div className="water-droplet-glow" />
+                    {/* Glowing Pie Slice on Droplet Sphere */}
+                    <svg className="water-droplet-wedge-svg" viewBox="0 0 100 100" aria-hidden="true">
+                      <path d="M 50 50 L 86 36 A 38 38 0 0 1 88 64 Z" fill="rgba(56, 189, 248, 0.45)" stroke="#38bdf8" strokeWidth="1.5" />
+                      <line x1="88" y1="64" x2="98" y2="76" stroke="#38bdf8" strokeWidth="1.2" />
+                      <circle cx="98" cy="76" r="2.5" fill="#38bdf8" />
+                    </svg>
                   </div>
 
                   {/* Callout 2: 2.5% Freshwater (bottom-right) */}
