@@ -1,24 +1,26 @@
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useCallback } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import NearViewportMount from './NearViewportMount';
 
 interface FormationGlobeProps {
   stageIndex: number;
 }
 
-// True 2:1 Equirectangular Spherical Planetary Textures for each Stage
+// True 2:1 Equirectangular Spherical Planetary Textures for Stages 01 - 06 (using optimized 2K maps)
 const stageTexturePaths = [
   '/textures/stage-01-nebula-sphere.jpg',
   '/textures/stage-02-accretion-sphere.jpg',
   '/textures/stage-03-magma-sphere.jpg',
   '/textures/stage-04-cooling-sphere.jpg',
   '/textures/stage-05-water-sphere.jpg',
-  '/textures/earth-albedo.jpg',
+  '/textures/earth-albedo-2k.jpg',
 ];
 
-// Stage Specific Atmospheric Glow Colors (Soft, Natural Atmospheric Limbs)
+// Stage Specific Atmospheric Glow Colors
 const stageGlowColors = [
-  new THREE.Color('#f97316'), // 01 Nebula: warm solar gold
+  new THREE.Color('#f59e0b'), // 01 Nebula: warm solar gold
   new THREE.Color('#f59e0b'), // 02 Accretion: asteroid amber
   new THREE.Color('#ef4444'), // 03 Early Earth: volcanic magma red
   new THREE.Color('#ea580c'), // 04 Cooling: basalt orange
@@ -44,102 +46,223 @@ const atmosphereFragmentShader = `
   }
 `;
 
-function OrbitingFragments({ count = 30 }: { count?: number }) {
-  const pointsRef = useRef<THREE.Points>(null);
+/**
+ * Stage 01: Authentic 3D Swirling Solar Nebula Vortex System
+ * Optimized with GPU group rotation instead of expensive CPU buffer re-uploads.
+ */
+function SolarNebulaSystem() {
+  const diskRef = useRef<THREE.Mesh>(null);
+  const innerDiskRef = useRef<THREE.Mesh>(null);
+  const coreRef = useRef<THREE.Mesh>(null);
+  const coronaRef = useRef<THREE.Mesh>(null);
+  const particlesGroupRef = useRef<THREE.Group>(null);
 
-  const [positions] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const radius = 1.6 + Math.random() * 0.8;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = (Math.random() - 0.5) * 0.6;
-      pos[i * 3] = radius * Math.cos(theta);
-      pos[i * 3 + 1] = radius * Math.sin(phi);
-      pos[i * 3 + 2] = radius * Math.sin(theta);
+  const textureLoader = useMemo(() => new THREE.TextureLoader(), []);
+
+  // Authentic spiral cosmic nebula vortex texture (matches card thumbnail)
+  const nebulaTex = useMemo(() => {
+    const tex = textureLoader.load('/images/stage-01-nebula.jpg');
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }, [textureLoader]);
+
+  // Static Keplerian dust coordinates - rotated via GPU group transform
+  const particleCount = 110;
+  const initialPositions = useMemo(() => {
+    const pos = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      const radius = 0.75 + Math.random() * 2.0;
+      const angle = Math.random() * Math.PI * 2;
+      const height = (Math.random() - 0.5) * 0.12 * (radius / 2);
+      pos[i * 3] = Math.cos(angle) * radius;
+      pos[i * 3 + 1] = height;
+      pos[i * 3 + 2] = Math.sin(angle) * radius;
     }
-    return [pos];
-  }, [count]);
+    return pos;
+  }, [particleCount]);
 
-  useFrame((_, delta) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.16;
+  useFrame((state, delta) => {
+    // 1. Primary outer spiral arm vortex rotation
+    if (diskRef.current) {
+      diskRef.current.rotation.z += delta * 0.15;
+    }
+    // 2. Secondary inner density wave rotation
+    if (innerDiskRef.current) {
+      innerDiskRef.current.rotation.z += delta * 0.28;
+    }
+    // 3. Nascent Proto-Sun thermal pulsation
+    if (coreRef.current) {
+      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 2.4) * 0.035;
+      coreRef.current.scale.set(pulse, pulse, pulse);
+    }
+    if (coronaRef.current) {
+      const pulseCorona = 1.0 + Math.sin(state.clock.elapsedTime * 1.8 + 1.2) * 0.05;
+      coronaRef.current.scale.set(pulseCorona, pulseCorona, pulseCorona);
+    }
+    // 4. Smooth GPU Keplerian particle rotation (zero CPU buffer writes)
+    if (particlesGroupRef.current) {
+      particlesGroupRef.current.rotation.z += delta * 0.22;
     }
   });
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.045}
-        color="#f59e0b"
-        transparent
-        opacity={0.8}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
+    <group>
+      {/* ── 1. PRIMARY ACCRETION VORTEX DISK (High-res Spiral Nebula) ── */}
+      <mesh ref={diskRef} rotation={[Math.PI / 2.35, 0.12, 0]}>
+        <planeGeometry args={[4.6, 4.6]} />
+        <meshBasicMaterial
+          map={nebulaTex}
+          transparent={true}
+          opacity={0.92}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* ── 2. SECONDARY INNER SWIRLING DENSITY WAVES DISK ── */}
+      <mesh ref={innerDiskRef} rotation={[Math.PI / 2.35, 0.12, 0.4]}>
+        <planeGeometry args={[3.2, 3.2]} />
+        <meshBasicMaterial
+          map={nebulaTex}
+          transparent={true}
+          opacity={0.68}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* ── 3. ORBITING KEPLERIAN DUST & GAS PARTICLES (Zero CPU uploads) ── */}
+      <group rotation={[Math.PI / 2.35, 0.12, 0]} ref={particlesGroupRef}>
+        <points>
+          <bufferGeometry>
+            <bufferAttribute attach="attributes-position" args={[initialPositions, 3]} />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.06}
+            color="#fbbf24"
+            transparent
+            opacity={0.92}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </points>
+      </group>
+
+      {/* ── 4. INCANDESCENT PROTO-SUN CORE ── */}
+      <mesh ref={coreRef} position={[0, 0, 0]}>
+        <sphereGeometry args={[0.34, 28, 28]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+
+      {/* Radiant Solar Corona Halo */}
+      <mesh ref={coronaRef} position={[0, 0, 0]}>
+        <sphereGeometry args={[0.55, 28, 28]} />
+        <meshBasicMaterial
+          color="#f59e0b"
+          transparent
+          opacity={0.55}
+          blending={THREE.AdditiveBlending}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Radiant Point Light from the Proto-Sun */}
+      <pointLight color="#fbbf24" intensity={4.5} distance={8} />
+    </group>
   );
 }
 
-function GlobeMesh({
-  stageIndex,
-  userRotationY,
-  userRotationX,
-  velocityRef,
-  isDragging,
-}: {
-  stageIndex: number;
-  userRotationY: React.MutableRefObject<number>;
-  userRotationX: React.MutableRefObject<number>;
-  velocityRef: React.MutableRefObject<{ x: number; y: number }>;
-  isDragging: React.MutableRefObject<boolean>;
-}) {
+/**
+ * Accretion fragments that orbit during the Heavy Bombardment epoch (Stage 02)
+ * Optimized with GPU group rotation.
+ */
+function OrbitingFragments({ count = 35 }: { count?: number }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const radius = 1.35 + Math.random() * 0.45;
+      const angle = Math.random() * Math.PI * 2;
+      pos[i * 3] = Math.cos(angle) * radius;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.7;
+      pos[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    return pos;
+  }, [count]);
+
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.45;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.045}
+          color="#fbbf24"
+          transparent
+          opacity={0.88}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </points>
+    </group>
+  );
+}
+
+function CelestialGlobeScene({ stageIndex }: { stageIndex: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
-  const diskRef = useRef<THREE.Mesh>(null);
 
   const textureLoader = useMemo(() => new THREE.TextureLoader(), []);
 
-  // Preload all 6 spherical planetary maps
-  const textures = useMemo(() => {
-    return stageTexturePaths.map((src) => {
+  // On-demand texture cache: Only loads textures when the stage is viewed
+  const textureCache = useRef<Map<string, THREE.Texture>>(new Map());
+
+  const getTexture = useCallback((src: string) => {
+    if (!textureCache.current.has(src)) {
       const tex = textureLoader.load(src);
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.wrapS = THREE.RepeatWrapping;
       tex.wrapT = THREE.ClampToEdgeWrapping;
-      return tex;
-    });
+      textureCache.current.set(src, tex);
+    }
+    return textureCache.current.get(src)!;
   }, [textureLoader]);
 
-  // Real NASA Cloud Map for Habitable Earth
-  const earthClouds = useMemo(() => {
-    const tex = textureLoader.load('/images/earth-clouds.jpg');
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    return tex;
-  }, [textureLoader]);
+  // Optimized 2K Cloud Map (only loaded if stage 06 is viewed)
+  const getEarthClouds = useCallback(() => {
+    return getTexture('/images/earth-clouds-2k.jpg');
+  }, [getTexture]);
 
-  // NASA Ocean Specular Mask
-  const earthOceanMask = useMemo(() => {
-    return textureLoader.load('/textures/earth-land-ocean-mask.png');
-  }, [textureLoader]);
+  // Optimized 2K Specular Mask
+  const getOceanMask = useCallback(() => {
+    return getTexture('/textures/earth-land-ocean-mask-2k.png');
+  }, [getTexture]);
 
   const glowColor = stageGlowColors[stageIndex] || stageGlowColors[5];
 
-  // Dynamically update materials when stageIndex changes
+  // Dynamically update material maps when stageIndex changes
   useEffect(() => {
-    if (!meshRef.current) return;
+    if (!meshRef.current || stageIndex === 0) return;
     const mat = meshRef.current.material as THREE.MeshStandardMaterial;
     if (!mat) return;
 
-    mat.map = textures[stageIndex] || textures[0];
+    const currentPath = stageTexturePaths[stageIndex] || stageTexturePaths[1];
+    mat.map = getTexture(currentPath);
 
     if (stageIndex === 5) {
-      // 06 Habitable Earth: Authentic 8K NASA Blue Marble with specular oceans
-      mat.roughnessMap = earthOceanMask;
+      // 06 Habitable Earth: Authentic NASA Blue Marble with specular oceans
+      mat.roughnessMap = getOceanMask();
       mat.roughness = 0.65;
       mat.metalness = 0.05;
       mat.emissive = new THREE.Color('#000000');
@@ -150,7 +273,7 @@ function GlobeMesh({
       mat.roughness = 0.35;
       mat.metalness = 0.05;
       mat.emissive = new THREE.Color('#ff3300');
-      mat.emissiveIntensity = 0.65;
+      mat.emissiveIntensity = 0.75;
     } else if (stageIndex === 3) {
       // 04 Cooling & Crust: Basalt rifts glow
       mat.roughnessMap = null;
@@ -164,16 +287,15 @@ function GlobeMesh({
       mat.roughness = 0.55;
       mat.metalness = 0.05;
       mat.emissive = new THREE.Color('#ff5500');
-      mat.emissiveIntensity = 0.35;
+      mat.emissiveIntensity = 0.45;
     } else if (stageIndex === 4) {
       // 05 Water & Atmosphere: Archean cyan ocean with specular mask
-      mat.roughnessMap = earthOceanMask;
+      mat.roughnessMap = getOceanMask();
       mat.roughness = 0.55;
       mat.metalness = 0.05;
       mat.emissive = new THREE.Color('#0284c7');
-      mat.emissiveIntensity = 0.1;
+      mat.emissiveIntensity = 0.12;
     } else {
-      // 01 Solar Nebula: Primordial golden accretion glow
       mat.roughnessMap = null;
       mat.roughness = 0.4;
       mat.metalness = 0.05;
@@ -181,30 +303,12 @@ function GlobeMesh({
       mat.emissiveIntensity = 0.5;
     }
     mat.needsUpdate = true;
-  }, [stageIndex, textures, earthOceanMask, glowColor]);
+  }, [stageIndex, getTexture, getOceanMask]);
 
   useFrame((_, delta) => {
-    // Smooth user rotation with velocity damping
-    if (!isDragging.current) {
-      userRotationY.current += 0.0016 + velocityRef.current.x;
-      velocityRef.current.x *= 0.92;
-      velocityRef.current.y *= 0.92;
-    }
-
-    if (meshRef.current) {
-      meshRef.current.rotation.y = userRotationY.current;
-      meshRef.current.rotation.x = userRotationX.current;
-    }
-
     // Dynamic independent cloud rotation for Habitable Earth
     if (cloudsRef.current) {
-      cloudsRef.current.rotation.y = userRotationY.current * 1.05 + 0.1;
-      cloudsRef.current.rotation.x = userRotationX.current;
-    }
-
-    // Rotating accretion disk for Nebula
-    if (diskRef.current) {
-      diskRef.current.rotation.z += delta * 0.14;
+      cloudsRef.current.rotation.y += delta * 0.06;
     }
 
     // Smooth atmosphere glow color transition
@@ -216,134 +320,95 @@ function GlobeMesh({
     }
   });
 
+  const globeRadius = 1.22;
+
   return (
     <group position={[0, 0, 0]}>
-      {/* Main Celestial Globe - Zoomed out to radius 1.15 */}
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[1.15, 64, 64]} />
-        <meshStandardMaterial
-          map={textures[stageIndex] || textures[0]}
-          roughness={stageIndex === 5 ? 0.65 : 0.45}
-          metalness={0.05}
-        />
-      </mesh>
+      {/* ── STAGE 01: SOLAR NEBULA ACCRETION DISK & PROTO-SUN ── */}
+      {stageIndex === 0 ? (
+        <SolarNebulaSystem />
+      ) : (
+        /* ── STAGES 02 - 06: CELESTIAL PLANETARY GLOBE ── */
+        <>
+          <mesh ref={meshRef}>
+            <sphereGeometry args={[globeRadius, 48, 48]} />
+            <meshStandardMaterial
+              map={getTexture(stageTexturePaths[stageIndex] || stageTexturePaths[1])}
+              roughness={stageIndex === 5 ? 0.65 : 0.45}
+              metalness={0.05}
+            />
+          </mesh>
 
-      {/* Floating 3D Cloud Atmosphere for Habitable Earth (Stage 06) */}
-      {stageIndex === 5 && (
-        <mesh ref={cloudsRef} scale={1.015}>
-          <sphereGeometry args={[1.15, 64, 64]} />
-          <meshStandardMaterial
-            map={earthClouds}
-            transparent={true}
-            opacity={0.68}
-            blending={THREE.NormalBlending}
-            depthWrite={false}
-          />
-        </mesh>
+          {/* Floating 3D Cloud Atmosphere for Habitable Earth (Stage 06) */}
+          {stageIndex === 5 && (
+            <mesh ref={cloudsRef} scale={1.015}>
+              <sphereGeometry args={[globeRadius, 48, 48]} />
+              <meshStandardMaterial
+                map={getEarthClouds()}
+                transparent={true}
+                opacity={0.68}
+                blending={THREE.NormalBlending}
+                depthWrite={false}
+              />
+            </mesh>
+          )}
+
+          {/* Orbiting asteroid bombardment particles during Accretion */}
+          {stageIndex === 1 && <OrbitingFragments count={40} />}
+
+          {/* Soft Rayleigh Scattering Rim Glow */}
+          <mesh ref={glowRef} scale={1.07}>
+            <sphereGeometry args={[globeRadius, 36, 36]} />
+            <shaderMaterial
+              vertexShader={atmosphereVertexShader}
+              fragmentShader={atmosphereFragmentShader}
+              blending={THREE.AdditiveBlending}
+              side={THREE.BackSide}
+              transparent
+              uniforms={{
+                uColor: { value: glowColor.clone() },
+              }}
+            />
+          </mesh>
+        </>
       )}
-
-      {/* Orbiting asteroid particles during Accretion & Nebula */}
-      {(stageIndex === 0 || stageIndex === 1) && <OrbitingFragments count={stageIndex === 0 ? 25 : 45} />}
-
-      {/* Rotating Solar Nebula Accretion Disk */}
-      {stageIndex === 0 && (
-        <mesh ref={diskRef} rotation={[Math.PI / 2.3, 0.16, 0]}>
-          <ringGeometry args={[1.35, 2.4, 64]} />
-          <meshBasicMaterial
-            map={textures[0]}
-            side={THREE.DoubleSide}
-            transparent
-            opacity={0.75}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      )}
-
-      {/* Soft Rayleigh Scattering Rim Glow */}
-      <mesh ref={glowRef} scale={1.09}>
-        <sphereGeometry args={[1.15, 48, 48]} />
-        <shaderMaterial
-          vertexShader={atmosphereVertexShader}
-          fragmentShader={atmosphereFragmentShader}
-          blending={THREE.AdditiveBlending}
-          side={THREE.BackSide}
-          transparent
-          uniforms={{
-            uColor: { value: glowColor.clone() },
-          }}
-        />
-      </mesh>
     </group>
   );
 }
 
 export default function InteractiveFormationGlobe({ stageIndex }: FormationGlobeProps) {
-  const isDragging = useRef(false);
-  const lastPointer = useRef({ x: 0, y: 0 });
-  const userRotationY = useRef(0);
-  const userRotationX = useRef(0.12);
-  const velocityRef = useRef({ x: 0, y: 0 });
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    isDragging.current = true;
-    lastPointer.current = { x: e.clientX, y: e.clientY };
-    velocityRef.current = { x: 0, y: 0 };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging.current) return;
-    const dx = e.clientX - lastPointer.current.x;
-    const dy = e.clientY - lastPointer.current.y;
-    lastPointer.current = { x: e.clientX, y: e.clientY };
-
-    const rotDeltaY = dx * 0.006;
-    const rotDeltaX = dy * 0.005;
-
-    userRotationY.current += rotDeltaY;
-    userRotationX.current = Math.max(-0.55, Math.min(0.55, userRotationX.current + rotDeltaX));
-    velocityRef.current = { x: rotDeltaY, y: rotDeltaX };
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (isDragging.current) {
-      isDragging.current = false;
-      try {
-        (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-      } catch {}
-    }
-  };
-
   return (
     <div
       className="interactive-formation-viewport"
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-      title="Click and drag anywhere on the globe to rotate in 3D"
+      title="Click and drag anywhere to rotate 3D Earth / Solar Nebula in full 360°"
     >
-      <Canvas
-        camera={{ position: [0, 0, 4.3], fov: 38 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      >
-        <ambientLight intensity={0.65} />
-        <directionalLight position={[4, 3, 3]} intensity={2.4} color="#fffcf2" />
-        <directionalLight position={[-3, -2, -2]} intensity={0.3} color="#1b304f" />
-        <GlobeMesh
-          stageIndex={stageIndex}
-          userRotationY={userRotationY}
-          userRotationX={userRotationX}
-          velocityRef={velocityRef}
-          isDragging={isDragging}
-        />
-      </Canvas>
+      <NearViewportMount>
+        <Canvas
+          camera={{ position: [0, 0, 3.85], fov: 38 }}
+          dpr={[1, 1.35]}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        >
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[4, 3, 3]} intensity={2.8} color="#fffcf2" />
+          <directionalLight position={[-3, -2, -2]} intensity={0.4} color="#1b304f" />
+          <CelestialGlobeScene stageIndex={stageIndex} />
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            rotateSpeed={0.85}
+            autoRotate={true}
+            autoRotateSpeed={0.9}
+            minPolarAngle={Math.PI * 0.18}
+            maxPolarAngle={Math.PI * 0.82}
+          />
+        </Canvas>
+      </NearViewportMount>
 
       {/* Interactive 3D Drag Hint Badge */}
       <div className="formation-drag-badge">
-        <span>DRAG TO ROTATE 3D GLOBE</span>
+        <span>{stageIndex === 0 ? 'DRAG TO ROTATE 3D NEBULA' : 'DRAG TO ROTATE 3D GLOBE'}</span>
       </div>
     </div>
   );
 }
+

@@ -1,6 +1,10 @@
-import { useRef, useMemo } from 'react';
+import { useMemo, useState, useRef, useCallback } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import * as THREE from 'three';
+import NearViewportMount from './NearViewportMount';
+
 
 export type LayerKey = 'crust' | 'mantle' | 'outer' | 'inner';
 
@@ -13,244 +17,524 @@ interface CutawayEarthProps {
 interface GlobeSceneProps {
   selectedLayer: LayerKey;
   onSelectLayer: (layer: LayerKey) => void;
-  userRotationY: React.MutableRefObject<number>;
-  userRotationX: React.MutableRefObject<number>;
-  velocityRef: React.MutableRefObject<{ x: number; y: number }>;
-  isDragging: React.MutableRefObject<boolean>;
+  hoveredLayer: LayerKey | null;
+  setHoveredLayer: (layer: LayerKey | null) => void;
+  isAutoRotating: boolean;
+  isInteracting: boolean;
+  onProjectAnchors: (anchors: Record<LayerKey, { x: number; y: number; visible: boolean }>) => void;
+  globeGroupRef: React.RefObject<THREE.Group | null>;
 }
 
 function GlobeCutawayScene({
   selectedLayer,
   onSelectLayer,
-  userRotationY,
-  userRotationX,
-  velocityRef,
-  isDragging,
+  hoveredLayer,
+  setHoveredLayer,
+  isAutoRotating,
+  isInteracting,
+  onProjectAnchors,
+  globeGroupRef,
 }: GlobeSceneProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const coreRef = useRef<THREE.Mesh>(null);
-  const outerCoreRef = useRef<THREE.Mesh>(null);
-  const mantleRef = useRef<THREE.Mesh>(null);
-  const crustRef = useRef<THREE.Mesh>(null);
+  const innerCoreRef = useRef<THREE.Mesh>(null);
 
   const textureLoader = useMemo(() => new THREE.TextureLoader(), []);
 
-  // Authentic NASA 8K Blue Marble Surface Map (Deep oceans, crisp continents)
+  // Crisp NASA Earth Albedo texture (optimized 2K map)
   const earthAlbedo = useMemo(() => {
-    const tex = textureLoader.load('/textures/earth-albedo.jpg');
+    const tex = textureLoader.load('/textures/earth-albedo-2k.jpg', (t) => {
+      t.needsUpdate = true;
+    });
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.ClampToEdgeWrapping;
     return tex;
   }, [textureLoader]);
 
-  // Concentric Core Cross-Section Map
-  const coreCrossSection = useMemo(() => {
-    const tex = textureLoader.load('/textures/earth-core-cross-section.png');
-    tex.colorSpace = THREE.SRGBColorSpace;
+  // Elevation relief bump map (optimized 2K map)
+  const earthBump = useMemo(() => {
+    const tex = textureLoader.load('/textures/earth-bump-2k.jpg', (t) => {
+      t.needsUpdate = true;
+    });
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
     return tex;
   }, [textureLoader]);
 
-  // Magma Flow Normal/Noise texture
+  // Molten magma / mantle convective texture (outer core)
   const magmaTex = useMemo(() => {
-    const tex = textureLoader.load('/textures/stage-03-magma-sphere.jpg');
+    const tex = textureLoader.load('/textures/stage-03-magma-sphere.jpg', (t) => {
+      t.needsUpdate = true;
+    });
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
     return tex;
   }, [textureLoader]);
 
-  useFrame((state) => {
-    // Decelerate user drag inertia ONLY - NO AUTO-ROTATION (Static standing pose)
-    if (!isDragging.current) {
-      if (Math.abs(velocityRef.current.x) > 0.0001 || Math.abs(velocityRef.current.y) > 0.0001) {
-        userRotationY.current += velocityRef.current.x;
-        userRotationX.current = Math.max(-0.45, Math.min(0.45, userRotationX.current + velocityRef.current.y));
-        velocityRef.current.x *= 0.88;
-        velocityRef.current.y *= 0.88;
-      }
-    }
+  // Accretion / incandescent metallic texture (inner core)
+  const innerCoreTex = useMemo(() => {
+    const tex = textureLoader.load('/textures/stage-02-accretion-sphere.jpg', (t) => {
+      t.needsUpdate = true;
+    });
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }, [textureLoader]);
 
-    if (groupRef.current) {
-      groupRef.current.rotation.y = userRotationY.current;
-      groupRef.current.rotation.x = userRotationX.current;
-    }
+  // Cooling silicate / semi-solid rock texture (mantle)
+  const mantleTex = useMemo(() => {
+    const tex = textureLoader.load('/textures/stage-04-cooling-sphere.jpg', (t) => {
+      t.needsUpdate = true;
+    });
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }, [textureLoader]);
 
-    // Inner core gentle heat pulsation
-    if (coreRef.current) {
-      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 2.4) * 0.035;
-      coreRef.current.scale.set(pulse, pulse, pulse);
-    }
-  });
+  // Accurately proportioned layer radii:
+  // Globe Radius: 1.08 (fits comfortably in 340px viewport)
+  // Crust: thin outer lithosphere rim (0.99 to 1.08)
+  // Mantle: thick silicate mantle (0.64 to 0.99)
+  // Outer Core: liquid iron-nickel dynamo (0.34 to 0.64)
+  // Inner Core: solid incandescent core (0 to 0.34)
+  const globeRadius = 1.08;
+  const rMantle = 0.99;
+  const rOuter = 0.64;
+  const rInner = 0.34;
 
-  // Layer Radii:
-  // Globe Radius: 1.45
-  // Cutout: Front-Right quadrant (phi from Math.PI to 2.5 * Math.PI = 270 degrees sweep)
-  // Missing 90° wedge is between phi = 0.5 * Math.PI (front) and Math.PI (right), i.e. x >= 0, z >= 0
-  const globeRadius = 1.45;
+  // Front-Right 90° cutaway wedge (from phi = 90° to 180°):
+  // Sphere geometry spans 270° from phi = 180° (Math.PI) to 450° (2.5 * Math.PI)
   const cutStart = Math.PI;
   const cutAngle = Math.PI * 1.5;
 
+  const activeLayer = hoveredLayer || selectedLayer;
+
+  const handlePointerOver = (layer: LayerKey) => {
+    setHoveredLayer(layer);
+    document.body.style.cursor = 'pointer';
+  };
+
+  const handlePointerOut = () => {
+    setHoveredLayer(null);
+    document.body.style.cursor = 'default';
+  };
+
+  // Reusable projection math vectors
+  const tempVec = useMemo(() => new THREE.Vector3(), []);
+  const worldPos = useMemo(() => new THREE.Vector3(), []);
+  const normalVec = useMemo(() => new THREE.Vector3(), []);
+  const camVec = useMemo(() => new THREE.Vector3(), []);
+
+  // 4 Local layer anchor points on Cut Face 1 (Plane z = 0, x >= 0)
+  const localAnchors = useMemo(() => ({
+    crust: new THREE.Vector3(1.035 * Math.cos(0.48), 1.035 * Math.sin(0.48), 0.002),
+    mantle: new THREE.Vector3(0.815 * Math.cos(0.32), 0.815 * Math.sin(0.32), 0.002),
+    outer: new THREE.Vector3(0.490 * Math.cos(0.14), 0.490 * Math.sin(0.14), 0.002),
+    inner: new THREE.Vector3(0.170, 0, 0.002),
+  }), []);
+
+  const projectedOnceRef = useRef(false);
+  const lastProjectTimeRef = useRef(0);
+
+  // Frame Loop:
+  // 1. Pulses the incandescent thermal glow of the inner core
+  // 2. Projects 3D layer anchors to 2D SVG screen space only when interacting (zero-overhead when idle)
+  useFrame(({ camera }) => {
+    // 1. Inner core thermal breathing pulse
+    if (innerCoreRef.current) {
+      const pulse = 1.0 + Math.sin(Date.now() * 0.003) * 0.035;
+      innerCoreRef.current.scale.set(pulse, pulse, pulse);
+    }
+
+    // 2. Only calculate SVG anchor projections if interacting OR on first render
+    const now = performance.now();
+    const shouldProject = !projectedOnceRef.current || (isInteracting && now - lastProjectTimeRef.current > 32);
+
+    if (shouldProject && globeGroupRef.current) {
+      lastProjectTimeRef.current = now;
+      projectedOnceRef.current = true;
+
+      normalVec.set(0, 0, 1).transformDirection(globeGroupRef.current.matrixWorld);
+      camVec.subVectors(camera.position, globeGroupRef.current.position).normalize();
+      const dot = normalVec.dot(camVec);
+      const isFacing = dot > 0.05;
+
+      const updatedAnchors: Record<LayerKey, { x: number; y: number; visible: boolean }> = {
+        crust: { x: 314, y: 96, visible: isFacing },
+        mantle: { x: 297, y: 128, visible: isFacing },
+        outer: { x: 261, y: 154, visible: isFacing },
+        inner: { x: 222, y: 167, visible: isFacing },
+      };
+
+      (Object.keys(localAnchors) as LayerKey[]).forEach((key) => {
+        worldPos.copy(localAnchors[key]).applyMatrix4(globeGroupRef.current!.matrixWorld);
+        tempVec.copy(worldPos).project(camera);
+        const svgX = (tempVec.x * 0.5 + 0.5) * 440;
+        const svgY = (-tempVec.y * 0.5 + 0.5) * 340;
+        updatedAnchors[key] = {
+          x: Math.round(svgX),
+          y: Math.round(svgY),
+          visible: isFacing && tempVec.z < 1,
+        };
+      });
+
+      onProjectAnchors(updatedAnchors);
+    }
+  });
+
   return (
-    <group ref={groupRef} position={[0, -0.05, 0]}>
-      {/* ── 1. INNER CORE (Solid Incandescent Iron-Nickel Sphere) ── */}
+    <group ref={globeGroupRef as any} position={[-0.15, 0, 0]} rotation={[0.22, 0.42, 0]}>
+      {/* ── 1. INNER CORE (Full 3D Incandescent Metallic Iron-Nickel Sphere in Center) ── */}
       <mesh
-        ref={coreRef}
+        ref={innerCoreRef}
         onClick={(e) => {
           e.stopPropagation();
           onSelectLayer('inner');
         }}
-        scale={selectedLayer === 'inner' ? 1.08 : 1.0}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          handlePointerOver('inner');
+        }}
+        onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[0.50, 32, 32]} />
+        <sphereGeometry args={[rInner, 32, 32]} />
         <meshStandardMaterial
-          color={selectedLayer === 'inner' ? '#ffffff' : '#fff5cc'}
-          emissive={selectedLayer === 'inner' ? '#ffaa00' : '#ff9900'}
-          emissiveIntensity={selectedLayer === 'inner' ? 1.3 : 0.9}
+          map={innerCoreTex}
+          color="#fffbe6"
+          emissive="#f59e0b"
+          emissiveIntensity={activeLayer === 'inner' ? 1.4 : 0.8}
           roughness={0.2}
-          metalness={0.8}
+          metalness={0.85}
         />
       </mesh>
 
-      {/* Point light shining from inner core */}
-      <pointLight color="#ffc860" intensity={3.8} distance={4.2} />
+      {/* Internal Core Thermal Radiance Point Light — kept dim so it doesn't wash out other layers */}
+      <pointLight color="#f59e0b" intensity={activeLayer === 'inner' ? 1.0 : 0.6} distance={3} />
 
-      {/* ── 2. OUTER CORE (Liquid Molten Iron-Nickel Shell with Front-Right Cutaway) ── */}
+      {/* ── 2. OUTER CORE (3D Liquid Molten Shell with 270° Cutaway) ── */}
       <mesh
-        ref={outerCoreRef}
         onClick={(e) => {
           e.stopPropagation();
           onSelectLayer('outer');
         }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          handlePointerOver('outer');
+        }}
+        onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[0.95, 48, 48, cutStart, cutAngle]} />
+        <sphereGeometry args={[rOuter, 36, 36, cutStart, cutAngle]} />
         <meshStandardMaterial
           map={magmaTex}
-          color={selectedLayer === 'outer' ? '#ffffff' : '#ffa533'}
-          emissive="#ff4400"
-          emissiveIntensity={selectedLayer === 'outer' ? 0.95 : 0.55}
+          color="#f59e0b"
+          emissive="#d97706"
+          emissiveIntensity={activeLayer === 'outer' ? 0.9 : 0.45}
           roughness={0.35}
-          metalness={0.3}
+          metalness={0.4}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* ── 3. MANTLE (Semi-Solid Convective Silicate Rock with Front-Right Cutaway) ── */}
+      {/* ── 3. MANTLE (3D Semi-Solid Silicate Magma Shell with 270° Cutaway) ── */}
       <mesh
-        ref={mantleRef}
         onClick={(e) => {
           e.stopPropagation();
           onSelectLayer('mantle');
         }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          handlePointerOver('mantle');
+        }}
+        onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[1.38, 56, 56, cutStart, cutAngle]} />
+        <sphereGeometry args={[rMantle, 40, 40, cutStart, cutAngle]} />
         <meshStandardMaterial
-          color={selectedLayer === 'mantle' ? '#ff6b4a' : '#d94e28'}
-          emissive="#7f1d1d"
-          emissiveIntensity={selectedLayer === 'mantle' ? 0.65 : 0.25}
-          roughness={0.7}
-          metalness={0.1}
+          map={mantleTex}
+          color="#b45309"
+          emissive="#7c2d12"
+          emissiveIntensity={activeLayer === 'mantle' ? 0.65 : 0.25}
+          roughness={0.65}
+          metalness={0.15}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* ── 4. CRUST & EARTH SURFACE (Clean NASA Blue Marble without Clouds) ── */}
+      {/* ── 4. CRUST & EARTH SURFACE (270° NASA Blue Marble Outer Shell with Continents) ── */}
       <mesh
-        ref={crustRef}
         onClick={(e) => {
           e.stopPropagation();
           onSelectLayer('crust');
         }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          handlePointerOver('crust');
+        }}
+        onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[globeRadius, 64, 64, cutStart, cutAngle]} />
+        <sphereGeometry args={[globeRadius, 44, 44, cutStart, cutAngle]} />
         <meshStandardMaterial
           map={earthAlbedo}
-          roughness={0.65}
+          bumpMap={earthBump}
+          bumpScale={0.035}
+          roughness={0.5}
           metalness={0.05}
-          emissive={selectedLayer === 'crust' ? '#38bdf8' : '#000000'}
-          emissiveIntensity={selectedLayer === 'crust' ? 0.25 : 0.0}
-          side={THREE.FrontSide}
-        />
-      </mesh>
-
-      {/* ── 5. FLAT CUT FACES (Concentric Cross-Section Caps on Front-Right Cutaway) ── */}
-      {/* Cut Face 1 (Plane along z = 0, for x >= 0, facing front toward camera) */}
-      <mesh rotation={[0, 0, 0]} position={[0, 0, 0]}>
-        <circleGeometry args={[globeRadius, 64, -Math.PI * 0.5, Math.PI]} />
-        <meshBasicMaterial
-          map={coreCrossSection}
+          color="#ffffff"
+          emissive={activeLayer === 'crust' ? '#deb87a' : '#000000'}
+          emissiveIntensity={activeLayer === 'crust' ? 0.18 : 0.0}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Cut Face 2 (Plane along x = 0, for z >= 0, facing right toward callout cards) */}
-      <mesh rotation={[0, -Math.PI / 2, 0]} position={[0, 0, 0]}>
-        <circleGeometry args={[globeRadius, 64, -Math.PI * 0.5, Math.PI]} />
-        <meshBasicMaterial
-          map={coreCrossSection}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      {/* ── 5. CUT FACE 1: STRATA CROSS-SECTION AT phi = Math.PI (Plane z = 0, for x >= 0) ── */}
+      <group position={[0, 0, 0.001]} rotation={[0, 0, 0]}>
+        {/* Inner Core Disc */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('inner');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('inner');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <circleGeometry args={[rInner, 32, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={innerCoreTex}
+            color={activeLayer === 'inner' ? '#ffffff' : '#fffbe6'}
+            emissive={activeLayer === 'inner' ? '#ffaa00' : '#f59e0b'}
+            emissiveIntensity={activeLayer === 'inner' ? 2.6 : 1.5}
+            roughness={0.2}
+            metalness={0.8}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
 
-      {/* ── 6. ACTIVE LAYER HIGHLIGHT RINGS ON BOTH CUT FACES ── */}
-      {selectedLayer === 'crust' && (
+        {/* Outer Core Ring */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('outer');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('outer');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rInner, rOuter, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={magmaTex}
+            color={activeLayer === 'outer' ? '#fbbf24' : '#ea580c'}
+            emissive={activeLayer === 'outer' ? '#f59e0b' : '#b45309'}
+            emissiveIntensity={activeLayer === 'outer' ? 1.5 : 0.7}
+            roughness={0.3}
+            metalness={0.35}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* Mantle Ring */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('mantle');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('mantle');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rOuter, rMantle, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={mantleTex}
+            color={activeLayer === 'mantle' ? '#ea580c' : '#991b1b'}
+            emissive={activeLayer === 'mantle' ? '#c2410c' : '#7f1d1d'}
+            emissiveIntensity={activeLayer === 'mantle' ? 1.0 : 0.35}
+            roughness={0.7}
+            metalness={0.15}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* Crust Lithosphere Outer Rim Band */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('crust');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('crust');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rMantle, globeRadius, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={earthAlbedo}
+            color={activeLayer === 'crust' ? '#fef08a' : '#a8a29e'}
+            emissive={activeLayer === 'crust' ? '#deb87a' : '#44403c'}
+            emissiveIntensity={activeLayer === 'crust' ? 0.9 : 0.22}
+            roughness={0.85}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      </group>
+
+      {/* ── 6. CUT FACE 2: STRATA CROSS-SECTION AT phi = 2.5 * Math.PI (Plane x = 0, for z >= 0) ── */}
+      <group position={[0.001, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
+        {/* Inner Core Disc */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('inner');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('inner');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <circleGeometry args={[rInner, 32, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={innerCoreTex}
+            color={activeLayer === 'inner' ? '#ffffff' : '#fffbe6'}
+            emissive={activeLayer === 'inner' ? '#ffaa00' : '#f59e0b'}
+            emissiveIntensity={activeLayer === 'inner' ? 2.6 : 1.5}
+            roughness={0.2}
+            metalness={0.8}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* Outer Core Ring */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('outer');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('outer');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rInner, rOuter, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={magmaTex}
+            color={activeLayer === 'outer' ? '#fbbf24' : '#ea580c'}
+            emissive={activeLayer === 'outer' ? '#f59e0b' : '#b45309'}
+            emissiveIntensity={activeLayer === 'outer' ? 1.5 : 0.7}
+            roughness={0.3}
+            metalness={0.35}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* Mantle Ring */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('mantle');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('mantle');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rOuter, rMantle, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={mantleTex}
+            color={activeLayer === 'mantle' ? '#ea580c' : '#991b1b'}
+            emissive={activeLayer === 'mantle' ? '#c2410c' : '#7f1d1d'}
+            emissiveIntensity={activeLayer === 'mantle' ? 1.0 : 0.35}
+            roughness={0.7}
+            metalness={0.15}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* Crust Lithosphere Outer Rim Band */}
+        <mesh
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectLayer('crust');
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            handlePointerOver('crust');
+          }}
+          onPointerOut={handlePointerOut}
+        >
+          <ringGeometry args={[rMantle, globeRadius, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <meshStandardMaterial
+            map={earthAlbedo}
+            color={activeLayer === 'crust' ? '#fef08a' : '#a8a29e'}
+            emissive={activeLayer === 'crust' ? '#deb87a' : '#44403c'}
+            emissiveIntensity={activeLayer === 'crust' ? 0.9 : 0.22}
+            roughness={0.85}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      </group>
+
+      {/* ── 7. CRISP GLOWING NEON HIGHLIGHT RINGS ON BOTH CUT FACES ── */}
+      {activeLayer === 'inner' && (
         <>
-          <mesh rotation={[0, 0, 0]}>
-            <ringGeometry args={[globeRadius * 0.965, globeRadius, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#deb87a" side={THREE.DoubleSide} transparent opacity={0.85} />
+          <mesh position={[0, 0, 0.005]}>
+            <ringGeometry args={[rInner - 0.015, rInner + 0.015, 48, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ffffff" side={THREE.DoubleSide} transparent opacity={0.95} />
           </mesh>
-          <mesh rotation={[0, -Math.PI / 2, 0]}>
-            <ringGeometry args={[globeRadius * 0.965, globeRadius, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#deb87a" side={THREE.DoubleSide} transparent opacity={0.85} />
-          </mesh>
-        </>
-      )}
-      {selectedLayer === 'mantle' && (
-        <>
-          <mesh rotation={[0, 0, 0]}>
-            <ringGeometry args={[0.96, 1.38, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#ea580c" side={THREE.DoubleSide} transparent opacity={0.55} />
-          </mesh>
-          <mesh rotation={[0, -Math.PI / 2, 0]}>
-            <ringGeometry args={[0.96, 1.38, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#ea580c" side={THREE.DoubleSide} transparent opacity={0.55} />
-          </mesh>
-        </>
-      )}
-      {selectedLayer === 'outer' && (
-        <>
-          <mesh rotation={[0, 0, 0]}>
-            <ringGeometry args={[0.51, 0.95, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#f59e0b" side={THREE.DoubleSide} transparent opacity={0.6} />
-          </mesh>
-          <mesh rotation={[0, -Math.PI / 2, 0]}>
-            <ringGeometry args={[0.51, 0.95, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#f59e0b" side={THREE.DoubleSide} transparent opacity={0.6} />
-          </mesh>
-        </>
-      )}
-      {selectedLayer === 'inner' && (
-        <>
-          <mesh rotation={[0, 0, 0]}>
-            <ringGeometry args={[0, 0.50, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#ffffff" side={THREE.DoubleSide} transparent opacity={0.75} />
-          </mesh>
-          <mesh rotation={[0, -Math.PI / 2, 0]}>
-            <ringGeometry args={[0, 0.50, 64, 1, -Math.PI * 0.5, Math.PI]} />
-            <meshBasicMaterial color="#ffffff" side={THREE.DoubleSide} transparent opacity={0.75} />
+          <mesh position={[0.005, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
+            <ringGeometry args={[rInner - 0.015, rInner + 0.015, 48, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ffffff" side={THREE.DoubleSide} transparent opacity={0.95} />
           </mesh>
         </>
       )}
 
-      {/* Subtle Atmospheric Blue Corona Rim Glow */}
-      <mesh>
-        <sphereGeometry args={[globeRadius * 1.025, 48, 48]} />
-        <meshBasicMaterial
-          color="#38bdf8"
-          transparent
-          opacity={0.15}
-          side={THREE.BackSide}
-        />
-      </mesh>
+      {activeLayer === 'outer' && (
+        <>
+          <mesh position={[0, 0, 0.005]}>
+            <ringGeometry args={[rOuter - 0.02, rOuter + 0.02, 48, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#f59e0b" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+          <mesh position={[0.005, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
+            <ringGeometry args={[rOuter - 0.02, rOuter + 0.02, 48, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#f59e0b" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+        </>
+      )}
+
+      {activeLayer === 'mantle' && (
+        <>
+          <mesh position={[0, 0, 0.005]}>
+            <ringGeometry args={[rMantle - 0.02, rMantle + 0.02, 56, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ff7a33" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+          <mesh position={[0.005, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
+            <ringGeometry args={[rMantle - 0.02, rMantle + 0.02, 56, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ff7a33" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+        </>
+      )}
+
+      {activeLayer === 'crust' && (
+        <>
+          <mesh position={[0, 0, 0.005]}>
+            <ringGeometry args={[globeRadius * 0.975, globeRadius * 1.01, 64, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ffd98a" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+          <mesh position={[0.005, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
+            <ringGeometry args={[globeRadius * 0.975, globeRadius * 1.01, 64, 1, -Math.PI * 0.5, Math.PI]} />
+            <meshBasicMaterial color="#ffd98a" side={THREE.DoubleSide} transparent opacity={0.95} />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }
@@ -273,7 +557,7 @@ const layerCardsData = [
   {
     key: 'outer' as const,
     title: 'Outer Core',
-    thickness: '~2,400 km thick',
+    thickness: '~2,250 km thick',
     desc: 'Liquid iron-nickel magnetic dynamo',
     icon: '/images/layer-icon-outer.png',
   },
@@ -291,141 +575,217 @@ export default function InteractiveCutawayEarth({
   onSelectLayer,
   onOpenLayerModal,
 }: CutawayEarthProps) {
-  const isDragging = useRef(false);
-  const lastPointer = useRef({ x: 0, y: 0 });
-  const userRotationY = useRef(-0.25);
-  const userRotationX = useRef(0.20);
-  const velocityRef = useRef({ x: 0, y: 0 });
+  const [hoveredLayer, setHoveredLayer] = useState<LayerKey | null>(null);
+  const [isAutoRotating, setIsAutoRotating] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    isDragging.current = true;
-    lastPointer.current = { x: e.clientX, y: e.clientY };
-    velocityRef.current = { x: 0, y: 0 };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  };
+  const globeGroupRef = useRef<THREE.Group>(null);
+  const orbitControlsRef = useRef<OrbitControlsImpl>(null);
+  const interactionTimerRef = useRef<number | null>(null);
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging.current) return;
-    const dx = e.clientX - lastPointer.current.x;
-    const dy = e.clientY - lastPointer.current.y;
-    lastPointer.current = { x: e.clientX, y: e.clientY };
+  // Dynamic 2D SVG screen anchor positions tracked in real time from 3D scene
+  const [anchors, setAnchors] = useState<Record<LayerKey, { x: number; y: number; visible: boolean }>>({
+    crust: { x: 314, y: 96, visible: true },
+    mantle: { x: 297, y: 128, visible: true },
+    outer: { x: 261, y: 154, visible: true },
+    inner: { x: 222, y: 167, visible: true },
+  });
 
-    const rotDeltaY = dx * 0.005;
-    const rotDeltaX = dy * 0.004;
+  const handleProjectAnchors = useCallback((updated: Record<LayerKey, { x: number; y: number; visible: boolean }>) => {
+    setAnchors((prev) => {
+      // Avoid unnecessary state re-renders if coordinates haven't drifted by > 1.5px
+      const changed = (['crust', 'mantle', 'outer', 'inner'] as LayerKey[]).some((k) => {
+        return (
+          Math.abs(prev[k].x - updated[k].x) > 1.5 ||
+          Math.abs(prev[k].y - updated[k].y) > 1.5 ||
+          prev[k].visible !== updated[k].visible
+        );
+      });
+      return changed ? updated : prev;
+    });
+  }, []);
 
-    userRotationY.current += rotDeltaY;
-    userRotationX.current = Math.max(-0.45, Math.min(0.45, userRotationX.current + rotDeltaX));
-    velocityRef.current = { x: rotDeltaY, y: rotDeltaX };
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (isDragging.current) {
-      isDragging.current = false;
-      try {
-        (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-      } catch {}
+  const handleResetView = useCallback(() => {
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.reset();
     }
-  };
+    if (globeGroupRef.current) {
+      globeGroupRef.current.rotation.set(0.18, 0, 0);
+    }
+  }, []);
 
   return (
     <div className="interactive-cutaway-container">
       {/* 3D WebGL Globe Viewport */}
       <div
         className="cutaway-earth-viewport"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-        title="Interactive 3D Earth Cutaway. Click any layer to explore."
+        title="Interactive 3D Earth Cutaway. Click any layer directly on the 3D globe or drag to rotate."
       >
+        <NearViewportMount>
         <Canvas
-          camera={{ position: [0, 0, 4.1], fov: 42 }}
-          dpr={[1, 1.5]}
+          camera={{ position: [0.65, 0.40, 3.25], fov: 42 }}
+          dpr={[1, 1.25]}
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         >
-          <ambientLight intensity={0.75} />
-          <directionalLight position={[4, 3, 3]} intensity={2.8} color="#fffcf2" />
-          <directionalLight position={[-3, -2, -2]} intensity={0.4} color="#1b304f" />
+          <ambientLight intensity={0.55} />
+          <directionalLight position={[5, 4, 5]} intensity={1.4} color="#fff8f0" />
+          <directionalLight position={[-3, 1, 3]} intensity={0.5} color="#ffffff" />
+          <directionalLight position={[0, -3, 1]} intensity={0.25} color="#ffffff" />
+
           <GlobeCutawayScene
             selectedLayer={selectedLayer}
             onSelectLayer={onSelectLayer}
-            userRotationY={userRotationY}
-            userRotationX={userRotationX}
-            velocityRef={velocityRef}
-            isDragging={isDragging}
+            hoveredLayer={hoveredLayer}
+            setHoveredLayer={setHoveredLayer}
+            isAutoRotating={isAutoRotating}
+            isInteracting={isInteracting}
+            onProjectAnchors={handleProjectAnchors}
+            globeGroupRef={globeGroupRef}
+          />
+
+          <OrbitControls
+            ref={orbitControlsRef}
+            enableZoom={false}
+            enablePan={false}
+            enableDamping={true}
+            dampingFactor={0.08}
+            rotateSpeed={0.8}
+            minPolarAngle={Math.PI * 0.18}
+            maxPolarAngle={Math.PI * 0.82}
+            onStart={() => setIsInteracting(true)}
+            onEnd={() => {
+              if (interactionTimerRef.current) clearTimeout(interactionTimerRef.current);
+              interactionTimerRef.current = window.setTimeout(() => {
+                setIsInteracting(false);
+              }, 2000);
+            }}
           />
         </Canvas>
+        </NearViewportMount>
 
-        {/* Pointer lines SVG connecting 3D cutaway to cards */}
-        <svg className="cutaway-pointer-lines-svg" viewBox="0 0 500 440" preserveAspectRatio="none" aria-hidden="true">
+        {/* Real-time Dynamic Pointer lines & Callout Pins connecting 3D cutaway to cards */}
+        <svg className="cutaway-pointer-lines-svg" viewBox="0 0 440 340" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="cutawayGold" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#deb87a" stopOpacity="0.95" />
               <stop offset="100%" stopColor="#deb87a" stopOpacity="0.3" />
             </linearGradient>
             <linearGradient id="cutawayDim" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.1" />
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.08" />
             </linearGradient>
           </defs>
 
-          {/* 1. Crust Dogleg Pointer Line */}
-          <g className={`pointer-line-group ${selectedLayer === 'crust' ? 'is-active-pointer' : ''}`}>
+          {/* 1. Crust Pin & Dogleg Pointer Line */}
+          <g
+            className={`pointer-line-group ${selectedLayer === 'crust' ? 'is-active-pointer' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectLayer('crust');
+            }}
+            style={{
+              cursor: 'pointer',
+              pointerEvents: anchors.crust.visible ? 'auto' : 'none',
+              opacity: anchors.crust.visible ? (selectedLayer === 'crust' ? 1 : 0.75) : 0.1,
+              transition: 'opacity 0.25s ease',
+            }}
+            role="button"
+            tabIndex={0}
+          >
             <polyline
-              points="335,110 430,48 495,48"
+              points={`${anchors.crust.x},${anchors.crust.y} 365,40 435,40`}
               fill="none"
               stroke={selectedLayer === 'crust' ? 'url(#cutawayGold)' : 'url(#cutawayDim)'}
               strokeWidth={selectedLayer === 'crust' ? '2.2' : '1.2'}
               strokeDasharray={selectedLayer === 'crust' ? 'none' : '3,3'}
             />
-            <circle cx="335" cy="110" r={selectedLayer === 'crust' ? '5' : '3.5'} fill={selectedLayer === 'crust' ? '#deb87a' : '#ffffff'} />
-            <circle cx="335" cy="110" r="8" fill="none" stroke="#deb87a" strokeWidth="1" opacity={selectedLayer === 'crust' ? '0.85' : '0'} />
+            <circle cx={anchors.crust.x} cy={anchors.crust.y} r={selectedLayer === 'crust' ? '5.5' : '3.5'} fill={selectedLayer === 'crust' ? '#deb87a' : '#ffffff'} />
+            <circle cx={anchors.crust.x} cy={anchors.crust.y} r="8" fill="none" stroke="#deb87a" strokeWidth="1.2" opacity={selectedLayer === 'crust' ? '0.9' : '0'} />
           </g>
 
-          {/* 2. Mantle Dogleg Pointer Line */}
-          <g className={`pointer-line-group ${selectedLayer === 'mantle' ? 'is-active-pointer' : ''}`}>
+          {/* 2. Mantle Pin & Dogleg Pointer Line */}
+          <g
+            className={`pointer-line-group ${selectedLayer === 'mantle' ? 'is-active-pointer' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectLayer('mantle');
+            }}
+            style={{
+              cursor: 'pointer',
+              pointerEvents: anchors.mantle.visible ? 'auto' : 'none',
+              opacity: anchors.mantle.visible ? (selectedLayer === 'mantle' ? 1 : 0.75) : 0.1,
+              transition: 'opacity 0.25s ease',
+            }}
+            role="button"
+            tabIndex={0}
+          >
             <polyline
-              points="305,155 430,148 495,148"
+              points={`${anchors.mantle.x},${anchors.mantle.y} 365,115 435,115`}
               fill="none"
               stroke={selectedLayer === 'mantle' ? 'url(#cutawayGold)' : 'url(#cutawayDim)'}
               strokeWidth={selectedLayer === 'mantle' ? '2.2' : '1.2'}
               strokeDasharray={selectedLayer === 'mantle' ? 'none' : '3,3'}
             />
-            <circle cx="305" cy="155" r={selectedLayer === 'mantle' ? '5' : '3.5'} fill={selectedLayer === 'mantle' ? '#deb87a' : '#ffffff'} />
-            <circle cx="305" cy="155" r="8" fill="none" stroke="#deb87a" strokeWidth="1" opacity={selectedLayer === 'mantle' ? '0.85' : '0'} />
+            <circle cx={anchors.mantle.x} cy={anchors.mantle.y} r={selectedLayer === 'mantle' ? '5.5' : '3.5'} fill={selectedLayer === 'mantle' ? '#deb87a' : '#ffffff'} />
+            <circle cx={anchors.mantle.x} cy={anchors.mantle.y} r="8" fill="none" stroke="#deb87a" strokeWidth="1.2" opacity={selectedLayer === 'mantle' ? '0.9' : '0'} />
           </g>
 
-          {/* 3. Outer Core Dogleg Pointer Line */}
-          <g className={`pointer-line-group ${selectedLayer === 'outer' ? 'is-active-pointer' : ''}`}>
+          {/* 3. Outer Core Pin & Dogleg Pointer Line */}
+          <g
+            className={`pointer-line-group ${selectedLayer === 'outer' ? 'is-active-pointer' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectLayer('outer');
+            }}
+            style={{
+              cursor: 'pointer',
+              pointerEvents: anchors.outer.visible ? 'auto' : 'none',
+              opacity: anchors.outer.visible ? (selectedLayer === 'outer' ? 1 : 0.75) : 0.1,
+              transition: 'opacity 0.25s ease',
+            }}
+            role="button"
+            tabIndex={0}
+          >
             <polyline
-              points="275,208 430,248 495,248"
+              points={`${anchors.outer.x},${anchors.outer.y} 365,190 435,190`}
               fill="none"
               stroke={selectedLayer === 'outer' ? 'url(#cutawayGold)' : 'url(#cutawayDim)'}
               strokeWidth={selectedLayer === 'outer' ? '2.2' : '1.2'}
               strokeDasharray={selectedLayer === 'outer' ? 'none' : '3,3'}
             />
-            <circle cx="275" cy="208" r={selectedLayer === 'outer' ? '5' : '3.5'} fill={selectedLayer === 'outer' ? '#deb87a' : '#ffffff'} />
-            <circle cx="275" cy="208" r="8" fill="none" stroke="#deb87a" strokeWidth="1" opacity={selectedLayer === 'outer' ? '0.85' : '0'} />
+            <circle cx={anchors.outer.x} cy={anchors.outer.y} r={selectedLayer === 'outer' ? '5.5' : '3.5'} fill={selectedLayer === 'outer' ? '#deb87a' : '#ffffff'} />
+            <circle cx={anchors.outer.x} cy={anchors.outer.y} r="8" fill="none" stroke="#deb87a" strokeWidth="1.2" opacity={selectedLayer === 'outer' ? '0.9' : '0'} />
           </g>
 
-          {/* 4. Inner Core Dogleg Pointer Line */}
-          <g className={`pointer-line-group ${selectedLayer === 'inner' ? 'is-active-pointer' : ''}`}>
+          {/* 4. Inner Core Pin & Dogleg Pointer Line */}
+          <g
+            className={`pointer-line-group ${selectedLayer === 'inner' ? 'is-active-pointer' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectLayer('inner');
+            }}
+            style={{
+              cursor: 'pointer',
+              pointerEvents: anchors.inner.visible ? 'auto' : 'none',
+              opacity: anchors.inner.visible ? (selectedLayer === 'inner' ? 1 : 0.75) : 0.1,
+              transition: 'opacity 0.25s ease',
+            }}
+            role="button"
+            tabIndex={0}
+          >
             <polyline
-              points="245,230 430,348 495,348"
+              points={`${anchors.inner.x},${anchors.inner.y} 365,265 435,265`}
               fill="none"
               stroke={selectedLayer === 'inner' ? 'url(#cutawayGold)' : 'url(#cutawayDim)'}
               strokeWidth={selectedLayer === 'inner' ? '2.2' : '1.2'}
               strokeDasharray={selectedLayer === 'inner' ? 'none' : '3,3'}
             />
-            <circle cx="245" cy="230" r={selectedLayer === 'inner' ? '5' : '3.5'} fill={selectedLayer === 'inner' ? '#deb87a' : '#ffffff'} />
-            <circle cx="245" cy="230" r="8" fill="none" stroke="#deb87a" strokeWidth="1" opacity={selectedLayer === 'inner' ? '0.85' : '0'} />
+            <circle cx={anchors.inner.x} cy={anchors.inner.y} r={selectedLayer === 'inner' ? '5.5' : '3.5'} fill={selectedLayer === 'inner' ? '#deb87a' : '#ffffff'} />
+            <circle cx={anchors.inner.x} cy={anchors.inner.y} r="8" fill="none" stroke="#deb87a" strokeWidth="1.2" opacity={selectedLayer === 'inner' ? '0.9' : '0'} />
           </g>
         </svg>
 
-        {/* 3D Drag Instruction Pill */}
-        <div className="cutaway-drag-badge">
-          <span>DRAG TO ROTATE 3D CUTAWAY</span>
-        </div>
+
       </div>
 
       {/* 4 Floating Layer Callout Cards on the Right */}

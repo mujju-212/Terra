@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ChevronRight, Layers3, RotateCw, Flame, Sparkles } from 'lucide-react';
+import NearViewportMount from './NearViewportMount';
 
 export interface LayerInfo {
   id: string;
@@ -272,23 +273,25 @@ export default function CutawayEarth3D() {
       </div>
 
       <div className="cutaway-viewport-layout">
-        {/* Real Three.js Canvas */}
+        {/* Real Three.js Canvas (unmounts WebGL render loop when offscreen) */}
         <div className="cutaway-canvas-wrap">
-          <Canvas
-            dpr={[1, 2]}
-            camera={{ position: [0, 0.4, 2.7], fov: 42 }}
-            gl={{ alpha: true, antialias: true }}
-          >
-            <ambientLight intensity={0.65} />
-            <pointLight position={[4, 3, 3]} intensity={1.5} color="#fff6e8" />
-            <pointLight position={[-3, -2, -2]} intensity={0.4} color="#603010" />
-            <CutawayEarthMesh
-              activeLayer={activeLayer}
-              cutawayAngle={cutawayRads}
-              autoRotate={autoRotate}
-              onSelectLayer={setActiveLayer}
-            />
-          </Canvas>
+          <NearViewportMount>
+            <Canvas
+              dpr={[1, 2]}
+              camera={{ position: [0, 0.4, 2.7], fov: 42 }}
+              gl={{ alpha: true, antialias: true }}
+            >
+              <ambientLight intensity={0.65} />
+              <pointLight position={[4, 3, 3]} intensity={1.5} color="#fff6e8" />
+              <pointLight position={[-3, -2, -2]} intensity={0.4} color="#603010" />
+              <CutawayEarthMesh
+                activeLayer={activeLayer}
+                cutawayAngle={cutawayRads}
+                autoRotate={autoRotate}
+                onSelectLayer={setActiveLayer}
+              />
+            </Canvas>
+          </NearViewportMount>
 
           {/* Interactive Slice Scrub Slider */}
           {cutaway && (
