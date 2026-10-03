@@ -93,15 +93,59 @@ function ModuleConclusion({ module }: { module: ModuleContent }) {
   </section>;
 }
 
-import LandModuleExperience from './LandModuleExperience';
-import WaterModuleExperience from './WaterModuleExperience';
+import { lazy, Suspense } from 'react';
+
+// ── Lazy-loaded module experiences ───────────────────────────────────────────
+// Each experience is its own chunk (~300-500 KB JS + CSS), loaded ONLY when
+// the user navigates to that specific module route.
+const LandModuleExperience  = lazy(() => import('./LandModuleExperience'));
+const WaterModuleExperience = lazy(() => import('./WaterModuleExperience'));
+const AirModuleExperience   = lazy(() => import('./AirModuleExperience'));
+const BioModuleExperience   = lazy(() => import('./BioModuleExperience'));
+
+function ModuleExperienceShell({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="module-experience-loading" role="status" aria-live="polite">
+          <span className="loading-orbit" />
+          <span>Loading module…</span>
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
+  );
+}
 
 export default function ModulePage({ module }: { module: ModuleContent }) {
   if (module.slug === 'land') {
-    return <LandModuleExperience module={module} />;
+    return (
+      <ModuleExperienceShell>
+        <LandModuleExperience module={module} />
+      </ModuleExperienceShell>
+    );
   }
   if (module.slug === 'water') {
-    return <WaterModuleExperience module={module} />;
+    return (
+      <ModuleExperienceShell>
+        <WaterModuleExperience module={module} />
+      </ModuleExperienceShell>
+    );
+  }
+  if (module.slug === 'air') {
+    return (
+      <ModuleExperienceShell>
+        <AirModuleExperience module={module} />
+      </ModuleExperienceShell>
+    );
+  }
+  if (module.slug === 'biodiversity') {
+    return (
+      <ModuleExperienceShell>
+        <BioModuleExperience module={module} />
+      </ModuleExperienceShell>
+    );
   }
 
   const reducedMotion = useReducedMotion();
