@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import type { ModuleContent } from '../content/types';
 import '../bio-module.css';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
+import MobileChapterBar from '../components/MobileChapterBar';
 
 import {
   bioChaptersNav,
@@ -362,6 +363,15 @@ export default function BioModuleExperience({ module }: BioModuleProps) {
         {/* CROSS-MODULE NAVIGATION CARD STRIP */}
         <ModuleCardsStrip currentSlug="biodiversity" />
       </main>
+
+      {/* ─── MOBILE FLOATING CHAPTER BAR (< 1025px) ─── */}
+      <MobileChapterBar
+        chapters={bioChaptersNav}
+        activeChapterIndex={activeChapterIndex}
+        onSelectChapter={scrollToChapter}
+        accentColor="#4ade80"
+        moduleName="Module 04: Biodiversity"
+      />
     </div>
   );
 }

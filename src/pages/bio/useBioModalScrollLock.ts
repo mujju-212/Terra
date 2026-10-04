@@ -1,26 +1,19 @@
 import { useEffect } from 'react';
 
 /**
- * Robust scroll lock and wheel management hook for all Biodiversity Module modals.
+ * Dual-scrolling hook for all Biodiversity Module modals:
  * 
- * 1. Pauses global Lenis smooth scrolling so wheel events are not hijacked.
- * 2. Locks document.body overflow so the background page stays completely still.
- * 3. Handles wheel events across the entire modal dialog (including hero headers,
- *    pills, and title boxes) by routing scroll deltas directly into the scrollable body.
- * 4. Listens for the Escape key to close the modal cleanly.
- * 5. Safely restores Lenis and document.body overflow when the modal closes.
+ * 1. Leaves page scroll & Lenis active so background page can be scrolled via wheel/scrollbar/touch.
+ * 2. Allows modal internal content to scroll independently with its own scrollbar.
+ * 3. Handles wheel events across the modal dialog by routing deltas into the scrollable body.
+ * 4. Forwards backdrop touch gestures to the window so mobile users can scroll the page.
+ * 5. Listens for the Escape key to close the modal cleanly.
  */
 export function useBioModalScrollLock(isOpen: boolean, onClose?: () => void) {
   useEffect(() => {
     if (!isOpen) return;
 
-    // Pause global Lenis smooth scroller while modal is open
-    if (window.__lenis) {
-      window.__lenis.stop();
-    }
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    let touchStartY = 0;
 
     const handleWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement | null;
@@ -31,9 +24,8 @@ export function useBioModalScrollLock(isOpen: boolean, onClose?: () => void) {
         '.bio-types-modal-card, .bio-eco-modal-card, .bio-sig-modal-card, .bio-econ-modal-card, .bio-sum-modal-card'
       ) as HTMLElement | null;
 
-      // If wheel occurred on the backdrop outside the card, stop background scrolling
+      // If wheel occurred on the backdrop outside the card, let it bubble to window/Lenis to scroll the page!
       if (!modal) {
-        e.preventDefault();
         return;
       }
 
@@ -52,15 +44,13 @@ export function useBioModalScrollLock(isOpen: boolean, onClose?: () => void) {
         if (!isInsideBody && modal !== scrollable) {
           scrollable.scrollTop += e.deltaY;
           e.preventDefault();
-          return;
         }
+      }
+    };
 
-        // Clamp boundary overscroll so wheel never propagates to the page behind
-        const atTop = scrollable.scrollTop <= 0;
-        const atBottom = Math.ceil(scrollable.scrollTop + scrollable.clientHeight) >= scrollable.scrollHeight - 1;
-        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-          e.preventDefault();
-        }
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
       }
     };
 
@@ -70,8 +60,11 @@ export function useBioModalScrollLock(isOpen: boolean, onClose?: () => void) {
       const modal = target.closest(
         '.bio-types-modal-card, .bio-eco-modal-card, .bio-sig-modal-card, .bio-econ-modal-card, .bio-sum-modal-card'
       );
-      if (!modal) {
-        e.preventDefault();
+      // If user swipes outside modal window on the backdrop, scroll the background page
+      if (!modal && e.touches.length === 1) {
+        const deltaY = touchStartY - e.touches[0].clientY;
+        touchStartY = e.touches[0].clientY;
+        window.scrollBy({ top: deltaY, behavior: 'auto' });
       }
     };
 
@@ -81,18 +74,15 @@ export function useBioModalScrollLock(isOpen: boolean, onClose?: () => void) {
       }
     };
 
-    // Attach capture-phase wheel listener for reliable interception
     window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { capture: true, passive: true });
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove, { capture: true });
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);

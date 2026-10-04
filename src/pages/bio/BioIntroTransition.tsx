@@ -18,7 +18,7 @@ interface BioIntroTransitionProps {
  */
 export default function BioIntroTransition({ onEnter }: BioIntroTransitionProps) {
   const wrapRef = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = false;
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,
