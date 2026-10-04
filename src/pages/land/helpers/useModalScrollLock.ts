@@ -20,15 +20,12 @@ interface ModalScrollLockOptions {
 }
 
 /**
- * Airtight background scroll lock for module modals:
- * - locks html/body overflow and pauses the global Lenis smooth scroller
- * - capture-phase wheel/touch interception so only the modal body scrolls,
- *   with boundary overscroll clamped so it never leaks to the page
- * - Escape-to-close (single shared keydown listener)
- *
- * Consolidates the near-identical ~80-line effects previously duplicated in
- * Deforestation, LandUseChange, LandDegradation, LandPlanning, SoilHealth
- * and SoilConservation screens.
+ * Dual-scrolling hook for module modals:
+ * - Leaves page scroll & Lenis active so background page can be scrolled via wheel/scrollbar/touch
+ * - Allows modal internal content to scroll independently with its own scrollbar
+ * - Routes wheel over modal headers/padding into the modal body
+ * - Forwards backdrop touch gestures to the window so mobile users can scroll the page
+ * - Handles Escape key to close
  */
 export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOptions) {
   const { scrollableSelector, onClose } = options;
@@ -36,20 +33,7 @@ export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOpti
   useEffect(() => {
     if (!isOpen) return;
 
-    // Measure scrollbar to prevent layout shift when modal opens
-    const sbWidth = getScrollbarWidth();
-    document.documentElement.style.setProperty('--scrollbar-width', `${sbWidth}px`);
-
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-    const originalPadding      = document.body.style.paddingRight;
-
-    document.body.classList.add('modal-open');
-    document.body.style.overflow     = 'hidden';
-    document.body.style.paddingRight = `${sbWidth}px`;
-    document.documentElement.style.overflow = 'hidden';
-
-    if (window.__lenis) window.__lenis.stop();
+    let touchStartY = 0;
 
     const handleNativeWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement | null;
@@ -60,14 +44,12 @@ export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOpti
         '[role="dialog"], [class*="-modal-window"], [class*="-modal-card"], [class*="-modal-dialog"], [class*="-modal-content"]'
       ) as HTMLElement | null;
 
-      // If wheel occurred on the backdrop outside the modal, block page scroll
+      // If wheel occurred on the backdrop outside the modal, let it bubble to window/Lenis to scroll the page!
       if (!modalWindow) {
-        e.preventDefault();
-        e.stopPropagation();
         return;
       }
 
-      // Find the active scrollable body container
+      // If inside modal: find the active scrollable body container
       const scrollable = (
         target.closest(scrollableSelector) ||
         modalWindow.querySelector(scrollableSelector) ||
@@ -75,33 +57,23 @@ export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOpti
         modalWindow
       ) as HTMLElement | null;
 
-      if (!scrollable) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
+      if (!scrollable) return;
 
       // If user spins wheel over header, title, badges, hero, or padding, route delta into scrollable body
       const isInsideScrollable = target.closest(scrollableSelector);
       if (!isInsideScrollable && modalWindow !== scrollable) {
         scrollable.scrollTop += e.deltaY;
         e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-
-      // Clamp boundary overscroll so wheel never leaks to the page behind
-      const { scrollTop, scrollHeight, clientHeight } = scrollable;
-      const atTop = scrollTop <= 0;
-      const atBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1;
-
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-        e.stopPropagation();
       }
     };
 
     window.addEventListener('wheel', handleNativeWheel, { capture: true, passive: false });
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
 
     const handleNativeTouch = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;
@@ -109,12 +81,16 @@ export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOpti
       const modalWindow = target.closest(
         '[role="dialog"], [class*="-modal-window"], [class*="-modal-card"], [class*="-modal-dialog"], [class*="-modal-content"]'
       );
-      if (!modalWindow) {
-        e.preventDefault();
-        e.stopPropagation();
+      // If user swipes outside modal window on the backdrop, scroll the background page
+      if (!modalWindow && e.touches.length === 1) {
+        const deltaY = touchStartY - e.touches[0].clientY;
+        touchStartY = e.touches[0].clientY;
+        window.scrollBy({ top: deltaY, behavior: 'auto' });
       }
     };
-    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: false });
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: true });
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose?.();
@@ -122,15 +98,10 @@ export function useModalScrollLock(isOpen: boolean, options: ModalScrollLockOpti
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.classList.remove('modal-open');
-      document.body.style.overflow     = originalBodyOverflow;
-      document.body.style.paddingRight = originalPadding;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      document.documentElement.style.removeProperty('--scrollbar-width');
-      if (window.__lenis) window.__lenis.start();
-      window.removeEventListener('wheel',     handleNativeWheel, { capture: true });
+      window.removeEventListener('wheel', handleNativeWheel, { capture: true });
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleNativeTouch, { capture: true });
-      window.removeEventListener('keydown',   handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, scrollableSelector, onClose]);
 }

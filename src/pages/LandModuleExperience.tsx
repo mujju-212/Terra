@@ -30,6 +30,7 @@ import {
 import LandIntroTransition from './land/LandIntroTransition';
 import { LAND_CHAPTERS } from './land/helpers/chapters';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
+import MobileChapterBar from '../components/MobileChapterBar';
 
 interface LandModuleProps {
   module: ModuleContent;
@@ -257,24 +258,6 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
         </AnimatePresence>
       </aside>
 
-      {/* ─── MOBILE CHAPTER NAV (the left rail is hidden on small screens) ─── */}
-      <nav className="land-mobile-chapternav" aria-label="Chapter navigation">
-        <div className="lmn-track">
-          {LAND_CHAPTERS.map((ch, idx) => (
-            <button
-              key={ch.id}
-              type="button"
-              className={`lmn-item ${activeChapterIndex === idx ? 'is-active' : ''}`}
-              onClick={() => scrollToChapter(idx)}
-              aria-label={`Jump to ${ch.num} ${ch.title}`}
-            >
-              <span className="lmn-num">{ch.num}</span>
-              <span className="lmn-title">{ch.title}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
-
       {/* ─── MAIN SCROLL CONTAINER ─── */}
       <main className="land-screens-container">
         {/* SCREEN 01: MODULE COVER / HERO */}
@@ -386,6 +369,15 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
         {/* Cross-module navigation cards (jump to Water / Air / Bio / Warming) */}
         <ModuleCardsStrip currentSlug="land" />
       </main>
+
+      {/* ─── MOBILE FLOATING CHAPTER BAR (< 1025px) ─── */}
+      <MobileChapterBar
+        chapters={LAND_CHAPTERS}
+        activeChapterIndex={activeChapterIndex}
+        onSelectChapter={scrollToChapter}
+        accentColor="#deb87a"
+        moduleName="Module 01: Land"
+      />
     </div>
   );
 }

@@ -15,7 +15,8 @@ interface LandIntroTransitionProps {
  */
 export default function LandIntroTransition({ onEnter }: LandIntroTransitionProps) {
   const wrapRef = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  // Ensure the pinned cinematic zoom & cross-fade always runs
+  const reduced = false;
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,

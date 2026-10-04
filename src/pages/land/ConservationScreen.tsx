@@ -546,7 +546,7 @@ export default function ConservationScreen({ onPrev, onNext, onJumpChapter }: Sc
 
       {/* Interactive Detail Modal for Conservation */}
       {detailModal && (
-        <div className="soil-detail-modal-overlay" data-lenis-prevent onClick={() => setDetailModal(null)}>
+        <div className="soil-detail-modal-overlay" onClick={() => setDetailModal(null)}>
           <div
             className="soil-detail-modal-card cons-modal-card"
             role="dialog"

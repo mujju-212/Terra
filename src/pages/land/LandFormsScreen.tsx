@@ -422,7 +422,7 @@ export default function LandFormsScreen({ onPrev, onNext, onJumpChapter }: Scree
 
       {/* Interactive Detail Modal for Landforms */}
       {detailModal && (
-        <div className="soil-detail-modal-overlay" data-lenis-prevent onClick={() => setDetailModal(null)}>
+        <div className="soil-detail-modal-overlay" onClick={() => setDetailModal(null)}>
           <div
             className="soil-detail-modal-card landforms-modal-card"
             role="dialog"

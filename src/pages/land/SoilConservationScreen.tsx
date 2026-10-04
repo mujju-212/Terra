@@ -509,7 +509,7 @@ export default function SoilConservationScreen({ onPrev, onNext, onJumpChapter }
       {/* ─── 5. Modals Portal ─── */}
       {activeModal &&
         createPortal(
-          <div className="soilcons-modal-portal" data-lenis-prevent>
+          <div className="soilcons-modal-portal">
             <div className="soilcons-modal-scrim" onClick={closeModal} />
             <div
               className="soilcons-modal-dialog"

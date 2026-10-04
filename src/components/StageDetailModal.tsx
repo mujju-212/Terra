@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -33,18 +33,11 @@ export default function StageDetailModal({
   onSelectStage,
 }: StageDetailModalProps) {
   const [activeTab, setActiveTab] = useState<'notes' | 'mechanisms' | 'exam'>('notes');
+  const touchStartY = useRef(0);
 
-  // Prevent background scrolling and lock Lenis smooth scroll while modal is active
+  // Handle keyboard navigation while modal is active; leave page scroll & Lenis active for dual-scrolling
   useEffect(() => {
     if (!isOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
-    if (lenis) {
-      lenis.stop();
-    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -60,10 +53,6 @@ export default function StageDetailModal({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = originalOverflow;
-      if (lenis) {
-        lenis.start();
-      }
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, stageIndex, allStages.length, onClose, onSelectStage]);
@@ -73,20 +62,34 @@ export default function StageDetailModal({
   const prevIndex = (stageIndex - 1 + allStages.length) % allStages.length;
   const nextIndex = (stageIndex + 1) % allStages.length;
 
+  const handleBackdropTouchStart = (e: React.TouchEvent) => {
+    if (e.target === e.currentTarget && e.touches.length === 1) {
+      touchStartY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleBackdropTouchMove = (e: React.TouchEvent) => {
+    if (e.target === e.currentTarget && e.touches.length === 1) {
+      const deltaY = touchStartY.current - e.touches[0].clientY;
+      touchStartY.current = e.touches[0].clientY;
+      window.scrollBy({ top: deltaY, behavior: 'auto' });
+    }
+  };
+
   return (
     <AnimatePresence>
       <div
         className="stage-modal-overlay"
         onClick={onClose}
-        onWheel={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
+        onTouchStart={handleBackdropTouchStart}
+        onTouchMove={handleBackdropTouchMove}
         role="dialog"
         aria-modal="true"
       >
         <motion.div
           className="stage-modal-container"
           onClick={(e) => e.stopPropagation()}
-          onWheel={(e) => e.stopPropagation()}
+          data-lenis-prevent
           initial={{ opacity: 0, scale: 0.95, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
@@ -213,7 +216,7 @@ export default function StageDetailModal({
           {/* Modal Tab Content Area - The Primary Scrollable Body */}
           <div
             className="stage-modal-content-scroll"
-            onWheel={(e) => e.stopPropagation()}
+            data-lenis-prevent
             tabIndex={0}
           >
             {/* TAB 1: CURRICULUM NOTES */}

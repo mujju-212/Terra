@@ -482,7 +482,7 @@ export default function LandPlanningScreen({ onPrev, onNext, onJumpChapter }: Sc
       {/* ─── 4. Modals Portal ─── */}
       {activeModal &&
         createPortal(
-          <div className="planning-modal-portal" data-lenis-prevent>
+          <div className="planning-modal-portal">
             <div className="planning-modal-scrim" onClick={closeModal} />
             <div
               className="planning-modal-dialog"
