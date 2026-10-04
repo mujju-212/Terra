@@ -308,7 +308,7 @@ export function GroundwaterPotentialScreen() {
 
       {/* ─── MODAL: DETAILED GEOLOGICAL REGION DEEP-DIVE ─── */}
       {selectedRegion && (
-        <div className="ilr-modal-backdrop" data-lenis-prevent onClick={() => setSelectedRegion(null)} role="dialog" aria-modal="true">
+        <div className="ilr-modal-backdrop" onClick={() => setSelectedRegion(null)} role="dialog" aria-modal="true">
           <div className="ilr-modal-content liquid-glass" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
             <button
               type="button"

@@ -3,6 +3,8 @@ import { useReducedMotion, motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import type { ModuleContent } from '../content/types';
 import '../water-module.css';
+import ModuleCardsStrip from '../components/ModuleCardsStrip';
+import MobileChapterBar from '../components/MobileChapterBar';
 
 import {
   waterChaptersNav,
@@ -377,7 +379,19 @@ export default function WaterModuleExperience({ module }: WaterModuleProps) {
 
         {/* CHAPTER 18 / SUMMARY & RECAP */}
         <WaterSummaryScreen module={module} />
+
+        {/* CROSS-MODULE NAVIGATION CARD STRIP */}
+        <ModuleCardsStrip currentSlug="water" />
       </main>
+
+      {/* ─── MOBILE FLOATING CHAPTER BAR (< 1025px) ─── */}
+      <MobileChapterBar
+        chapters={waterChaptersNav}
+        activeChapterIndex={activeChapterIndex}
+        onSelectChapter={scrollToChapter}
+        accentColor="#4fa3c7"
+        moduleName="Module 02: Water"
+      />
     </div>
   );
 }

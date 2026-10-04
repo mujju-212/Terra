@@ -815,7 +815,7 @@ export function RiverInterlinkingScreen() {
 
       {/* ─── MODAL DIALOGS (Ken-Betwa, Godavari-Krishna, Merits, Demerits, Full Link Directory) ─── */}
       {activeModal && (
-        <div className="ilr-modal-backdrop" data-lenis-prevent onClick={() => setActiveModal(null)} role="dialog" aria-modal="true">
+        <div className="ilr-modal-backdrop" onClick={() => setActiveModal(null)} role="dialog" aria-modal="true">
           <div className="ilr-modal-content liquid-glass" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
             <button
               type="button"

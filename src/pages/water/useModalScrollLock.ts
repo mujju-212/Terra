@@ -58,24 +58,19 @@ function getScrollbarWidth(): number {
   return width;
 }
 
+/**
+ * Dual-scrolling hook for water modals:
+ * - Leaves page scroll & Lenis active so background page can be scrolled via wheel/scrollbar/touch
+ * - Allows modal internal content to scroll independently with its own scrollbar
+ * - Routes wheel over modal headers/padding into the modal body
+ * - Forwards backdrop touch gestures to the window so mobile users can scroll the page
+ * - Handles Escape key to close
+ */
 export function useModalScrollLock(isOpen: boolean, onClose?: () => void) {
   useEffect(() => {
     if (!isOpen) return;
 
-    // Measure scrollbar to prevent layout shift
-    const sbWidth = getScrollbarWidth();
-    document.documentElement.style.setProperty('--scrollbar-width', `${sbWidth}px`);
-
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-    const originalPadding      = document.body.style.paddingRight;
-
-    document.body.classList.add('modal-open');
-    document.body.style.overflow     = 'hidden';
-    document.body.style.paddingRight = `${sbWidth}px`; // compensate for lost scrollbar
-    document.documentElement.style.overflow = 'hidden';
-
-    if (window.__lenis) window.__lenis.stop();
+    let touchStartY = 0;
 
     const handleNativeWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement | null;
@@ -84,10 +79,8 @@ export function useModalScrollLock(isOpen: boolean, onClose?: () => void) {
       // Find if wheel event occurred within any active modal dialog/card
       const modal = target.closest(MODAL_CARD_SELECTORS) as HTMLElement | null;
 
-      // If wheel occurred on backdrop outside the modal, block page scroll
+      // If wheel occurred on backdrop outside the modal, let it bubble to window/Lenis to scroll the page!
       if (!modal) {
-        e.preventDefault();
-        e.stopPropagation();
         return;
       }
 
@@ -98,44 +91,38 @@ export function useModalScrollLock(isOpen: boolean, onClose?: () => void) {
         modal
       ) as HTMLElement | null;
 
-      if (!scrollable) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
+      if (!scrollable) return;
 
       // If cursor is on the header, hero, close button or card padding, route delta into scrollable
       const isInsideScrollable = target.closest(SCROLLABLE_SELECTORS);
       if (!isInsideScrollable && modal !== scrollable) {
         scrollable.scrollTop += e.deltaY;
         e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-
-      // Clamp boundary overscroll so wheel never propagates to the page behind
-      const { scrollTop, scrollHeight, clientHeight } = scrollable;
-      const atTop    = scrollTop <= 0;
-      const atBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1;
-
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-        e.stopPropagation();
       }
     };
 
     window.addEventListener('wheel', handleNativeWheel, { capture: true, passive: false });
 
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
     const handleNativeTouch = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
       const modal = target.closest(MODAL_CARD_SELECTORS);
-      if (!modal) {
-        e.preventDefault();
-        e.stopPropagation();
+      // If user swipes outside modal window on the backdrop, scroll the background page
+      if (!modal && e.touches.length === 1) {
+        const deltaY = touchStartY - e.touches[0].clientY;
+        touchStartY = e.touches[0].clientY;
+        window.scrollBy({ top: deltaY, behavior: 'auto' });
       }
     };
-    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: false });
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleNativeTouch, { capture: true, passive: true });
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && onClose) onClose();
@@ -143,15 +130,10 @@ export function useModalScrollLock(isOpen: boolean, onClose?: () => void) {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.classList.remove('modal-open');
-      document.body.style.overflow     = originalBodyOverflow;
-      document.body.style.paddingRight = originalPadding;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-      document.documentElement.style.removeProperty('--scrollbar-width');
-      if (window.__lenis) window.__lenis.start();
-      window.removeEventListener('wheel',     handleNativeWheel, { capture: true });
+      window.removeEventListener('wheel', handleNativeWheel, { capture: true });
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleNativeTouch, { capture: true });
-      window.removeEventListener('keydown',   handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
 }

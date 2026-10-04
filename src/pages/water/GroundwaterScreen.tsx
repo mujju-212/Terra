@@ -516,7 +516,7 @@ export function GroundwaterScreen() {
 
       {/* ─── MODAL: AQUIFER TYPE DEEP DIVE ─── */}
       {selectedAquiferType && (
-        <div className="ilr-modal-backdrop" data-lenis-prevent onClick={() => setSelectedAquiferType(null)} role="dialog" aria-modal="true">
+        <div className="ilr-modal-backdrop" onClick={() => setSelectedAquiferType(null)} role="dialog" aria-modal="true">
           <div className="ilr-modal-content liquid-glass" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
@@ -588,7 +588,7 @@ export function GroundwaterScreen() {
 
       {/* ─── MODAL: USE CASE STUDY DEEP DIVE ─── */}
       {selectedUse && (
-        <div className="ilr-modal-backdrop" data-lenis-prevent onClick={() => setSelectedUse(null)} role="dialog" aria-modal="true">
+        <div className="ilr-modal-backdrop" onClick={() => setSelectedUse(null)} role="dialog" aria-modal="true">
           <div className="ilr-modal-content liquid-glass" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
             <button
               type="button"

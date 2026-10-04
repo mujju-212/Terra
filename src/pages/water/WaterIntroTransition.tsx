@@ -17,7 +17,7 @@ interface WaterIntroTransitionProps {
  */
 export default function WaterIntroTransition({ onEnter }: WaterIntroTransitionProps) {
   const wrapRef = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = false;
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,

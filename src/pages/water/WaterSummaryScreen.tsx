@@ -22,7 +22,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import type { ModuleContent } from '../../content/types';
-import ModuleCardsStrip from '../../components/ModuleCardsStrip';
 import { useModalScrollLock } from './useModalScrollLock';
 import {
   SummaryItem,
@@ -268,7 +267,7 @@ export function WaterSummaryScreen({ module }: WaterSummaryScreenProps) {
 
       {/* Interactive Deep-Dive Modal */}
       {activeModalItem && (
-        <div className="water-modal-overlay" data-lenis-prevent onClick={() => setActiveModalItem(null)}>
+        <div className="water-modal-overlay" onClick={() => setActiveModalItem(null)}>
           <div
             className="water-modal-container water-summary-modal-box"
             data-lenis-prevent
@@ -346,9 +345,6 @@ export function WaterSummaryScreen({ module }: WaterSummaryScreenProps) {
           </div>
         </div>
       )}
-
-      {/* Module Strip at the bottom */}
-      <ModuleCardsStrip currentSlug={module.slug} />
     </>
   );
 }
