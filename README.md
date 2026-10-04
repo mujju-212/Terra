@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://terra-kappa-three.vercel.app"><img src="https://img.shields.io/badge/Live%20Deployment-terra--kappa--three.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Deployment" /></a>
   <a href="#-curriculum--module-deep-dives"><img src="https://img.shields.io/badge/Modules-5%20Complete%20Spheres-059669?style=for-the-badge&logo=codewars&logoColor=white" alt="5 Modules" /></a>
   <a href="#-course-information--syllabus-mapping"><img src="https://img.shields.io/badge/Course%20Code-BCV755B-2563EB?style=for-the-badge&logo=bookmeter&logoColor=white" alt="Course Code BCV755B" /></a>
   <a href="#-technology-stack"><img src="https://img.shields.io/badge/Tech-React%2018%20%7C%20TypeScript%20%7C%20Three.js-7C3AED?style=for-the-badge&logo=react&logoColor=white" alt="Tech Stack" /></a>
@@ -21,6 +22,7 @@
 ## 📖 Table of Contents
 
 - [Executive Summary & Vision](#-executive-summary--vision)
+- [Live Release & Deployment](#-live-release--deployment)
 - [Platform Architecture & Interactive Features](#-platform-architecture--interactive-features)
 - [Curriculum & Module Deep Dives](#-curriculum--module-deep-dives)
   - [Module 1: Land Resources & Lithosphere](#-module-1-land-resources--lithosphere)
@@ -49,6 +51,27 @@ Traditional natural resource pedagogy often relies on dense, static PDF notes th
 <p align="center">
   <img src="./public/images/begin-journey-landscape.jpg" alt="TERRA Exploration Journey" width="100%" />
 </p>
+
+---
+
+## 🚀 Live Release & Deployment
+
+The official production release of **TERRA** is live and globally distributed on Vercel:
+
+<p align="center">
+  <a href="https://terra-kappa-three.vercel.app" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/Launch%20Platform-terra--kappa--three.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Launch Live Platform" />
+  </a>
+</p>
+
+| Environment | Production URL | Status | Network |
+| :--- | :--- | :--- | :--- |
+| **Primary Production Release** | [**https://terra-kappa-three.vercel.app**](https://terra-kappa-three.vercel.app) | `ACTIVE (HTTP 200)` | Vercel Global Edge CDN |
+| **Secondary Production Alias** | [**https://terra-mujju718263-gmailcoms-projects.vercel.app**](https://terra-mujju718263-gmailcoms-projects.vercel.app) | `ACTIVE (HTTP 200)` | Vercel Global Edge CDN |
+| **GitHub Source Code** | [**https://github.com/mujju-212/Terra**](https://github.com/mujju-212/Terra) | `v1.0.0 (Release)` | Branch: `main` |
+
+> [!TIP]
+> **Performance Optimized:** All 270+ educational visual assets, Three.js shaders, and interactive curriculum modules are edge-cached with HTTP/2 and immutable cache headers for instantaneous sub-second page delivery worldwide.
 
 ---
 
