@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import type { ModuleContent } from '../content/types';
 import '../air-module.css';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
+import MobileChapterBar from '../components/MobileChapterBar';
 
 import {
   airChaptersNav,
@@ -367,6 +368,15 @@ export default function AirModuleExperience({ module }: AirModuleProps) {
         {/* CROSS-MODULE NAVIGATION CARD STRIP */}
         <ModuleCardsStrip currentSlug="air" />
       </main>
+
+      {/* ─── MOBILE FLOATING CHAPTER BAR (< 1025px) ─── */}
+      <MobileChapterBar
+        chapters={airChaptersNav}
+        activeChapterIndex={activeChapterIndex}
+        onSelectChapter={scrollToChapter}
+        accentColor="#38bdf8"
+        moduleName="Module 03: Air"
+      />
     </div>
   );
 }

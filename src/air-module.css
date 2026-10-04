@@ -3837,3 +3837,84 @@
 .aintro-static .aintro-chapter-title {
   margin-bottom: 14px;
 }
+
+/* ==========================================================================
+   MODULE 03 (AIR) MOBILE APP RESPONSIVE OPTIMIZATION
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .air-left-rail {
+    display: none !important;
+  }
+
+  .air-top-quote-card {
+    position: static !important;
+    max-width: 100% !important;
+    margin: 24px 0 16px !important;
+  }
+
+  .air-cards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .air-main-content > section:not(.air-cover-section):not(.air-intro-transition) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    border-left: none !important;
+    padding: 72px 18px 48px !important;
+  }
+
+  .air-cover-section {
+    padding: 84px 18px 36px 18px !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .air-atmosphere-interactive {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .air-cover-section {
+    padding: 76px 14px 28px 14px !important;
+  }
+
+  .air-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .air-hero-title-air {
+    font-size: clamp(48px, 15vw, 76px) !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .air-hero-subtitle-display {
+    font-size: clamp(18px, 5.5vw, 24px) !important;
+  }
+
+  .air-hero-curriculum {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .air-hero-desc {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+  }
+
+  .air-btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .air-main-content > section:not(.air-cover-section):not(.air-intro-transition) {
+    padding: 64px 14px 40px !important;
+  }
+}
+

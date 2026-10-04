@@ -17,7 +17,7 @@ interface AirIntroTransitionProps {
  */
 export default function AirIntroTransition({ onEnter }: AirIntroTransitionProps) {
   const wrapRef = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = false;
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,
