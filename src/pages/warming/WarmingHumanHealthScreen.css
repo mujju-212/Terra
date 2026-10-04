@@ -1,0 +1,703 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 07 / 08: CLIMATE CHANGE & HUMAN HEALTH
+   Matches Image 1 UI mockup with Image 2 (warming-human-health-bg.jpg) background.
+   ========================================================================== */
+
+.human-health-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 85px;
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 3vw, 44px);
+  padding-bottom: 28px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Background Layer with Image 2 (Human Silhouette, Fire & Water Horizons) ── */
+.human-health-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.human-health-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: brightness(0.92) contrast(1.05);
+}
+
+/* Scrim to ensure crisp contrast on text and glass cards */
+.human-health-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 50% 35%, transparent 35%, rgba(7, 9, 13, 0.6) 85%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.76) 0%, rgba(7, 9, 13, 0.25) 30%, rgba(7, 9, 13, 0.45) 55%, rgba(7, 9, 13, 0.95) 92%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.9) 0%, rgba(7, 9, 13, 0.55) 24%, rgba(7, 9, 13, 0.2) 48%, transparent 70%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK (LEFT) & CRIMSON QUOTE BOX (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.health-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 14px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Left Header Copy */
+.health-header-block {
+  max-width: 620px;
+}
+
+.health-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f59e0b;
+  margin-bottom: 4px;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.health-eyebrow-pipe {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 300;
+}
+
+.health-main-title {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(34px, 3.8vw, 52px);
+  font-weight: 400;
+  line-height: 1.05;
+  color: #ffffff;
+  margin: 0 0 3px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+}
+
+.health-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(16px, 1.6vw, 21px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.health-lead-text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(245, 242, 237, 0.88);
+  margin: 0;
+  max-width: 580px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
+}
+
+/* Right Quote Box matching Image 1 (Crimson / Red Glass) */
+.health-quote-card {
+  position: relative;
+  background: rgba(28, 12, 14, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  border-radius: 14px;
+  padding: 12px 18px 14px 16px;
+  max-width: 290px;
+  width: 100%;
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 24px rgba(244, 63, 94, 0.15);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.health-quote-symbol {
+  font-family: Georgia, serif;
+  font-size: 34px;
+  line-height: 0.9;
+  color: #fb7185;
+  text-shadow: 0 0 10px rgba(251, 113, 133, 0.6);
+  margin-bottom: 2px;
+  user-select: none;
+}
+
+.health-quote-text {
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: 3 COLUMNS (DRIVERS | PATHWAYS | HEALTH IMPACTS)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.health-main-stage {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 290px 320px 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+  margin-bottom: 16px;
+}
+
+/* Shared Container Glass Wrap */
+.health-panel-wrap {
+  position: relative;
+  background: rgba(11, 16, 23, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 14px;
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.health-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.health-head-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.health-head-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.health-head-badge.badge-blue {
+  background: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.6);
+}
+
+.health-head-badge.badge-green {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.6);
+}
+
+.health-head-badge.badge-red {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+.health-head-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.health-head-arrow-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.health-head-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateX(2px);
+}
+
+/* ── COLUMN 1: CLIMATE CHANGE DRIVERS (2x2 Grid) ── */
+.drivers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  flex: 1;
+}
+
+.driver-card {
+  position: relative;
+  background: rgba(16, 22, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.driver-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.driver-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px 8px 6px;
+  min-height: 42px;
+}
+
+.driver-card-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.driver-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.driver-card-thumb {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.driver-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.driver-card:hover .driver-card-thumb img {
+  transform: scale(1.08);
+}
+
+/* ── COLUMN 2: PATHWAYS TO HEALTH IMPACTS (Vertical Stack with Connected SVG) ── */
+.pathways-layout {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+}
+
+/* Left SVG Branching Connector */
+.pathways-tree-svg {
+  width: 22px;
+  height: 250px;
+  flex-shrink: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pathways-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.pathway-pill-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(16, 22, 32, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.pathway-pill-bar:hover {
+  transform: translateX(4px);
+  background: rgba(22, 30, 44, 0.95);
+}
+
+/* Themed Glow Borders matching Image 1 */
+.pathway-pill-bar.path-red { border-color: rgba(239, 68, 68, 0.45); }
+.pathway-pill-bar.path-red:hover { border-color: #ef4444; box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35); }
+
+.pathway-pill-bar.path-blue { border-color: rgba(56, 189, 248, 0.45); }
+.pathway-pill-bar.path-blue:hover { border-color: #38bdf8; box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35); }
+
+.pathway-pill-bar.path-green { border-color: rgba(34, 197, 94, 0.45); }
+.pathway-pill-bar.path-green:hover { border-color: #22c55e; box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35); }
+
+.pathway-pill-bar.path-amber { border-color: rgba(245, 158, 11, 0.45); }
+.pathway-pill-bar.path-amber:hover { border-color: #f59e0b; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35); }
+
+.pathway-pill-bar.path-crimson { border-color: rgba(244, 63, 94, 0.45); }
+.pathway-pill-bar.path-crimson:hover { border-color: #f43f5e; box-shadow: 0 4px 16px rgba(244, 63, 94, 0.35); }
+
+.pathway-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.path-red .pathway-icon-circle { background: rgba(239, 68, 68, 0.25); color: #fca5a5; }
+.path-blue .pathway-icon-circle { background: rgba(56, 189, 248, 0.25); color: #bae6fd; }
+.path-green .pathway-icon-circle { background: rgba(34, 197, 94, 0.25); color: #bbf7d0; }
+.path-amber .pathway-icon-circle { background: rgba(245, 158, 11, 0.25); color: #fde047; }
+.path-crimson .pathway-icon-circle { background: rgba(244, 63, 94, 0.25); color: #fecdd3; }
+
+.pathway-text-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pathway-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.pathway-sub {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* ── COLUMN 3: KEY HEALTH IMPACTS (2x3 Grid of 6 Cards) ── */
+.impacts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  flex: 1;
+}
+
+.impact-card {
+  position: relative;
+  background: rgba(16, 22, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.impact-card:hover {
+  transform: translateY(-3px);
+  background: rgba(20, 28, 40, 0.95);
+}
+
+/* Themed Glow Borders matching Image 1 */
+.impact-card.theme-orange { border-color: rgba(249, 115, 22, 0.45); }
+.impact-card.theme-orange:hover { border-color: #f97316; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
+
+.impact-card.theme-blue { border-color: rgba(56, 189, 248, 0.45); }
+.impact-card.theme-blue:hover { border-color: #38bdf8; box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3); }
+
+.impact-card.theme-green { border-color: rgba(34, 197, 94, 0.45); }
+.impact-card.theme-green:hover { border-color: #22c55e; box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3); }
+
+.impact-card.theme-cyan { border-color: rgba(6, 182, 212, 0.45); }
+.impact-card.theme-cyan:hover { border-color: #06b6d4; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3); }
+
+.impact-card.theme-purple { border-color: rgba(168, 85, 247, 0.45); }
+.impact-card.theme-purple:hover { border-color: #a855f7; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3); }
+
+.impact-card.theme-amber { border-color: rgba(245, 158, 11, 0.45); }
+.impact-card.theme-amber:hover { border-color: #f59e0b; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); }
+
+.impact-card-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px 6px;
+  min-height: 38px;
+}
+
+.impact-card-icon {
+  flex-shrink: 0;
+}
+
+.theme-orange .impact-card-icon { color: #fb923c; }
+.theme-blue .impact-card-icon { color: #38bdf8; }
+.theme-green .impact-card-icon { color: #4ade80; }
+.theme-cyan .impact-card-icon { color: #22d3ee; }
+.theme-purple .impact-card-icon { color: #c084fc; }
+.theme-amber .impact-card-icon { color: #fde047; }
+
+.impact-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.impact-card-thumb {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.impact-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.impact-card:hover .impact-card-thumb img {
+  transform: scale(1.08);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM ROW: KEY TAKEAWAYS (LEFT) & DID YOU KNOW (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.health-bottom-row {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Left Wide Takeaways Card */
+.takeaways-panel {
+  position: relative;
+  background: rgba(14, 18, 25, 0.8);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 18px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.takeaways-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.takeaways-header svg {
+  color: #f59e0b;
+}
+
+.takeaways-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.takeaway-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.takeaway-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.takeaway-icon-circle.circle-gold {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.takeaway-icon-circle.circle-green {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.takeaway-text {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Right Did You Know Card (Purple Theme matching Image 1) */
+.did-you-know-panel {
+  position: relative;
+  background: rgba(24, 14, 34, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 14px;
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+}
+
+.did-you-know-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.did-you-know-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.did-you-know-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.25);
+  color: #c084fc;
+  border: 1px solid rgba(192, 132, 252, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.did-you-know-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.did-you-know-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE DESIGN BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .health-main-stage {
+    grid-template-columns: 1fr 1fr;
+  }
+  .impacts-panel {
+    grid-column: span 2;
+  }
+  .impacts-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .human-health-screen-container {
+    padding-left: clamp(20px, 3vw, 36px);
+    padding-right: clamp(20px, 3vw, 36px);
+    padding-top: 76px;
+  }
+}
+
+@media (max-width: 860px) {
+  .health-top-bar {
+    flex-direction: column;
+  }
+  .health-quote-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .health-main-stage {
+    grid-template-columns: 1fr;
+  }
+  .impacts-panel {
+    grid-column: span 1;
+  }
+  .impacts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .health-bottom-row {
+    grid-template-columns: 1fr;
+  }
+  .takeaways-columns {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .drivers-grid {
+    grid-template-columns: 1fr;
+  }
+  .impacts-grid {
+    grid-template-columns: 1fr;
+  }
+}

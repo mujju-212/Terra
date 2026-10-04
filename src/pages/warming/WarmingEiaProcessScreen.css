@@ -1,0 +1,638 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 12: 9-PHASE INDIAN EIA PROCEDURE
+   Matches Image 1 UI mockup with 3x3 Cards Grid & 3 Wide Bottom Summary Panels
+   ========================================================================== */
+
+.eia-process-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Clears floating left rail (245px) and fixed top navbar (75px) */
+  padding-top: clamp(75px, 8.5vh, 90px);
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 2.8vw, 44px);
+  padding-bottom: 28px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Background Layer with Mountain River & Construction ── */
+.eia-process-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-process-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right top;
+  filter: brightness(0.75) contrast(1.1);
+}
+
+/* Vignette Scrim for maximum contrast and legibility */
+.eia-process-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 75% 20%, rgba(7, 9, 13, 0.1) 0%, rgba(7, 9, 13, 0.8) 70%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.75) 0%, rgba(7, 9, 13, 0.2) 20%, rgba(7, 9, 13, 0.6) 55%, rgba(7, 9, 13, 0.95) 100%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.85) 0%, rgba(7, 9, 13, 0.4) 40%, rgba(7, 9, 13, 0.15) 75%, rgba(7, 9, 13, 0.7) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK (LEFT) & CYAN AMBIENT QUOTE CARD (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-proc-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.eia-proc-header-block {
+  max-width: 720px;
+}
+
+.eia-proc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.eia-proc-eyebrow-pipe {
+  opacity: 0.5;
+  color: #ffffff;
+}
+
+.eia-proc-main-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  display: flex;
+  flex-direction: column;
+}
+
+.eia-proc-title-prefix {
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.eia-proc-title-highlight {
+  background: linear-gradient(135deg, #ffffff 15%, #fef3c7 50%, #fde68a 85%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 16px rgba(245, 158, 11, 0.35));
+}
+
+.eia-proc-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 6px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
+}
+
+.eia-proc-lead-text {
+  font-size: clamp(12px, 0.92vw, 13px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  max-width: 680px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Cyan Glowing Quote Card (Matches Image 1 exactly) */
+.eia-proc-quote-card {
+  position: relative;
+  max-width: 320px;
+  padding: 12px 16px;
+  background: rgba(6, 182, 212, 0.14);
+  border: 1px solid rgba(6, 182, 212, 0.45);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(6, 182, 212, 0.15);
+}
+
+.eia-proc-quote-symbol {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 30px;
+  line-height: 1;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 2px;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.eia-proc-quote-text {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: 3×3 CARDS GRID (9 PHASES)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-proc-cards-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 1420px;
+  margin-top: 4px;
+}
+
+.eia-phase-glass-card {
+  position: relative;
+  background: rgba(11, 16, 25, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: 
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    background 0.28s ease;
+  user-select: none;
+  min-height: 78px;
+}
+
+.eia-phase-glass-card:hover {
+  transform: translateY(-3px);
+  background: rgba(15, 22, 34, 0.94);
+}
+
+/* Themed card glow borders matching Image 1 */
+.eia-phase-glass-card.theme-blue { border-color: rgba(14, 165, 233, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(14, 165, 233, 0.15); }
+.eia-phase-glass-card.theme-blue:hover { border-color: #0ea5e9; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(14, 165, 233, 0.4); }
+
+.eia-phase-glass-card.theme-green { border-color: rgba(34, 197, 94, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(34, 197, 94, 0.15); }
+.eia-phase-glass-card.theme-green:hover { border-color: #22c55e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(34, 197, 94, 0.4); }
+
+.eia-phase-glass-card.theme-purple { border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(168, 85, 247, 0.15); }
+.eia-phase-glass-card.theme-purple:hover { border-color: #a855f7; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(168, 85, 247, 0.4); }
+
+.eia-phase-glass-card.theme-orange { border-color: rgba(249, 115, 22, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(249, 115, 22, 0.15); }
+.eia-phase-glass-card.theme-orange:hover { border-color: #f97316; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(249, 115, 22, 0.4); }
+
+.eia-phase-glass-card.theme-red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(239, 68, 68, 0.15); }
+.eia-phase-glass-card.theme-red:hover { border-color: #ef4444; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(239, 68, 68, 0.4); }
+
+.eia-phase-glass-card.theme-cyan { border-color: rgba(6, 182, 212, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(6, 182, 212, 0.15); }
+.eia-phase-glass-card.theme-cyan:hover { border-color: #06b6d4; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(6, 182, 212, 0.4); }
+
+.eia-phase-glass-card.theme-magenta { border-color: rgba(217, 70, 239, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(217, 70, 239, 0.15); }
+.eia-phase-glass-card.theme-magenta:hover { border-color: #d946ef; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(217, 70, 239, 0.4); }
+
+.eia-phase-glass-card.theme-gold { border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(245, 158, 11, 0.15); }
+.eia-phase-glass-card.theme-gold:hover { border-color: #f59e0b; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(245, 158, 11, 0.4); }
+
+.eia-phase-glass-card.theme-emerald { border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(16, 185, 129, 0.15); }
+.eia-phase-glass-card.theme-emerald:hover { border-color: #10b981; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(16, 185, 129, 0.4); }
+
+/* Left Badge Column */
+.eia-phase-badge-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.eia-phase-num-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.theme-blue .eia-phase-num-circle { background: #0284c7; }
+.theme-green .eia-phase-num-circle { background: #16a34a; }
+.theme-purple .eia-phase-num-circle { background: #9333ea; }
+.theme-orange .eia-phase-num-circle { background: #ea580c; }
+.theme-red .eia-phase-num-circle { background: #e11d48; }
+.theme-cyan .eia-phase-num-circle { background: #0891b2; }
+.theme-magenta .eia-phase-num-circle { background: #c026d3; }
+.theme-gold .eia-phase-num-circle { background: #d97706; }
+.theme-emerald .eia-phase-num-circle { background: #059669; }
+
+.eia-phase-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-blue .eia-phase-icon-box { color: #38bdf8; }
+.theme-green .eia-phase-icon-box { color: #4ade80; }
+.theme-purple .eia-phase-icon-box { color: #c084fc; }
+.theme-orange .eia-phase-icon-box { color: #fb923c; }
+.theme-red .eia-phase-icon-box { color: #f87171; }
+.theme-cyan .eia-phase-icon-box { color: #22d3ee; }
+.theme-magenta .eia-phase-icon-box { color: #e879f9; }
+.theme-gold .eia-phase-icon-box { color: #fbbf24; }
+.theme-emerald .eia-phase-icon-box { color: #34d399; }
+
+/* Middle Info Column */
+.eia-phase-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.eia-phase-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.eia-phase-desc {
+  font-size: 10px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+/* Right Thumbnail & Action Column */
+.eia-phase-visual-col {
+  position: relative;
+  width: clamp(112px, 8.8vw, 134px);
+  height: clamp(64px, 5vw, 76px);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phase-thumb-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.eia-phase-glass-card:hover .phase-thumb-svg {
+  transform: scale(1.06);
+}
+
+.eia-phase-visual-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.eia-phase-glass-card:hover .eia-phase-visual-col img {
+  transform: scale(1.08);
+}
+
+.eia-phase-arrow-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 5;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.eia-phase-glass-card:hover .eia-phase-arrow-btn {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateX(1px);
+}
+
+/* Custom Styled Visual Thumbnails matching the Mockup */
+.phase-thumb-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.phase-thumb-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.phase-thumb-box {
+  font-size: 7.5px;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM STRIP: 3 WIDE SUMMARY PANELS (Matches Image 1)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-proc-bottom-strip {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+  margin-top: 14px;
+  padding: 14px 20px;
+  background: rgba(11, 16, 25, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.eia-summary-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.eia-summary-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.eia-summary-col.theme-blue .eia-summary-icon-wrap {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.eia-summary-col.theme-purple .eia-summary-icon-wrap {
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+.eia-summary-col.theme-green .eia-summary-icon-wrap {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+.eia-summary-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eia-summary-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-summary-desc {
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.74);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MODAL DIALOG (Interactive Deep Dive per BCV755B Section 3.5)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-proc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.eia-proc-modal-window {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f1622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.eia-proc-modal-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.eia-proc-modal-window::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.eia-proc-modal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.eia-proc-modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.eia-proc-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eia-proc-modal-close-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.eia-proc-modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.eia-proc-modal-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f59e0b;
+}
+
+.eia-proc-modal-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-proc-modal-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0;
+}
+
+.eia-proc-modal-box {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #38bdf8;
+  border-radius: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE MEDIA QUERIES
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .eia-proc-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .eia-process-screen-container {
+    padding-left: clamp(20px, 3vw, 36px);
+    padding-right: clamp(20px, 3vw, 36px);
+    padding-top: 76px;
+  }
+}
+
+@media (max-width: 860px) {
+  .eia-proc-top-bar {
+    flex-direction: column;
+  }
+  .eia-proc-quote-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .eia-proc-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .eia-proc-bottom-strip {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

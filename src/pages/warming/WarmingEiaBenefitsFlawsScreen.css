@@ -1,0 +1,758 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 15: EIA BENEFITS VS FLAWS
+   A Balanced Perspective — Exact Match for Image Mockup with Central Scale
+   ========================================================================== */
+
+.eia-bf-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Clears floating left rail (245px) and fixed top navbar (75px) */
+  padding-top: clamp(75px, 8.5vh, 90px);
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 2.8vw, 44px);
+  padding-bottom: 28px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Split Panoramic Background (Nature Left, Industry Right) ── */
+.eia-bf-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-bf-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.65) contrast(1.15);
+}
+
+/* Dual-side Vignette Scrim (Emerald Nature on Left, Amber-Industrial Smoke on Right) */
+.eia-bf-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 25% 30%, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 30%, rgba(239, 68, 68, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 60%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.85) 0%, rgba(7, 9, 13, 0.25) 20%, rgba(7, 9, 13, 0.65) 60%, rgba(7, 9, 13, 0.96) 100%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.88) 0%, rgba(7, 9, 13, 0.3) 30%, rgba(7, 9, 13, 0.2) 70%, rgba(7, 9, 13, 0.88) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK (LEFT) & AMBER/RED GLOWING QUOTE CARD (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-bf-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.eia-bf-header-block {
+  max-width: 740px;
+}
+
+.eia-bf-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.eia-bf-eyebrow-pipe {
+  opacity: 0.5;
+  color: #ffffff;
+}
+
+.eia-bf-main-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.eia-bf-title-word {
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.eia-bf-title-vs {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 400;
+  color: #f59e0b;
+  font-style: italic;
+  margin: 0 6px;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.eia-bf-title-flaws {
+  background: linear-gradient(135deg, #ffffff 15%, #fecaca 50%, #f87171 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 14px rgba(239, 68, 68, 0.35));
+}
+
+.eia-bf-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 6px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
+}
+
+.eia-bf-lead-text {
+  font-size: clamp(11.5px, 0.9vw, 12.8px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.76);
+  margin: 0;
+  max-width: 700px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Red/Amber Glowing Quote Card (Matches Image Mockup) */
+.eia-bf-quote-card {
+  position: relative;
+  max-width: 310px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+.eia-bf-quote-symbol {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 30px;
+  line-height: 1;
+  color: #f87171;
+  display: block;
+  margin-bottom: 2px;
+  text-shadow: 0 0 12px rgba(248, 113, 113, 0.6);
+}
+
+.eia-bf-quote-text {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: 3-COLUMN LAYOUT (BENEFITS - GOLDEN SCALES - FLAWS)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-bf-main-stage {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 180px 1fr;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+  margin-bottom: 14px;
+}
+
+/* ── Left Column: Benefits of EIA (Green Theme) ── */
+.eia-bf-side-card {
+  position: relative;
+  background: rgba(11, 16, 25, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eia-bf-side-card.theme-green {
+  border: 1px solid rgba(34, 197, 94, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(34, 197, 94, 0.16);
+}
+
+.eia-bf-side-card.theme-red {
+  border: 1px solid rgba(239, 68, 68, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(239, 68, 68, 0.16);
+}
+
+.eia-bf-side-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.eia-bf-side-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-bf-header-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-green .eia-bf-header-badge {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #4ade80;
+}
+
+.theme-red .eia-bf-header-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.eia-bf-side-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-bf-header-arrow {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.eia-bf-side-card:hover .eia-bf-header-arrow {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* 5 Stacked Rows */
+.eia-bf-rows-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eia-bf-row-item {
+  position: relative;
+  background: rgba(15, 23, 36, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.eia-bf-row-item:hover {
+  transform: translateX(2px);
+  background: rgba(20, 30, 48, 0.95);
+}
+
+.theme-green .eia-bf-row-item:hover {
+  border-color: rgba(34, 197, 94, 0.6);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.theme-red .eia-bf-row-item:hover {
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+.eia-bf-row-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.eia-bf-circle-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.eia-bf-circle-icon.circle-green {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.eia-bf-circle-icon.circle-blue {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.eia-bf-circle-icon.circle-yellow {
+  background: #d97706;
+  color: #ffffff;
+}
+
+.eia-bf-circle-icon.circle-purple {
+  background: #9333ea;
+  color: #ffffff;
+}
+
+.eia-bf-circle-icon.circle-teal {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+.eia-bf-circle-icon.circle-red {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.eia-bf-row-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.eia-bf-row-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.eia-bf-row-desc {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 1px 0 0;
+}
+
+.eia-bf-row-thumb {
+  width: 60px;
+  height: 38px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eia-bf-row-thumb-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* ── Center Column: The Golden Scales of Justice ── */
+.eia-bf-scales-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  min-height: 290px;
+}
+
+.eia-bf-scales-svg-wrap {
+  width: 100%;
+  max-width: 180px;
+  height: 280px;
+  filter: drop-shadow(0 10px 25px rgba(245, 158, 11, 0.25));
+  animation: gentleScaleFloat 5s ease-in-out infinite alternate;
+}
+
+@keyframes gentleScaleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM STRIP: 2 WIDE PANELS (KEY TAKEAWAYS & MOVING FORWARD)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-bf-bottom-strip {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Panel 1: Key Takeaways (Amber Theme) */
+.eia-bf-takeaways-panel {
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eia-bf-takeaways-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-bf-takeaways-icon-wrap {
+  color: #f59e0b;
+}
+
+.eia-bf-takeaways-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-bf-takeaways-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.eia-bf-takeaway-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.eia-bf-takeaway-col-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.eia-bf-takeaway-col-text {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+}
+
+/* Panel 2: Moving Forward (Purple Theme) */
+.eia-bf-forward-panel {
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.eia-bf-forward-panel:hover {
+  transform: translateY(-2px);
+  border-color: #a855f7;
+}
+
+.eia-bf-forward-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eia-bf-forward-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-bf-forward-icon-wrap {
+  color: #c084fc;
+}
+
+.eia-bf-forward-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-bf-forward-arrow {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.eia-bf-forward-panel:hover .eia-bf-forward-arrow {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.eia-bf-forward-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eia-bf-forward-text {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  flex: 1;
+}
+
+.eia-bf-forward-thumb {
+  width: 80px;
+  height: 44px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MODAL WINDOW (Interactive Deep Dive)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-bf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.eia-bf-modal-window {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f1622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.2);
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.eia-bf-modal-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.eia-bf-modal-window::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.eia-bf-modal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.eia-bf-modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.eia-bf-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eia-bf-modal-close-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.eia-bf-modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.eia-bf-modal-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f59e0b;
+}
+
+.eia-bf-modal-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-bf-modal-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0;
+}
+
+.eia-bf-modal-box {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #38bdf8;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE QUERIES
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .eia-bf-main-stage {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .eia-bf-scales-center {
+    order: -1;
+    min-height: 180px;
+  }
+  .eia-bf-scales-svg-wrap {
+    height: 180px;
+    max-width: 240px;
+  }
+  .eia-bf-bottom-strip {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .eia-bf-screen-container {
+    padding-left: clamp(20px, 3vw, 36px);
+    padding-right: clamp(20px, 3vw, 36px);
+    padding-top: 76px;
+  }
+}
+
+@media (max-width: 768px) {
+  .eia-bf-top-bar {
+    flex-direction: column;
+  }
+  .eia-bf-quote-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .eia-bf-takeaways-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .eia-bf-forward-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

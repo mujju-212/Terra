@@ -1,0 +1,758 @@
+/* ==========================================================================
+   MODULE 05 · CHAPTER 05: GLOBAL WARMING VS CLIMATE CHANGE
+   Matches Image 1 UI with Pristine Background Image 2 (warming-vs-climate-bg.jpg)
+   Adheres to Biodiversity Module layout & floating sidebar rail offset
+   ========================================================================== */
+
+.vs-climate-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Biodiversity module layout offset: clears floating left rail and fixed top navbar */
+  padding: 85px clamp(20px, 3vw, 44px) 36px clamp(235px, 16vw, 275px);
+  background: 
+    linear-gradient(180deg, rgba(8, 12, 22, 0.45) 0%, rgba(6, 10, 20, 0.72) 40%, rgba(4, 7, 15, 0.94) 100%),
+    url('/images/warming-vs-climate-bg.jpg') no-repeat center top;
+  background-size: cover;
+  background-attachment: scroll;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: #FFFFFF;
+}
+
+.vs-climate-inner-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-sizing: border-box;
+}
+
+/* ─── HEADER BLOCK ─── */
+.vs-climate-header-block {
+  max-width: 780px;
+  margin-bottom: 0.25rem;
+}
+
+.vs-climate-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #E2E8F0;
+  opacity: 0.9;
+  margin-bottom: 0.45rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.vs-climate-main-title {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.3rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.35rem 0;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF1D6 28%, #FDBA74 60%, #FB923C 85%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 20px rgba(249, 115, 22, 0.25));
+}
+
+.vs-climate-subtitle {
+  font-family: var(--font-sans, system-ui);
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 0.55rem 0;
+  letter-spacing: -0.005em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+}
+
+.vs-climate-lead-text {
+  font-family: var(--font-sans, system-ui);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.85);
+  max-width: 660px;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+}
+
+/* ─── MAIN 3-COLUMN COMPARISON GRID ─── */
+.vs-climate-main-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr 310px;
+  align-items: stretch;
+  gap: 1.1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1320px) {
+  .vs-climate-main-grid {
+    grid-template-columns: 1fr auto 1fr 280px;
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 1160px) {
+  .vs-climate-main-grid {
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .vs-takeaways-col {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .vs-climate-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .vs-divider-wrap {
+    margin: -0.5rem 0;
+  }
+  .vs-climate-screen-container {
+    padding: 85px 1.5rem 36px;
+  }
+}
+
+/* ─── COMPARISON CARD (GLOBAL WARMING & CLIMATE CHANGE) ─── */
+.vs-card {
+  background: rgba(11, 17, 28, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.26s ease, box-shadow 0.26s ease;
+  min-width: 0;
+}
+
+/* Orange Theme (Global Warming) */
+.vs-card.theme-warming {
+  border-color: rgba(249, 115, 22, 0.38);
+}
+
+.vs-card.theme-warming:hover {
+  transform: translateY(-3px);
+  border-color: rgba(249, 115, 22, 0.75);
+  box-shadow: 
+    0 20px 42px rgba(234, 88, 12, 0.24),
+    0 0 24px rgba(249, 115, 22, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Blue Theme (Climate Change) */
+.vs-card.theme-climate {
+  border-color: rgba(56, 189, 248, 0.38);
+}
+
+.vs-card.theme-climate:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 
+    0 20px 42px rgba(2, 132, 199, 0.26),
+    0 0 24px rgba(56, 189, 248, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Card Header */
+.vs-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.vs-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vs-pill-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.pill-warming {
+  background: linear-gradient(135deg, #FF6B4A 0%, #EA580C 100%);
+  color: #FFFFFF;
+}
+
+.pill-climate {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  color: #FFFFFF;
+}
+
+.vs-title-wrap h3 {
+  font-family: var(--font-sans, system-ui);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.vs-title-wrap p {
+  font-size: 0.76rem;
+  color: rgba(226, 232, 240, 0.75);
+  margin: 0.15rem 0 0 0;
+}
+
+.vs-card-arrow-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-card:hover .vs-card-arrow-btn {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(2px);
+}
+
+/* Card Visual Thumbnail (16:9 ratio) */
+.vs-card-thumb-wrap {
+  width: 100%;
+  height: 112px;
+  border-radius: 9px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #000000;
+  margin-bottom: 1rem;
+}
+
+.vs-card-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.vs-card:hover .vs-card-thumb-img {
+  transform: scale(1.05);
+}
+
+.vs-card-thumb-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(6, 10, 20, 0.55) 100%);
+  pointer-events: none;
+}
+
+/* Comparison Attribute Rows Table */
+.vs-attr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vs-attr-row {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.77rem;
+  line-height: 1.45;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.65rem;
+}
+
+.vs-attr-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.vs-attr-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.vs-attr-icon {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.theme-warming .vs-attr-icon {
+  color: #F97316;
+}
+
+.theme-climate .vs-attr-icon {
+  color: #38BDF8;
+}
+
+.vs-attr-value {
+  color: rgba(226, 232, 240, 0.85);
+  margin: 0;
+}
+
+/* ─── CENTER VS GLOWING BADGE & DIVIDER ─── */
+.vs-divider-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 44px;
+  align-self: center;
+}
+
+.vs-vertical-line {
+  width: 1.5px;
+  height: 60px;
+  background: linear-gradient(180deg, transparent 0%, rgba(249, 115, 22, 0.6) 50%, rgba(56, 189, 248, 0.6) 100%);
+  pointer-events: none;
+}
+
+.vs-center-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(26, 36, 56, 0.95) 0%, rgba(8, 12, 22, 0.95) 100%);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #F97316 0%, #38BDF8 100%) 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans, system-ui);
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: #FFFFFF;
+  box-shadow: 
+    0 0 24px rgba(249, 115, 22, 0.4),
+    0 0 24px rgba(56, 189, 248, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.15);
+  z-index: 5;
+  user-select: none;
+  animation: vsBadgePulse 3.5s infinite ease-in-out;
+}
+
+@keyframes vsBadgePulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.4)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.6)); }
+}
+
+/* ─── RIGHT COLUMN: KEY TAKEAWAYS ─── */
+.vs-takeaways-col {
+  background: rgba(11, 17, 28, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.vs-takeaways-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.takeaways-bulb-icon {
+  color: #FBBF24;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+}
+
+.vs-takeaways-title {
+  font-family: var(--font-sans, system-ui);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.vs-takeaways-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.takeaway-mini-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+  cursor: pointer;
+}
+
+.takeaway-mini-card:hover {
+  transform: translateX(3px);
+  background: rgba(22, 34, 56, 0.8);
+}
+
+.takeaway-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.takeaway-mini-card.theme-orange {
+  border-color: rgba(249, 115, 22, 0.25);
+}
+.takeaway-mini-card.theme-orange .takeaway-icon-box {
+  background: rgba(234, 88, 12, 0.22);
+  color: #FB923C;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.takeaway-mini-card.theme-purple {
+  border-color: rgba(168, 85, 247, 0.25);
+}
+.takeaway-mini-card.theme-purple .takeaway-icon-box {
+  background: rgba(147, 51, 234, 0.22);
+  color: #C084FC;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.takeaway-mini-card.theme-green {
+  border-color: rgba(34, 197, 94, 0.25);
+}
+.takeaway-mini-card.theme-green .takeaway-icon-box {
+  background: rgba(22, 163, 74, 0.22);
+  color: #4ADE80;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+.takeaway-mini-card.theme-cyan {
+  border-color: rgba(6, 182, 212, 0.25);
+}
+.takeaway-mini-card.theme-cyan .takeaway-icon-box {
+  background: rgba(8, 145, 178, 0.22);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.takeaway-text {
+  font-size: 0.77rem;
+  line-height: 1.4;
+  color: rgba(241, 245, 249, 0.9);
+  margin: 0;
+}
+
+/* ─── BOTTOM BANNER (QUOTE & NATURE STRIP) ─── */
+.vs-bottom-banner {
+  width: 100%;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  box-sizing: border-box;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* Nature river photo backdrop */
+.vs-bottom-banner-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.vs-bottom-banner-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+  filter: brightness(0.68) saturate(1.15);
+}
+
+.vs-bottom-banner-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(90deg, rgba(8, 12, 20, 0.92) 0%, rgba(8, 12, 20, 0.65) 55%, rgba(8, 12, 20, 0.85) 100%);
+  pointer-events: none;
+}
+
+.vs-bottom-left {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.vs-bottom-leaf-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.22);
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  color: #4ADE80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.vs-bottom-quote-text {
+  font-family: inherit;
+  font-style: italic;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.vs-bottom-right {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.vs-bottom-right:hover {
+  transform: translateX(2px);
+}
+
+.vs-bottom-future-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.vs-bottom-future-label span:first-child {
+  font-size: 0.74rem;
+  color: rgba(226, 232, 240, 0.7);
+  line-height: 1.1;
+}
+
+.vs-bottom-future-label span:last-child {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.vs-bottom-arrow-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+/* ─── INTERACTIVE INSPECTION MODAL ─── */
+.vs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 18, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.vs-modal-card {
+  width: 100%;
+  max-width: 660px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.vs-modal-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.vs-modal-card::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.vs-modal-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.vs-modal-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.vs-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1.2rem;
+}
+
+.vs-modal-title-wrap h3 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin: 0;
+  color: #FFFFFF;
+}
+
+.vs-modal-title-wrap p {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin: 0.25rem 0 0 0;
+}
+
+.vs-modal-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.vs-modal-hero-visual {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #020617;
+}
+
+.vs-modal-hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vs-modal-section {
+  margin-bottom: 1.25rem;
+}
+
+.vs-modal-section h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #F59E0B;
+  margin: 0 0 0.4rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vs-modal-section p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(226, 232, 240, 0.88);
+  margin: 0;
+}
+
+.vs-modal-dismiss-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-modal-dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+}

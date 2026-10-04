@@ -1,0 +1,803 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 01: THE GREENHOUSE EFFECT
+   Matches Image 1 UI mockup with Image 2 (warming-greenhouse-bg.jpg) background.
+   ========================================================================== */
+
+.gh-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Offset for floating left rail matching Biodiversity module */
+  padding-top: clamp(75px, 8.5vh, 90px);
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 2.8vw, 44px);
+  padding-bottom: 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Background image layer using Image 2 ── */
+.gh-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gh-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Top-alignment guarantees the radiant Sun at the top of Image 2 is 100% visible! */
+  object-position: center top;
+  filter: brightness(0.96) contrast(1.03);
+}
+
+/* Atmospheric Heat Haze / Thermal Glow Overlay that intensifies with GHG */
+.gh-thermal-glow-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle at 50% 48%,
+    rgba(249, 115, 22, calc(var(--thermal-alpha, 0.28))),
+    rgba(239, 68, 68, calc(var(--thermal-alpha, 0.28) * 0.6)) 35%,
+    transparent 65%
+  );
+  transition: opacity 0.4s ease;
+}
+
+/* Vignette scrim for readability */
+.gh-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(7, 9, 13, 0.6) 100%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.45) 0%, transparent 20%, transparent 75%, rgba(7, 9, 13, 0.85) 100%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.6) 0%, transparent 30%, transparent 68%, rgba(7, 9, 13, 0.5) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: HEADER (LEFT) + CENTRAL DIAGRAM (CENTER) + CONTROLS (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.gh-main-stage {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  align-items: start;
+  flex: 1;
+}
+
+/* Header Text (Top Left) */
+.gh-header-block {
+  max-width: 440px;
+  padding-top: 4px;
+}
+
+.gh-header-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f59e0b;
+  margin-bottom: 6px;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.gh-eyebrow-pipe {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 300;
+}
+
+.gh-header-title {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(38px, 4.2vw, 56px);
+  font-weight: 400;
+  line-height: 1.04;
+  color: #ffffff;
+  margin: 0 0 2px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.gh-header-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(18px, 2vw, 25px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+}
+
+.gh-header-description {
+  font-size: 14px;
+  line-height: 1.58;
+  color: rgba(245, 242, 237, 0.82);
+  margin: 0;
+  max-width: 410px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CANVAS ANNOTATIONS OVER EARTH & ATMOSPHERE
+   ────────────────────────────────────────────────────────────────────────── */
+
+.gh-canvas-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 1. 30% Reflected Rays */
+.gh-callout-reflected {
+  position: absolute;
+  left: 45%;
+  top: 17%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+/* 2. 70% Absorbed Rays */
+.gh-callout-absorbed {
+  position: absolute;
+  left: 47%;
+  top: 31%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: float-subtle 4.5s ease-in-out infinite 0.5s;
+}
+
+.gh-ray-arrows {
+  display: flex;
+  align-items: center;
+  color: #facc15;
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.8));
+}
+
+.gh-callout-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.gh-callout-stat {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 21px;
+  font-weight: 800;
+  color: #facc15;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(250, 204, 21, 0.65);
+}
+
+.gh-callout-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.25;
+  margin-top: 2px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+}
+
+/* 3. Arched Greenhouse Heat Trap Banner */
+.gh-callout-trapped-banner {
+  position: absolute;
+  left: 43%;
+  top: 41%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: rgba(234, 88, 12, 0.28);
+  border: 1px solid rgba(251, 146, 60, 0.45);
+  backdrop-filter: blur(8px);
+  color: #fed7aa;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 10px rgba(234, 88, 12, 0.85);
+  box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* 4. Wavy Trapped Thermal Arrows */
+.gh-wavy-heat-cluster {
+  position: absolute;
+  left: 43%;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 24px;
+  pointer-events: none;
+}
+
+.gh-wavy-heat-arrow {
+  color: #ea580c;
+  filter: drop-shadow(0 0 10px rgba(234, 88, 12, 0.85));
+  animation: heat-rise 2.2s ease-in-out infinite;
+}
+
+.gh-wavy-heat-arrow:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.gh-wavy-heat-arrow:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.gh-wavy-heat-arrow:nth-child(4) {
+  animation-delay: 0.9s;
+}
+.gh-wavy-heat-arrow:nth-child(5) {
+  animation-delay: 1.2s;
+}
+
+/* 5. Leader Line Annotations (Atmosphere, Surface, GHGs) */
+.gh-annotation-layer {
+  position: absolute;
+  left: 56%;
+  top: 43%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.gh-leader-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gh-leader-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.gh-leader-dot.dot-atmosphere {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.gh-leader-dot.dot-surface {
+  background: #94a3b8;
+  box-shadow: 0 0 6px #94a3b8;
+}
+
+.gh-leader-line {
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.15));
+}
+
+.gh-leader-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RIGHT CONTROL COLUMN: GHG SLIDERS & EARTH TEMPERATURE
+   ────────────────────────────────────────────────────────────────────────── */
+
+.gh-controls-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 380px;
+  margin-left: auto;
+}
+
+/* Glassmorphic Panel Base */
+.gh-glass-panel {
+  position: relative;
+  background: rgba(11, 17, 24, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px rgba(216, 112, 63, 0.04);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gh-glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 20px 42px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 24px rgba(216, 112, 63, 0.08);
+}
+
+/* Panel Header Row */
+.gh-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.gh-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.gh-info-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gh-info-trigger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Master Slider */
+.gh-master-slider-wrap {
+  margin-bottom: 14px;
+}
+
+.gh-master-track {
+  position: relative;
+  width: 100%;
+  height: 9px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #f59e0b 0%, #f97316 48%, #ef4444 82%, #b91c1c 100%);
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.45);
+  cursor: pointer;
+  user-select: none;
+}
+
+.gh-master-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #f97316;
+  box-shadow: 
+    0 0 14px #f97316,
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.gh-master-thumb:active {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.gh-master-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* Individual Gas Sliders */
+.gh-gases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.gh-gas-row {
+  display: grid;
+  grid-template-columns: 26px 95px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.2s ease;
+}
+
+.gh-gas-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gh-gas-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.gh-gas-icon.icon-co2 {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.gh-gas-icon.icon-ch4 {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.gh-gas-icon.icon-n2o {
+  color: #67e8f9;
+  background: rgba(103, 232, 249, 0.12);
+}
+
+.gh-gas-label-group {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.gh-gas-formula {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.gh-gas-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Mini Gas Slider Track */
+.gh-mini-track {
+  position: relative;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.gh-mini-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.gh-mini-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+}
+
+/* Temperature Comparison Card */
+.gh-temp-card {
+  margin-top: 0;
+}
+
+.gh-temp-grid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gh-temp-box {
+  flex: 1;
+  padding: 11px 12px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+/* Frozen State (-18°C) */
+.gh-temp-box.box-frozen {
+  background: rgba(14, 30, 48, 0.72);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 8px 24px rgba(14, 30, 48, 0.4);
+}
+
+/* Liveable / Warming State (+15°C) */
+.gh-temp-box.box-warm {
+  background: rgba(48, 22, 12, 0.72);
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.25);
+}
+
+.gh-temp-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gh-temp-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.gh-temp-num {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.box-frozen .gh-temp-num {
+  color: #7dd3fc;
+  text-shadow: 0 0 12px rgba(125, 211, 252, 0.5);
+}
+
+.box-warm .gh-temp-num {
+  color: #fb923c;
+  text-shadow: 0 0 12px rgba(251, 146, 60, 0.6);
+}
+
+.gh-temp-main-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.25;
+}
+
+.gh-temp-sublabel {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.25;
+}
+
+.gh-temp-arrow-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+  font-size: 18px;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM ROW: 5 GLASS STAGE CARDS
+   ────────────────────────────────────────────────────────────────────────── */
+
+.gh-cards-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.gh-stage-card {
+  position: relative;
+  background: rgba(11, 16, 22, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: 
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+  user-select: none;
+}
+
+.gh-stage-card:hover {
+  transform: translateY(-3px);
+  background: rgba(16, 23, 32, 0.82);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.gh-stage-card.is-active {
+  background: rgba(22, 28, 36, 0.88);
+  border-color: #f59e0b;
+  box-shadow: 
+    0 14px 32px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(245, 158, 11, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.gh-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.gh-card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0b0f14;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.gh-stage-card.is-active .gh-card-badge {
+  background: #f59e0b;
+  color: #000000;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+.gh-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #facc15;
+  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.6));
+}
+
+.gh-stage-card:nth-child(4) .gh-card-icon {
+  color: #ea580c;
+  filter: drop-shadow(0 0 6px rgba(234, 88, 12, 0.7));
+}
+
+.gh-card-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.gh-card-desc {
+  font-size: 11px;
+  line-height: 1.44;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+  flex: 1;
+}
+
+.gh-stage-card.is-active .gh-card-desc {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   KEYFRAMES & ANIMATIONS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes heat-rise {
+  0% {
+    transform: translateY(0) scaleY(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-8px) scaleY(1.1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-16px) scaleY(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(234, 88, 12, 0.3);
+    border-color: rgba(251, 146, 60, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(234, 88, 12, 0.6);
+    border-color: rgba(251, 146, 60, 0.65);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE DESIGN BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .gh-screen-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 72px;
+  }
+  .gh-main-stage {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .gh-header-block {
+    max-width: 100%;
+  }
+  .gh-controls-column {
+    max-width: 100%;
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .gh-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .gh-stage-card:nth-child(4),
+  .gh-stage-card:nth-child(5) {
+    grid-column: span 1;
+  }
+  .gh-callout-reflected,
+  .gh-callout-absorbed,
+  .gh-annotation-layer {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .gh-screen-container {
+    padding: 68px 16px 16px;
+    height: auto;
+    min-height: 100vh;
+  }
+  .gh-controls-column {
+    grid-template-columns: 1fr;
+  }
+  .gh-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

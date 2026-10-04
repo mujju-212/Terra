@@ -1,0 +1,772 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 08: INTRODUCTION TO EIA
+   Matches Image 1 UI mockup with Image 2 (warming-eia-intro-bg.jpg) background.
+   ========================================================================== */
+
+.eia-intro-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Clears floating left rail (245px) and fixed top navbar (75px) */
+  padding-top: clamp(75px, 8.5vh, 90px);
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 2.8vw, 44px);
+  padding-bottom: 28px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Background Layer with Image 2 (Alpine River Valley with Mountain Sunrise & Construction) ── */
+.eia-intro-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-intro-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.72) contrast(1.08);
+}
+
+/* Vignette Scrim for maximum contrast and legibility */
+.eia-intro-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 50% 45%, rgba(7, 9, 13, 0.45) 0%, rgba(7, 9, 13, 0.88) 100%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.88) 0%, rgba(7, 9, 13, 0.3) 25%, rgba(7, 9, 13, 0.55) 65%, rgba(7, 9, 13, 0.96) 100%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.82) 0%, transparent 25%, transparent 75%, rgba(7, 9, 13, 0.82) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK (LEFT) & EMERALD GREEN QUOTE CARD (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-intro-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.eia-intro-header-block {
+  max-width: 720px;
+}
+
+.eia-intro-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.eia-intro-eyebrow-pipe {
+  opacity: 0.5;
+  color: #ffffff;
+}
+
+.eia-intro-main-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.eia-intro-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 6px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
+}
+
+.eia-intro-lead-text {
+  font-size: clamp(12px, 0.92vw, 13px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  max-width: 680px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Emerald Green Quote Card (Matches Image 1 exactly) */
+.eia-intro-quote-card {
+  position: relative;
+  max-width: 320px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.eia-intro-quote-symbol {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 30px;
+  line-height: 1;
+  color: #34d399;
+  display: block;
+  margin-bottom: 2px;
+  text-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+}
+
+.eia-intro-quote-text {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: 2 ROWS OF INTERACTIVE CARDS
+   Row 1: What is EIA (Green) + Purpose (Purple) + Development Process (Blue)
+   Row 2: Who Uses EIA (Red) + Types of EIA (Indigo) + Key Takeaway (Amber)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-intro-grid {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 1420px;
+  margin-top: 4px;
+}
+
+.eia-grid-row {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+
+.eia-grid-row.row-top {
+  grid-template-columns: 1.15fr 0.95fr 1.35fr;
+}
+
+.eia-grid-row.row-bottom {
+  grid-template-columns: 1.35fr 0.95fr 1.15fr;
+}
+
+/* ── Generic Glass Panel ── */
+.eia-card-panel {
+  position: relative;
+  background: rgba(11, 16, 25, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  transition: 
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    background 0.28s ease;
+  user-select: none;
+}
+
+.eia-card-panel:hover {
+  transform: translateY(-3px);
+  background: rgba(15, 22, 34, 0.92);
+}
+
+/* Themed card glow borders matching Image 1 */
+.eia-card-panel.theme-green { border-color: rgba(34, 197, 94, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(34, 197, 94, 0.12); }
+.eia-card-panel.theme-green:hover { border-color: #22c55e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(34, 197, 94, 0.35); }
+
+.eia-card-panel.theme-purple { border-color: rgba(168, 85, 247, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(168, 85, 247, 0.12); }
+.eia-card-panel.theme-purple:hover { border-color: #a855f7; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(168, 85, 247, 0.35); }
+
+.eia-card-panel.theme-blue { border-color: rgba(14, 165, 233, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(14, 165, 233, 0.12); }
+.eia-card-panel.theme-blue:hover { border-color: #0ea5e9; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(14, 165, 233, 0.35); }
+
+.eia-card-panel.theme-red { border-color: rgba(244, 63, 94, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(244, 63, 94, 0.12); }
+.eia-card-panel.theme-red:hover { border-color: #f43f5e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(244, 63, 94, 0.35); }
+
+.eia-card-panel.theme-indigo { border-color: rgba(129, 140, 248, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(129, 140, 248, 0.12); }
+.eia-card-panel.theme-indigo:hover { border-color: #818cf8; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(129, 140, 248, 0.35); }
+
+.eia-card-panel.theme-amber { border-color: rgba(245, 158, 11, 0.45); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(245, 158, 11, 0.12); }
+.eia-card-panel.theme-amber:hover { border-color: #f59e0b; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(245, 158, 11, 0.35); }
+
+/* Card Header */
+.eia-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.eia-panel-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-panel-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.theme-green .eia-panel-icon { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+.theme-purple .eia-panel-icon { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+.theme-blue .eia-panel-icon { background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.4); }
+.theme-red .eia-panel-icon { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+.theme-indigo .eia-panel-icon { background: rgba(129, 140, 248, 0.2); color: #a5b4fc; border: 1px solid rgba(129, 140, 248, 0.4); }
+.theme-amber .eia-panel-icon { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+
+.eia-panel-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-panel-arrow-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.eia-card-panel:hover .eia-panel-arrow-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateX(2px);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 1: WHAT IS EIA? (Split Text + Earth Visual)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-what-body {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+
+.eia-what-text {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+}
+
+.eia-what-visual {
+  position: relative;
+  width: 100%;
+  height: 95px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+}
+
+.eia-what-visual img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(34, 197, 94, 0.5));
+  animation: floatEarth 5s ease-in-out infinite alternate;
+}
+
+@keyframes floatEarth {
+  0% { transform: translateY(0px) scale(0.96); }
+  100% { transform: translateY(-4px) scale(1.02); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 2: PURPOSE OF EIA (2×2 GRID OF TILES)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-purpose-tiles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  flex: 1;
+}
+
+.eia-purpose-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.eia-purpose-tile:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+.eia-purpose-tile-icon {
+  color: #c084fc;
+  flex-shrink: 0;
+}
+
+.eia-purpose-tile-text {
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 3: EIA IN THE DEVELOPMENT PROCESS (HORIZONTAL STEP LIFECYCLE)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-lifecycle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.eia-lifecycle-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.eia-step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.eia-step-icon-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(14, 165, 233, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+}
+
+.eia-step-item.is-highlight .eia-step-icon-circle {
+  background: #10b981;
+  border-color: #34d399;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+}
+
+.eia-step-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.2;
+}
+
+.eia-step-arrow {
+  color: rgba(56, 189, 248, 0.6);
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: -14px;
+}
+
+.eia-lifecycle-banner {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.eia-lifecycle-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+  opacity: 0.85;
+}
+
+.eia-lifecycle-banner-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(11, 16, 25, 0.8) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 4: WHO USES EIA? (4 STAKEHOLDER COLUMNS)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-stakeholders-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  flex: 1;
+}
+
+.eia-stakeholder-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.eia-stakeholder-col:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.eia-stakeholder-icon {
+  margin-bottom: 2px;
+}
+
+.eia-stakeholder-col.theme-red .eia-stakeholder-icon { color: #f43f5e; }
+.eia-stakeholder-col.theme-cyan .eia-stakeholder-icon { color: #38bdf8; }
+.eia-stakeholder-col.theme-green .eia-stakeholder-icon { color: #4ade80; }
+.eia-stakeholder-col.theme-purple .eia-stakeholder-icon { color: #c084fc; }
+
+.eia-stakeholder-name {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.eia-stakeholder-desc {
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 5: TYPES OF EIA (COMPREHENSIVE VS RAPID)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-types-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+}
+
+.eia-type-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.eia-type-box.box-comprehensive {
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+
+.eia-type-box.box-rapid {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.eia-type-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.box-comprehensive .eia-type-head { color: #38bdf8; }
+.box-rapid .eia-type-head { color: #c084fc; }
+
+.eia-type-desc {
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANEL 6: KEY TAKEAWAY (SEEDLING NATURE VS CITY BALANCE)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-takeaway-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.eia-takeaway-visual {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.eia-takeaway-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.eia-takeaway-text {
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}
+
+.eia-takeaway-highlight {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MODAL DIALOG (Interactive Deep Dive per BCV755B Section 3.1)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.eia-modal-window {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f1622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(52, 211, 153, 0.2);
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.eia-modal-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.eia-modal-window::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.eia-modal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.eia-modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.eia-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eia-modal-close-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.eia-modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.eia-modal-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #34d399;
+}
+
+.eia-modal-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-modal-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0;
+}
+
+.eia-modal-box {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #34d399;
+  border-radius: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE MEDIA QUERIES
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .eia-grid-row.row-top {
+    grid-template-columns: 1fr 1fr;
+  }
+  .eia-grid-row.row-bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .eia-intro-screen-container {
+    padding-left: clamp(20px, 3vw, 36px);
+    padding-right: clamp(20px, 3vw, 36px);
+    padding-top: 76px;
+  }
+}
+
+@media (max-width: 860px) {
+  .eia-intro-top-bar {
+    flex-direction: column;
+  }
+  .eia-intro-quote-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .eia-grid-row.row-top,
+  .eia-grid-row.row-bottom {
+    grid-template-columns: 1fr;
+  }
+  .eia-stakeholders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .eia-stakeholders-grid {
+    grid-template-columns: 1fr;
+  }
+  .eia-purpose-tiles-grid {
+    grid-template-columns: 1fr;
+  }
+  .eia-types-grid {
+    grid-template-columns: 1fr;
+  }
+}

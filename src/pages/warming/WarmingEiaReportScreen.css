@@ -1,0 +1,998 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 13: EIA REPORT COMPONENTS
+   A Complete View of the EIA Report — Exact Match for Image Mockup
+   ========================================================================== */
+
+.eia-report-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Clears floating left rail (245px) and fixed top navbar (75px) */
+  padding-top: clamp(75px, 8.5vh, 90px);
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 2.8vw, 44px);
+  padding-bottom: 28px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Background Layer with Landscape & Office Elements ── */
+.eia-report-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-report-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right top;
+  filter: brightness(0.72) contrast(1.1);
+}
+
+/* Vignette Scrim for maximum contrast and legibility */
+.eia-report-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 75% 18%, rgba(7, 9, 13, 0.15) 0%, rgba(7, 9, 13, 0.82) 70%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.8) 0%, rgba(7, 9, 13, 0.25) 20%, rgba(7, 9, 13, 0.65) 55%, rgba(7, 9, 13, 0.96) 100%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.88) 0%, rgba(7, 9, 13, 0.45) 42%, rgba(7, 9, 13, 0.2) 78%, rgba(7, 9, 13, 0.75) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK (LEFT) & GREEN GLOWING QUOTE CARD (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-rep-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.eia-rep-header-block {
+  max-width: 740px;
+}
+
+.eia-rep-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.eia-rep-eyebrow-pipe {
+  opacity: 0.5;
+  color: #ffffff;
+}
+
+.eia-rep-main-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #ffffff 15%, #fef3c7 50%, #fde68a 85%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 14px rgba(245, 158, 11, 0.3));
+}
+
+.eia-rep-subtitle {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 6px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
+}
+
+.eia-rep-lead-text {
+  font-size: clamp(11.5px, 0.9vw, 12.8px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.76);
+  margin: 0;
+  max-width: 700px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Green Glowing Quote Card (Matches Image Mockup) */
+.eia-rep-quote-card {
+  position: relative;
+  max-width: 320px;
+  padding: 12px 16px;
+  background: rgba(22, 163, 74, 0.14);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 197, 94, 0.16);
+}
+
+.eia-rep-quote-symbol {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 30px;
+  line-height: 1;
+  color: #4ade80;
+  display: block;
+  margin-bottom: 2px;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
+}
+
+.eia-rep-quote-text {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ROW 1: TWO WIDE COMPARISON CARDS (COMPREHENSIVE VS RAPID EIA)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-rep-duo-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 1420px;
+  margin-bottom: 14px;
+}
+
+.eia-duo-card {
+  position: relative;
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+  cursor: pointer;
+}
+
+.eia-duo-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Comprehensive EIA Card Theme (Blue) */
+.eia-duo-card.theme-blue {
+  border-color: rgba(2, 132, 199, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 14px rgba(2, 132, 199, 0.18);
+}
+
+.eia-duo-card.theme-blue:hover {
+  border-color: #0284c7;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 22px rgba(2, 132, 199, 0.35);
+}
+
+/* Rapid EIA Card Theme (Green) */
+.eia-duo-card.theme-green {
+  border-color: rgba(34, 197, 94, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 14px rgba(34, 197, 94, 0.18);
+}
+
+.eia-duo-card.theme-green:hover {
+  border-color: #22c55e;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 22px rgba(34, 197, 94, 0.35);
+}
+
+.eia-duo-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eia-duo-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eia-duo-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.theme-blue .eia-duo-icon-box {
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid rgba(2, 132, 199, 0.45);
+  color: #38bdf8;
+}
+
+.theme-green .eia-duo-icon-box {
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+}
+
+.eia-duo-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.eia-duo-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-duo-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+.eia-duo-arrow-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.eia-duo-card:hover .eia-duo-arrow-btn {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateX(2px);
+}
+
+.eia-duo-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.eia-duo-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.eia-duo-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.3;
+}
+
+.eia-duo-check-icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.theme-blue .eia-duo-check-icon {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.theme-green .eia-duo-check-icon {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+/* Dossier Cover 3D Render */
+.eia-duo-visual-cover {
+  width: 140px;
+  height: 110px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.35s ease;
+}
+
+.eia-duo-card:hover .eia-duo-visual-cover {
+  transform: scale(1.04) rotate(1deg);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ROW 2: KEY COMPONENTS OF AN EIA REPORT (A TO H HORIZONTAL CARDS)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-rep-components-panel {
+  position: relative;
+  z-index: 10;
+  background: rgba(11, 16, 25, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(192, 38, 211, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(192, 38, 211, 0.15);
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  max-width: 1420px;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+}
+
+.eia-comp-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.eia-comp-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eia-comp-header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(192, 38, 211, 0.2);
+  border: 1px solid rgba(192, 38, 211, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e879f9;
+}
+
+.eia-comp-panel-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-comp-panel-arrow {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+.eia-rep-components-panel:hover .eia-comp-panel-arrow {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* 8 Domain Cards Grid (A through H) */
+.eia-comp-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.eia-domain-subcard {
+  position: relative;
+  background: rgba(15, 23, 36, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+  min-height: 145px;
+}
+
+.eia-domain-subcard:hover {
+  transform: translateY(-3px);
+}
+
+/* Theme borders for A through H */
+.eia-domain-subcard.theme-A { border-color: rgba(2, 132, 199, 0.6); }
+.eia-domain-subcard.theme-A:hover { border-color: #0284c7; box-shadow: 0 6px 14px rgba(2, 132, 199, 0.35); }
+
+.eia-domain-subcard.theme-B { border-color: rgba(34, 197, 94, 0.6); }
+.eia-domain-subcard.theme-B:hover { border-color: #22c55e; box-shadow: 0 6px 14px rgba(34, 197, 94, 0.35); }
+
+.eia-domain-subcard.theme-C { border-color: rgba(234, 88, 12, 0.6); }
+.eia-domain-subcard.theme-C:hover { border-color: #ea580c; box-shadow: 0 6px 14px rgba(234, 88, 12, 0.35); }
+
+.eia-domain-subcard.theme-D { border-color: rgba(220, 38, 38, 0.6); }
+.eia-domain-subcard.theme-D:hover { border-color: #dc2626; box-shadow: 0 6px 14px rgba(220, 38, 38, 0.35); }
+
+.eia-domain-subcard.theme-E { border-color: rgba(147, 51, 234, 0.6); }
+.eia-domain-subcard.theme-E:hover { border-color: #9333ea; box-shadow: 0 6px 14px rgba(147, 51, 234, 0.35); }
+
+.eia-domain-subcard.theme-F { border-color: rgba(8, 145, 178, 0.6); }
+.eia-domain-subcard.theme-F:hover { border-color: #0891b2; box-shadow: 0 6px 14px rgba(8, 145, 178, 0.35); }
+
+.eia-domain-subcard.theme-G { border-color: rgba(217, 119, 6, 0.6); }
+.eia-domain-subcard.theme-G:hover { border-color: #d97706; box-shadow: 0 6px 14px rgba(217, 119, 6, 0.35); }
+
+.eia-domain-subcard.theme-H { border-color: rgba(192, 38, 211, 0.6); }
+.eia-domain-subcard.theme-H:hover { border-color: #c026d3; box-shadow: 0 6px 14px rgba(192, 38, 211, 0.35); }
+
+/* Header of subcard: Letter circle + Title */
+.eia-domain-top-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.eia-domain-letter-badge {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.theme-A .eia-domain-letter-badge { background: #0284c7; }
+.theme-B .eia-domain-letter-badge { background: #16a34a; }
+.theme-C .eia-domain-letter-badge { background: #ea580c; }
+.theme-D .eia-domain-letter-badge { background: #dc2626; }
+.theme-E .eia-domain-letter-badge { background: #9333ea; }
+.theme-F .eia-domain-letter-badge { background: #0891b2; }
+.theme-G .eia-domain-letter-badge { background: #d97706; }
+.theme-H .eia-domain-letter-badge { background: #c026d3; }
+
+.eia-domain-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+  text-align: left;
+  flex: 1;
+}
+
+/* Thumbnail miniature */
+.eia-domain-thumb-box {
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eia-domain-thumb-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.eia-domain-desc {
+  font-size: 8px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  text-align: left;
+  width: 100%;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ROW 3: BOTTOM STRIP (3 PANELS: LINKS, KEY TAKEAWAY, EXPLORE EXAMPLE)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-rep-bottom-strip {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 0.95fr;
+  gap: 14px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Panel 1: Links with Other Modules */
+.eia-bottom-links-panel {
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(2, 132, 199, 0.45);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eia-links-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-links-icon-wrap {
+  color: #38bdf8;
+}
+
+.eia-links-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.eia-links-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-links-desc {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+}
+
+.eia-module-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.eia-module-pill-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 6px 4px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.eia-module-pill-btn:hover {
+  transform: translateY(-2px);
+}
+
+.eia-module-pill-btn.pill-green {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+}
+.eia-module-pill-btn.pill-green:hover {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+.eia-module-pill-btn.pill-blue {
+  border-color: rgba(2, 132, 199, 0.4);
+  background: rgba(2, 132, 199, 0.1);
+  color: #7dd3fc;
+}
+.eia-module-pill-btn.pill-blue:hover {
+  background: rgba(2, 132, 199, 0.2);
+  border-color: #0284c7;
+}
+
+.eia-module-pill-btn.pill-purple {
+  border-color: rgba(147, 51, 234, 0.4);
+  background: rgba(147, 51, 234, 0.1);
+  color: #d8b4fe;
+}
+.eia-module-pill-btn.pill-purple:hover {
+  background: rgba(147, 51, 234, 0.2);
+  border-color: #9333ea;
+}
+
+.eia-module-pill-btn.pill-amber {
+  border-color: rgba(217, 119, 6, 0.4);
+  background: rgba(217, 119, 6, 0.1);
+  color: #fde68a;
+}
+.eia-module-pill-btn.pill-amber:hover {
+  background: rgba(217, 119, 6, 0.2);
+  border-color: #d97706;
+}
+
+/* Panel 2: Key Takeaway */
+.eia-bottom-takeaway-panel {
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eia-takeaway-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-takeaway-icon-wrap {
+  color: #f59e0b;
+}
+
+.eia-takeaway-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-takeaway-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.eia-takeaway-doc-icon {
+  width: 28px;
+  height: 34px;
+  background: #fef3c7;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b45309;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.eia-takeaway-text {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* Panel 3: Explore Example Report */
+.eia-bottom-example-panel {
+  background: rgba(11, 16, 25, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(192, 38, 211, 0.45);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.eia-bottom-example-panel:hover {
+  transform: translateY(-2px);
+  border-color: #c026d3;
+}
+
+.eia-example-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eia-example-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eia-example-icon-wrap {
+  color: #e879f9;
+}
+
+.eia-example-title {
+  font-family: var(--sans, Inter, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.eia-example-arrow {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.eia-bottom-example-panel:hover .eia-example-arrow {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.eia-example-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eia-example-thumb-book {
+  width: 48px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.eia-example-text {
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MODAL WINDOW (Interactive Deep-Dive)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-rep-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.eia-rep-modal-window {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f1622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.eia-rep-modal-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.eia-rep-modal-window::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.eia-rep-modal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.eia-rep-modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.eia-rep-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eia-rep-modal-close-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.eia-rep-modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.eia-rep-modal-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f59e0b;
+}
+
+.eia-rep-modal-title {
+  font-family: var(--serif, 'Cinzel', serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.eia-rep-modal-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0;
+}
+
+.eia-rep-modal-box {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #38bdf8;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.eia-rep-modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eia-rep-modal-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE QUERIES
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .eia-comp-cards-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .eia-rep-bottom-strip {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .eia-report-screen-container {
+    padding-left: clamp(20px, 3vw, 36px);
+    padding-right: clamp(20px, 3vw, 36px);
+    padding-top: 76px;
+  }
+  .eia-rep-duo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .eia-rep-top-bar {
+    flex-direction: column;
+  }
+  .eia-rep-quote-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .eia-comp-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .eia-module-pills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

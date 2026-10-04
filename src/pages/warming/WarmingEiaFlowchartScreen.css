@@ -1,0 +1,935 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 13: EIA FLOWCHART
+   Matches UI Mockup media_1791100050408.jpg & Detail Image 2
+   Strict clearance of floating sidebar rail: padding-left: clamp(235px, 16vw, 275px)
+   ========================================================================== */
+
+.eia-flowchart-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 85px;
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 3vw, 44px);
+  padding-bottom: 54px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Scenic Mountain Dam Reservoir Layer (Exact Match for Reference) ── */
+.eia-flowchart-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-flowchart-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  filter: brightness(0.92) contrast(1.08) saturate(1.18);
+  opacity: 0.82;
+}
+
+.eia-flowchart-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 25%, transparent 40%, rgba(7, 9, 13, 0.72) 90%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.5) 0%, rgba(7, 9, 13, 0.18) 24%, rgba(7, 9, 13, 0.65) 58%, rgba(7, 9, 13, 0.98) 96%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.8) 0%, rgba(7, 9, 13, 0.3) 22%, transparent 45%, rgba(7, 9, 13, 0.3) 85%, rgba(7, 9, 13, 0.8) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK & QUOTE CARD
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-flowchart-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.eia-flowchart-header-block {
+  max-width: 720px;
+}
+
+.eia-flowchart-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'SF Mono', Consolas, Monaco, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fbbf24;
+  margin-bottom: 6px;
+}
+
+.eia-flowchart-main-title {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(34px, 3.4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.eia-flowchart-subtitle {
+  font-size: clamp(16px, 1.4vw, 21px);
+  font-weight: 400;
+  color: #94a3b8;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.2px;
+}
+
+.eia-flowchart-lead-text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.85);
+  margin: 0;
+  max-width: 640px;
+}
+
+/* Quote Box (Top Right) */
+.eia-flowchart-quote-box {
+  position: relative;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 16px 20px 16px 26px;
+  max-width: 320px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(56, 189, 248, 0.05);
+  flex-shrink: 0;
+}
+
+.flowchart-quote-mark {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: #38bdf8;
+  font-size: 30px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  opacity: 0.9;
+}
+
+.flowchart-quote-text {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #e2e8f0;
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
+  padding-left: 12px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MAIN STAGE: COMPLETE PROCESS FLOWCHART WITH DECISION PATH
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-flowchart-stage-panel {
+  position: relative;
+  z-index: 10;
+  background: rgba(11, 16, 26, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px);
+  border-radius: 18px;
+  padding: 20px 18px 24px;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7);
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 1420px;
+  box-sizing: border-box;
+}
+
+/* Start / End Boundary Pills */
+.flowchart-boundary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 6px;
+}
+
+.boundary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pill-start {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.pill-end {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+/* 9 Step Process Cards Row */
+.flowchart-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 8px;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.flowchart-step-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  min-height: 220px;
+  justify-content: space-between;
+}
+
+.flowchart-step-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Step Themes */
+.flowchart-step-card.step-blue {
+  border-top: 3px solid #38bdf8;
+}
+.flowchart-step-card.step-blue:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.flowchart-step-card.step-green {
+  border-top: 3px solid #34d399;
+}
+.flowchart-step-card.step-green:hover {
+  border-color: #34d399;
+  background: rgba(52, 211, 153, 0.08);
+}
+
+.flowchart-step-card.step-purple {
+  border-top: 3px solid #a855f7;
+}
+.flowchart-step-card.step-purple:hover {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.flowchart-step-card.step-orange {
+  border-top: 3px solid #fb923c;
+}
+.flowchart-step-card.step-orange:hover {
+  border-color: #fb923c;
+  background: rgba(251, 146, 60, 0.08);
+}
+
+.flowchart-step-card.step-red {
+  border-top: 3px solid #f87171;
+}
+.flowchart-step-card.step-red:hover {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.flowchart-step-card.step-cyan {
+  border-top: 3px solid #22d3ee;
+}
+.flowchart-step-card.step-cyan:hover {
+  border-color: #22d3ee;
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.flowchart-step-card.step-magenta {
+  border-top: 3px solid #c084fc;
+}
+.flowchart-step-card.step-magenta:hover {
+  border-color: #c084fc;
+  background: rgba(192, 132, 252, 0.08);
+}
+
+.flowchart-step-card.step-gold {
+  border-top: 3px solid #facc15;
+}
+.flowchart-step-card.step-gold:hover {
+  border-color: #facc15;
+  background: rgba(250, 204, 21, 0.08);
+}
+
+.flowchart-step-card.step-emerald {
+  border-top: 3px solid #10b981;
+}
+.flowchart-step-card.step-emerald:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* Step Card Internal Typography & Badges */
+.step-num-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.step-icon-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.step-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.2;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.2px;
+}
+
+.step-card-desc {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #cbd5e1;
+  margin: 0 0 10px 0;
+}
+
+.step-actor-pill {
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 3px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Connecting Arrow Indicator */
+.step-arrow-connector {
+  position: absolute;
+  top: 45%;
+  right: -8px;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   DECISION NETWORK & CONNECTOR PATHS (EXACT MATCH FOR IMAGE 2)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.flowchart-decision-stage {
+  position: relative;
+  width: 100%;
+  min-height: 145px;
+  margin-top: 4px;
+}
+
+/* Background SVG Connector Lines */
+.decision-svg-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 9-Column Aligned Decision Grid (Directly mirrors the 9 steps above) */
+.decision-grid-stage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 8px;
+  width: 100%;
+  min-height: 140px;
+}
+
+/* Col 1 & 2: Open space for vertical SVG lines */
+.decision-col-blank {
+  pointer-events: none;
+}
+
+/* Col 3-4: Send Back for Revisions (Positioned in Row 2) */
+.decision-col-revision {
+  grid-column: 3 / span 2;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4px;
+}
+
+.outcome-revision-card {
+  background: rgba(120, 53, 15, 0.45);
+  border: 1px solid rgba(245, 158, 11, 0.65);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(245, 158, 11, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.outcome-revision-card:hover {
+  border-color: #fbbf24;
+  background: rgba(120, 53, 15, 0.65);
+  transform: translateY(-2px);
+}
+
+.outcome-revision-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fde047;
+  line-height: 1.2;
+}
+
+.outcome-revision-sub {
+  display: block;
+  font-size: 9.5px;
+  color: #fef08a;
+  line-height: 1.2;
+}
+
+/* Col 5-6: Review by Competent Authority (Positioned in Row 1) */
+.decision-col-review {
+  grid-column: 5 / span 2;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 6px;
+}
+
+.decision-review-card {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(56, 189, 248, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.decision-review-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.decision-review-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.decision-review-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.decision-review-sub {
+  font-size: 10px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Col 7: Yes / No Decision Pills */
+.decision-col-pills {
+  grid-column: 7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.decision-choice-pill {
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice-yes {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.choice-no {
+  background: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Col 8-9: Grant Clearance (Row 1) & Reject Proposal (Row 2) */
+.decision-col-outcomes {
+  grid-column: 8 / span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Row 1: Grant Environmental Clearance */
+.outcome-grant-card {
+  background: rgba(6, 78, 59, 0.55);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(16, 185, 129, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.outcome-grant-card:hover {
+  border-color: #34d399;
+  background: rgba(6, 78, 59, 0.75);
+  transform: translateY(-2px);
+}
+
+.outcome-grant-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #34d399;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.outcome-grant-sub {
+  font-size: 9.5px;
+  color: #a7f3d0;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Row 2: Reject Proposal */
+.outcome-reject-card {
+  background: rgba(127, 29, 29, 0.45);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.outcome-reject-card:hover {
+  border-color: #f87171;
+  background: rgba(127, 29, 29, 0.65);
+  transform: translateY(-2px);
+}
+
+.outcome-reject-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fca5a5;
+  margin: 0;
+  flex: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM ROW: THREE INFO CARDS
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-flowchart-bottom-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(380px, 1.35fr) minmax(280px, 0.9fr) minmax(260px, 0.75fr);
+  gap: 18px;
+  width: 100%;
+  max-width: 1420px;
+  box-sizing: border-box;
+}
+
+/* Common Card Header */
+.flowchart-bottom-card {
+  background: rgba(11, 16, 26, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.bottom-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bottom-card-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+/* Card 1: 4 Key Stakeholders Columns */
+.stakeholders-cols-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.stakeholder-item-col {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stakeholder-item-col:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.stakeholder-icon {
+  margin-bottom: 6px;
+}
+
+.stakeholder-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.2;
+  margin: 0 0 4px 0;
+}
+
+.stakeholder-desc {
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* Card 2: 4 Decision Points */
+.decision-points-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 4px;
+}
+
+.decision-point-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.decision-point-item:hover {
+  color: #ffffff;
+}
+
+.decision-point-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Card 3: Key Takeaway with Dam Thumbnail */
+.takeaway-flex-layout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.takeaway-thumb-wrap {
+  width: 90px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.takeaway-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.takeaway-text-copy {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   INTERACTIVE DETAIL MODAL / POPUP
+   ────────────────────────────────────────────────────────────────────────── */
+
+.flowchart-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 12, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.flowchart-detail-modal {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.15);
+  padding: 28px;
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.flowchart-detail-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.flowchart-detail-modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.flowchart-detail-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.flowchart-detail-modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.flowchart-modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flowchart-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.flowchart-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.flowchart-modal-title {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #f8fafc;
+}
+
+.flowchart-modal-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+}
+
+.flowchart-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flowchart-modal-primary-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.flowchart-modal-primary-btn:hover {
+  background: #0369a1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1250px) {
+  .flowchart-steps-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .decision-grid-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .decision-svg-lines {
+    display: none;
+  }
+  .eia-flowchart-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .eia-flowchart-screen-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 75px;
+  }
+  .eia-flowchart-top-bar {
+    flex-direction: column;
+  }
+  .eia-flowchart-quote-box {
+    max-width: 100%;
+  }
+  .flowchart-steps-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .stakeholders-cols-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

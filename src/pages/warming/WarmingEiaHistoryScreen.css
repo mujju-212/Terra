@@ -1,0 +1,1051 @@
+/* ==========================================================================
+   MODULE 05: GLOBAL WARMING & EIA — CHAPTER 11: EIA BENEFITS & HISTORY
+   Matches UI Mockup media_1791099875140.jpg
+   Strict clearance of floating sidebar rail: padding-left: clamp(235px, 16vw, 275px)
+   ========================================================================== */
+
+.eia-history-screen-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 85px;
+  padding-left: clamp(235px, 16vw, 275px);
+  padding-right: clamp(24px, 3vw, 44px);
+  padding-bottom: 54px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #07090d;
+}
+
+/* ── Atmospheric Ambient Layer ── */
+.eia-history-screen-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.eia-history-screen-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: brightness(0.65) contrast(1.12);
+  opacity: 0.35;
+}
+
+.eia-history-screen-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 75% 20%, rgba(20, 60, 95, 0.45) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(30, 20, 50, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(7, 9, 13, 0.75) 85%),
+    linear-gradient(180deg, rgba(7, 9, 13, 0.82) 0%, rgba(7, 9, 13, 0.4) 25%, rgba(7, 9, 13, 0.55) 60%, rgba(7, 9, 13, 0.98) 96%),
+    linear-gradient(90deg, rgba(7, 9, 13, 0.92) 0%, rgba(7, 9, 13, 0.6) 24%, rgba(7, 9, 13, 0.25) 48%, transparent 70%);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TOP BAR: HEADER BLOCK, NEPA PARCHMENT MOTIF & QUOTE CARD
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-history-top-bar {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(340px, 1.4fr) minmax(280px, 1fr) minmax(220px, 0.8fr);
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Left: Eyebrow + Main Title + Lead */
+.eia-history-header-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.eia-history-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'SF Mono', Consolas, Monaco, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fbbf24;
+  margin-bottom: 6px;
+}
+
+.eia-history-main-title {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(32px, 3.2vw, 42px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.5px;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.eia-history-subtitle {
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 400;
+  color: #94a3b8;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.2px;
+}
+
+.eia-history-lead-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.82);
+  margin: 0;
+  max-width: 540px;
+}
+
+/* Center: Antique NEPA 1970 Parchment + Globe Atmosphere */
+.eia-history-hero-artwork {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  border-radius: 16px;
+  overflow: visible;
+}
+
+.nepa-parchment-card {
+  position: relative;
+  width: 165px;
+  height: 125px;
+  background: linear-gradient(135deg, #f5ebd5 0%, #e8d7b3 45%, #d8be91 100%);
+  border-radius: 6px;
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(120, 85, 45, 0.35),
+    inset 0 0 20px rgba(139, 94, 43, 0.25);
+  transform: rotate(-3.5deg);
+  padding: 10px 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #3d2714;
+  font-family: 'Times New Roman', Times, serif;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.nepa-parchment-card:hover {
+  transform: rotate(0deg) scale(1.04);
+}
+
+.nepa-parchment-seal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px dashed #8b5e2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b5e2b;
+  opacity: 0.85;
+}
+
+.nepa-parchment-header {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #4a331c;
+  line-height: 1.15;
+}
+
+.nepa-parchment-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  color: #2b1704;
+  line-height: 1.1;
+  margin: 3px 0 0 0;
+}
+
+.nepa-parchment-acronym {
+  font-size: 10px;
+  font-weight: 700;
+  color: #5c3c1e;
+  letter-spacing: 1px;
+}
+
+.nepa-parchment-year {
+  font-size: 16px;
+  font-weight: 900;
+  color: #261502;
+  text-align: right;
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(92, 60, 30, 0.3);
+  padding-top: 2px;
+}
+
+.hero-globe-glow {
+  position: absolute;
+  right: 10px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, rgba(56, 189, 248, 0.25) 0%, rgba(14, 116, 144, 0.15) 50%, transparent 70%);
+  filter: blur(8px);
+  z-index: 1;
+}
+
+.hero-cityscape-composite {
+  position: absolute;
+  right: -5px;
+  width: 175px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  z-index: 1;
+}
+
+.hero-cityscape-composite img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9) contrast(1.15);
+}
+
+.hero-cityscape-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.35) 0%, rgba(15, 23, 42, 0.6) 80%);
+}
+
+/* Right: Quote Box */
+.eia-history-quote-box {
+  position: relative;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 14px 18px 14px 22px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(56, 189, 248, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quote-mark-icon {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  color: #38bdf8;
+  font-size: 28px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  opacity: 0.9;
+}
+
+.eia-history-quote-text {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #e2e8f0;
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
+  padding-left: 14px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   MIDDLE STAGE: KEY BENEFITS (LEFT) & GLOBAL HISTORY (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-history-middle-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.85fr) minmax(480px, 1.15fr);
+  gap: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* Shared Glass Panel Styles */
+.eia-panel {
+  background: rgba(11, 16, 26, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.eia-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.eia-panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eia-panel-badge-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-green {
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.eia-panel-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.eia-panel-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eia-panel-action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(2px);
+}
+
+/* ── Left Box: 3×3 Grid of 9 Benefits ── */
+.benefits-3x3-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 16px;
+  flex: 1;
+}
+
+.benefit-card-tile {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 88px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-card-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.benefit-card-tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Themed Benefit Accents */
+.benefit-card-tile.theme-emerald {
+  border-left: 3px solid #10b981;
+}
+.benefit-card-tile.theme-emerald:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.benefit-card-tile.theme-blue {
+  border-left: 3px solid #3b82f6;
+}
+.benefit-card-tile.theme-blue:hover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.benefit-card-tile.theme-purple {
+  border-left: 3px solid #a855f7;
+}
+.benefit-card-tile.theme-purple:hover {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.benefit-card-tile.theme-orange {
+  border-left: 3px solid #f97316;
+}
+.benefit-card-tile.theme-orange:hover {
+  border-color: #f97316;
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.benefit-card-tile.theme-rose {
+  border-left: 3px solid #f43f5e;
+}
+.benefit-card-tile.theme-rose:hover {
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.08);
+}
+
+.benefit-card-tile.theme-amber {
+  border-left: 3px solid #eab308;
+}
+.benefit-card-tile.theme-amber:hover {
+  border-color: #eab308;
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.benefit-card-tile.theme-cyan {
+  border-left: 3px solid #06b6d4;
+}
+.benefit-card-tile.theme-cyan:hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.benefit-card-tile.theme-pink {
+  border-left: 3px solid #ec4899;
+}
+.benefit-card-tile.theme-pink:hover {
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.08);
+}
+
+.benefit-card-tile.theme-indigo {
+  border-left: 3px solid #8b5cf6;
+}
+.benefit-card-tile.theme-indigo:hover {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.benefit-tile-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-tile-text {
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* ── Right Box: Global History Skyline + 5 Milestones ── */
+.global-history-body {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 18px;
+  gap: 16px;
+  flex: 1;
+}
+
+/* Skyline Banner */
+.history-skyline-banner {
+  position: relative;
+  width: 100%;
+  height: 125px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #090e17;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+.history-skyline-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.85) contrast(1.15) saturate(1.1);
+}
+
+.history-skyline-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 100%, rgba(56, 189, 248, 0.15) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(9, 14, 23, 0.2) 0%, rgba(9, 14, 23, 0.65) 75%, rgba(9, 14, 23, 0.95) 100%);
+}
+
+.history-orbital-network {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 5 Milestones Horizontal Bar */
+.global-timeline-track-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.global-timeline-rail {
+  position: absolute;
+  top: 15px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: linear-gradient(90deg, #38bdf8 0%, #34d399 25%, #fbbf24 50%, #a855f7 75%, #f97316 100%);
+  z-index: 1;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.global-timeline-nodes-row {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.timeline-milestone-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.timeline-milestone-col:hover {
+  transform: translateY(-2px);
+}
+
+.timeline-flag-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #0f172a;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.timeline-milestone-col:hover .timeline-flag-circle {
+  transform: scale(1.12);
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.flag-svg-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.timeline-meta-label {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.milestone-year-text {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.milestone-loc-text {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.milestone-card-bubble {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 8px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: all 0.2s ease;
+}
+
+.timeline-milestone-col:hover .milestone-card-bubble {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.milestone-card-bubble.tint-blue {
+  border-top: 2px solid #38bdf8;
+}
+.milestone-card-bubble.tint-green {
+  border-top: 2px solid #34d399;
+}
+.milestone-card-bubble.tint-amber {
+  border-top: 2px solid #fbbf24;
+}
+.milestone-card-bubble.tint-purple {
+  border-top: 2px solid #a855f7;
+}
+.milestone-card-bubble.tint-orange {
+  border-top: 2px solid #f97316;
+}
+
+.milestone-card-bubble p {
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   BOTTOM ROW: INDIA EIA JOURNEY (LEFT) & KEY TAKEAWAYS (RIGHT)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.eia-history-bottom-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(420px, 1.18fr) minmax(360px, 0.82fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1420px;
+}
+
+/* ── India EIA Journey Panel with Dusk India Gate Backdrop ── */
+.india-journey-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.india-gate-dusk-scene {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.india-gate-silhouette-wrap {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 60% 70%, rgba(249, 115, 22, 0.35) 0%, rgba(180, 83, 9, 0.15) 45%, transparent 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.india-gate-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.india-journey-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.india-journey-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.india-tricolor-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.india-journey-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+
+/* 6-Step Horizontal Tracker */
+.india-timeline-rail-wrap {
+  position: relative;
+  width: 62%;
+  padding-top: 10px;
+}
+
+.india-timeline-track-line {
+  position: absolute;
+  top: 17px;
+  left: 4%;
+  right: 4%;
+  height: 2px;
+  background: linear-gradient(90deg, #38bdf8 0%, #34d399 20%, #fbbf24 40%, #f43f5e 60%, #a855f7 80%, #06b6d4 100%);
+  z-index: 1;
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+}
+
+.india-milestones-row {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.india-milestone-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.india-milestone-step:hover {
+  transform: translateY(-2px);
+}
+
+.india-node-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #0f172a;
+  box-shadow: 0 0 8px currentColor;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.india-milestone-step:hover .india-node-dot {
+  transform: scale(1.3);
+}
+
+.india-step-year {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.india-step-desc {
+  font-size: 9.5px;
+  line-height: 1.25;
+  color: #cbd5e1;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Right Box: Key Takeaways Panel ── */
+.takeaways-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.takeaways-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px;
+  flex: 1;
+}
+
+.takeaway-card-tile {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.takeaway-card-tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(245, 158, 11, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.takeaway-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.takeaway-card-tile p {
+  font-size: 11px;
+  line-height: 1.35;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   INTERACTIVE MODAL / DETAIL DRAWER
+   ────────────────────────────────────────────────────────────────────────── */
+
+.history-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 12, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.history-detail-modal {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.15);
+  padding: 28px;
+  color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.05);
+}
+
+.history-detail-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-detail-modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.history-detail-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+}
+
+.history-detail-modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.history-modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.history-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.history-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.history-modal-title {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #f8fafc;
+}
+
+.history-modal-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+}
+
+.history-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history-modal-primary-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.history-modal-primary-btn:hover {
+  background: #0369a1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .eia-history-top-bar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .eia-history-middle-grid {
+    grid-template-columns: 1fr;
+  }
+  .eia-history-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+  .india-timeline-rail-wrap {
+    width: 100%;
+  }
+  .india-gate-dusk-scene {
+    opacity: 0.25;
+  }
+}
+
+@media (max-width: 768px) {
+  .eia-history-screen-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 75px;
+  }
+  .benefits-3x3-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .global-timeline-nodes-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .global-timeline-rail {
+    display: none;
+  }
+  .india-milestones-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .india-timeline-track-line {
+    display: none;
+  }
+  .takeaways-body {
+    grid-template-columns: 1fr;
+  }
+}
