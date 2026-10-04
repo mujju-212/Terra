@@ -1,0 +1,3505 @@
+/* ==========================================================================
+   TERRA — NATIVE MOBILE APP UI & RESPONSIVE DESIGN SYSTEM
+   Professional Mobile Application UX/UI Architecture for TERRA
+   Tailored for touch, haptic fluidity, scrollytelling transitions, and 100% responsive integrity.
+   ========================================================================== */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 00: GLOBAL FOUNDATIONS & POSITION:STICKY DEFENSE
+   Uses overflow-x: clip so horizontal overflow is blocked WITHOUT breaking
+   CSS position: sticky (which is required by the cinematic scrollytelling stages).
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  html,
+  body {
+    overflow-x: clip !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative !important;
+    -webkit-text-size-adjust: 100% !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box !important;
+  }
+
+  /* Disable custom desktop cursor elements on touch devices */
+  .cursor-dot,
+  .cursor-ring,
+  .mouse-glow {
+    display: none !important;
+  }
+
+  /* Smooth touch response on mobile taps */
+  button,
+  a,
+  [role="button"],
+  [role="tab"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 01: CINEMATIC SCROLLYTELLING TRANSITIONS (LANDING & ALL MODULES)
+   Ensures the pinned 200vh-270vh scroll zoom & cross-fade stages ALWAYS stick
+   and play smoothly on mobile devices as the user scrolls.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Landing Scrollytelling Universe */
+  .hero-motivation-universe {
+    position: relative !important;
+    min-height: 250vh !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow: clip !important;
+    background: #040507 !important;
+  }
+
+  .universe-sticky-stage {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+    isolation: isolate !important;
+    z-index: 5 !important;
+  }
+
+  /* All Module Pinned Intro Bridges (Land, Water, Bio, Air, Warming) */
+  .land-intro-transition,
+  .water-intro-transition,
+  .bio-intro-transition,
+  .air-intro-transition,
+  .warming-intro-transition {
+    position: relative !important;
+    min-height: 220vh !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin-left: 0 !important;
+    border-left: none !important;
+    padding: 0 !important;
+    overflow: clip !important;
+    background: #060505 !important;
+  }
+
+  .intro-sticky,
+  .wintro-sticky,
+  .bintro-sticky,
+  .aintro-sticky,
+  .gwintro-sticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+    isolation: isolate !important;
+    z-index: 10 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Layer Copy Styling inside Intro Transitions */
+  .intro-cover-copy,
+  .intro-formation-copy,
+  .wintro-cover-copy,
+  .wintro-chapter-copy,
+  .bintro-cover-copy,
+  .bintro-chapter-copy,
+  .aintro-cover-copy,
+  .aintro-chapter-copy,
+  .gwintro-cover-copy,
+  .gwintro-chapter-copy {
+    padding: 24px 20px !important;
+    max-width: 90vw !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    z-index: 15 !important;
+  }
+
+  .intro-chapter-num,
+  .wintro-chapter-num,
+  .bintro-chapter-num,
+  .aintro-chapter-num,
+  .gwintro-chapter-num {
+    font-size: 10px !important;
+    letter-spacing: 0.2em !important;
+    margin-bottom: 8px !important;
+    color: #deb87a !important;
+    font-weight: 600 !important;
+  }
+
+  .intro-formation-title,
+  .wintro-chapter-title,
+  .bintro-chapter-title,
+  .aintro-chapter-title,
+  .gwintro-chapter-title,
+  .gwintro-cover-title {
+    font-family: var(--serif, Georgia, serif) !important;
+    font-size: clamp(28px, 8vw, 42px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 10px !important;
+    color: #ffffff !important;
+  }
+
+  .intro-formation-lead,
+  .wintro-chapter-lead,
+  .bintro-chapter-lead,
+  .aintro-chapter-lead,
+  .gwintro-chapter-lead,
+  .gwintro-cover-sub {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    max-width: 320px !important;
+    margin: 0 auto 16px !important;
+  }
+
+  .intro-enter-btn,
+  .wintro-enter-btn,
+  .bintro-enter-btn,
+  .aintro-enter-btn,
+  .gwintro-enter-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 11px 24px !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .intro-scroll-hint,
+  .wintro-scroll-cue {
+    position: absolute !important;
+    bottom: 24px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 9px !important;
+    letter-spacing: 0.22em !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    z-index: 20 !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 02: PRELOADER MOBILE SCREEN
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .preloader-overlay {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .preloader-topbar {
+    padding: 14px 16px !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 20 !important;
+  }
+
+  .preloader-brand .brand-title,
+  .preloader-brand .brand-divider,
+  .preloader-mantra,
+  .preloader-left-col {
+    display: none !important;
+  }
+
+  .preloader-center-stage {
+    position: absolute !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px !important;
+  }
+
+  .preloader-orbital-ring-wrap {
+    width: min(88vw, 340px) !important;
+    height: min(88vw, 340px) !important;
+    max-width: 340px !important;
+    max-height: 340px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .preloader-orbital-svg {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
+  .preloader-percent-badge {
+    position: absolute !important;
+    top: 11% !important;
+    right: 13% !important;
+    z-index: 15 !important;
+  }
+
+  .percent-num {
+    font-size: clamp(20px, 5.5vw, 26px) !important;
+  }
+
+  .percent-sym {
+    font-size: clamp(11px, 3vw, 14px) !important;
+  }
+
+  .preloader-center-content {
+    max-width: 270px !important;
+    width: 90% !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    z-index: 10 !important;
+  }
+
+  .preloader-kicker {
+    font-size: 8px !important;
+    letter-spacing: 0.2em !important;
+    margin-bottom: 8px !important;
+  }
+
+  .preloader-grand-title {
+    font-size: clamp(20px, 6vw, 28px) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.015em !important;
+    margin: 0 0 8px !important;
+  }
+
+  .preloader-subtitle {
+    font-size: 7px !important;
+    letter-spacing: 0.16em !important;
+    margin: 0 0 12px !important;
+    max-width: 230px !important;
+    line-height: 1.35 !important;
+  }
+
+  .preloader-course-badge {
+    margin-bottom: 14px !important;
+    gap: 10px !important;
+  }
+
+  .badge-rule {
+    width: 24px !important;
+  }
+
+  .preloader-enter-btn {
+    padding: 9px 20px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.08em !important;
+    gap: 8px !important;
+  }
+
+  .preloader-footer {
+    padding: 0 16px 14px !important;
+  }
+
+  .preloader-dots {
+    display: none !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 03: MOBILE APP HEADER & NAVIGATION BAR
+   Clean fixed 52px app bar with blurred glassmorphism.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .site-nav-wrap,
+  .site-nav-wrap.module-header-wrap {
+    top: 8px !important;
+    padding: 0 12px !important;
+    position: fixed !important;
+    z-index: 95 !important;
+  }
+
+  .site-nav,
+  .module-top-nav {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 10px 0 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 999px !important;
+    background: rgba(10, 14, 20, 0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .brand,
+  .mod-brand-lockup {
+    font-size: 11px !important;
+    gap: 8px !important;
+  }
+
+  .brand-logo-disc,
+  .mod-brand-emblem {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .brand-divider,
+  .brand-title,
+  .mod-brand-sep,
+  .mod-brand-sub,
+  .nav-links,
+  .mod-nav-links,
+  .nav-begin-btn {
+    display: none !important;
+  }
+
+  .nav-right-actions,
+  .mod-nav-actions {
+    gap: 8px !important;
+  }
+
+  .mobile-sound-btn,
+  .nav-sound-btn,
+  .mod-sound-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+  }
+
+  .mobile-menu-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 04: LANDING HERO (S01) & MOTIVATION (S02)
+   Mobile App Welcome screen with zero horizontal overflow.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .universe-hero-layer {
+    padding: 68px 16px 14px !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    justify-content: space-between !important;
+  }
+
+  .hero-portal-main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    margin-top: 4px !important;
+    margin-bottom: auto !important;
+    padding-bottom: 8px !important;
+    width: 100% !important;
+  }
+
+  .hero-vertical-rail {
+    display: none !important;
+  }
+
+  .hero-editorial-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .hero-kicker-row {
+    margin-bottom: 6px !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .hero-kicker-rule {
+    display: none !important;
+  }
+
+  .hero-world-title {
+    font-size: clamp(38px, 11.5vw, 62px) !important;
+    line-height: 0.94 !important;
+    letter-spacing: -0.025em !important;
+    margin: 0 0 6px !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .hero-world-subtitle {
+    font-size: clamp(16px, 4.8vw, 22px) !important;
+    line-height: 1.25 !important;
+    margin: 0 0 10px !important;
+  }
+
+  .hero-editorial-divider {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero-world-desc {
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    margin: 0 0 12px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* 3 Stat Metric Tiles in App Card Style */
+  .hero-stat-trio {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    border-radius: 14px !important;
+    background: rgba(12, 16, 22, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-stat-col strong {
+    font-size: clamp(15px, 4vw, 19px) !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  .hero-stat-col span {
+    font-size: 7.5px !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+    display: block !important;
+  }
+
+  .hero-stat-col small {
+    font-size: 7px !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1.15 !important;
+    word-break: break-word !important;
+    display: block !important;
+  }
+
+  /* Full Width Stacked App Action Buttons */
+  .hero-editorial-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    margin-top: 14px !important;
+    width: 100% !important;
+  }
+
+  .hero-enter-module-btn {
+    width: 100% !important;
+    min-height: 46px !important;
+    padding: 10px 16px !important;
+    font-size: 11.5px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .hero-notes-link-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 9px 16px !important;
+    font-size: 11.5px !important;
+    justify-content: center !important;
+  }
+
+  .hero-portal-bottom {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-top: 8px !important;
+  }
+
+  .hero-bottom-left {
+    display: none !important;
+  }
+
+  /* Motivation Section (S02) */
+  .universe-motivation-layer {
+    padding: 68px 16px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    justify-content: space-between !important;
+  }
+
+  .motivation-top-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .motivation-scroll-status,
+  .heading-celestial-rings {
+    display: none !important;
+  }
+
+  .motivation-grand-headline {
+    font-size: clamp(20px, 5.5vw, 32px) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.015em !important;
+    margin: 0 0 10px !important;
+  }
+
+  .motivation-lead-sub {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    margin: 0 0 14px !important;
+  }
+
+  .motivation-metrics-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    background: rgba(10, 14, 20, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .metric-number {
+    font-size: clamp(16px, 4.5vw, 22px) !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 05: MODULE EXPERIENCE CORE FRAMEWORK (ALL 5 MODULES)
+   Resets all sidebar margins to 0 for a 100% clean full-width mobile view.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .land-module-viewport,
+  .water-module-viewport,
+  .air-module-viewport,
+  .bio-module-viewport,
+  .warming-module-viewport {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+    padding-bottom: 74px !important;
+  }
+
+  /* Hide desktop left sticky rail on mobile */
+  .land-left-rail,
+  .water-left-rail,
+  .air-left-rail,
+  .bio-left-rail,
+  .warming-left-rail {
+    display: none !important;
+  }
+
+  /* Reset all module main containers so they occupy full 100% width with no left offset */
+  .land-content-area,
+  .land-screens-container,
+  .water-main-content,
+  .water-content-area,
+  .water-chapters-container,
+  .air-main-content,
+  .air-content-area,
+  .air-screens-container,
+  .bio-main-content,
+  .bio-content-area,
+  .bio-module-container,
+  .warming-main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    border-left: none !important;
+  }
+
+  /* Every chapter slide gets uniform, comfortable app padding with zero left-rail indent */
+  .land-screens-container > section:not(.land-cover-screen):not(.land-intro-transition),
+  .water-main-content > section:not(.water-cover-section):not(.water-intro-transition),
+  .air-main-content > section:not(.air-cover-section):not(.air-intro-transition),
+  .bio-main-content > section:not(.bio-cover-section):not(.bio-intro-transition),
+  .warming-main-content > section:not(.warming-cover-section):not(.warming-intro-transition),
+  .land-screen:not(.land-cover-screen):not(.land-intro-transition),
+  .water-screen:not(.water-cover-section):not(.water-intro-transition),
+  .air-screen:not(.air-cover-section):not(.air-intro-transition),
+  .bio-screen:not(.bio-cover-section):not(.bio-intro-transition),
+  .warming-screen:not(.warming-cover-section):not(.warming-intro-transition),
+  .warming-chapter-screen,
+  .gh-screen-container,
+  .indicators-screen-container,
+  .causes-screen-container,
+  .effects-screen-container,
+  .vs-climate-screen-container,
+  .climate-ind-screen-container,
+  .human-health-screen-container,
+  .eia-intro-screen-container,
+  .eia-values-screen-container,
+  .eia-history-screen-container,
+  .eia-process-screen-container,
+  .eia-flowchart-screen-container,
+  .eia-report-screen-container,
+  .eia-bf-screen-container,
+  .warming-summary-screen-container,
+  .water-cycle-chapter-section,
+  .water-rivers-chapter-section,
+  .river-interlinking-screen,
+  .groundwater-screen,
+  .air-intro-section,
+  .air-pollution-section,
+  .air-naaqs-section,
+  .aqi-section,
+  .health-effects-section,
+  .economic-effects-section,
+  .control-equipment-section,
+  .smoke-control-section,
+  .ozone-depletion-section,
+  .photochemical-section,
+  .pollutant-classification-section,
+  .air-summary-section,
+  .bio-intro-section,
+  .bio-levels-section,
+  .bio-values-section,
+  .bio-threats-section,
+  .bio-conservation-section,
+  .bio-ecosystem-section,
+  .bio-types-section,
+  .bio-significance-section,
+  .bio-economic-section,
+  .bio-summary-section {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    border-left: none !important;
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 06: COVER SCREENS (LAND, WATER, BIO, AIR, WARMING)
+   Mobile App Module Hub with clean CTA and horizontal swipeable preview strip.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .land-screen.land-cover-screen,
+  .water-cover-section,
+  .bio-cover-section,
+  .air-cover-section,
+  .warming-cover-section {
+    padding: 68px 16px 88px 16px !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+  }
+
+  .cover-narrative-block,
+  .water-hero-main,
+  .bio-cover-hero-content,
+  .air-hero-main {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-top: 0 !important;
+  }
+
+  .cover-mod-overline,
+  .water-hero-eyebrow,
+  .bio-cover-eyebrow-row,
+  .air-hero-eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 0.18em !important;
+    margin-bottom: 6px !important;
+    color: #deb87a !important;
+  }
+
+  .cover-grand-title,
+  .water-hero-title,
+  .bio-cover-title,
+  .air-hero-title {
+    font-size: clamp(40px, 12vw, 66px) !important;
+    line-height: 0.92 !important;
+    margin: 0 0 6px !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .cover-title-sub,
+  .water-hero-subtitle,
+  .bio-cover-subtitle {
+    font-size: clamp(16px, 4.8vw, 22px) !important;
+    line-height: 1.25 !important;
+    margin-top: 4px !important;
+  }
+
+  .cover-lead-desc,
+  .bio-cover-desc {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    margin: 10px 0 16px !important;
+    max-width: 100% !important;
+  }
+
+  /* Metric cards */
+  .cover-metrics-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+    background: rgba(10, 14, 20, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+  }
+
+  .cover-metric-item strong {
+    font-size: clamp(15px, 4vw, 19px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  .cover-metric-item span {
+    font-size: 7.5px !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.2 !important;
+    display: block !important;
+  }
+
+  .cover-metric-divider {
+    display: none !important;
+  }
+
+  /* Full-width Touch Start CTA */
+  .cover-cta-mag,
+  .cover-start-cta,
+  .water-precious-card,
+  .bio-cover-actions {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .cover-start-cta {
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 20px !important;
+  }
+
+  /* HIDE cursive script overlap on mobile */
+  .cover-script-accent {
+    display: none !important;
+  }
+
+  /* Horizontal swipeable preview cards carousel */
+  .cover-bottom-strip,
+  .air-cards-grid,
+  .water-cards-grid,
+  .bio-bottom-cards-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    margin-top: 14px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .cover-bottom-strip::-webkit-scrollbar,
+  .air-cards-grid::-webkit-scrollbar,
+  .water-cards-grid::-webkit-scrollbar,
+  .bio-bottom-cards-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .cover-preview-card,
+  .air-feature-card,
+  .water-preview-card,
+  .water-feature-card,
+  .bio-bottom-card {
+    flex: 0 0 80% !important;
+    min-width: 240px !important;
+    max-width: 310px !important;
+    scroll-snap-align: start !important;
+    min-height: 84px !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  /* Atmosphere altitude pins on Cover Screen - hide on mobile to prevent overlapping */
+  .air-atmosphere-pins-container {
+    display: none !important;
+  }
+
+  /* Air & Bio Top Quote Cards converted to static full width on mobile */
+  .air-top-quote-card,
+  .bio-quote-callout {
+    position: static !important;
+    right: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    margin: 14px 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Bio Stats Strip -> 2-Column Grid on Mobile */
+  .bio-stats-strip-inner {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .bio-stat-pill {
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Water "A Precious Resource" card converted to clean static card */
+  .water-precious-card {
+    position: static !important;
+    margin: 14px 0 !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    background: rgba(10, 16, 22, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 07: CHAPTER SLIDES AS MOBILE APP CARDS (LAND, WATER, BIO, AIR)
+   Tailors every section, 3D viewport, timeline, slider, and data grid for mobile.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Section Title & Tag Pill */
+  .screen-ch-tag,
+  .section-mini-title,
+  .chapter-tag {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    background: rgba(222, 184, 122, 0.12) !important;
+    border: 1px solid rgba(222, 184, 122, 0.25) !important;
+    color: #deb87a !important;
+    font-size: 9.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+  }
+
+  .screen-main-title,
+  .chapter-title {
+    font-size: clamp(24px, 6.8vw, 32px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.015em !important;
+    margin: 0 0 6px !important;
+    color: #ffffff !important;
+  }
+
+  .screen-sub-headline,
+  .chapter-sub {
+    font-size: 13px !important;
+    color: #deb87a !important;
+    margin: 0 0 10px !important;
+  }
+
+  .screen-lead-copy,
+  .chapter-desc {
+    font-size: 12.5px !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* 3D WebGL Globe & Cutaway Stages on Mobile */
+  .layers-cutaway-stage,
+  .continents-top-stage,
+  .layers-top-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  /* Earth Formation 3D Globe - center in view below header */
+  .interactive-formation-viewport {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 330px !important;
+    height: 240px !important;
+    margin: 12px auto !important;
+  }
+
+  .formation-script-stamp {
+    display: none !important;
+  }
+
+  /* Earth Layers 3D Cutaway - remove pointer lines on mobile & stack cards in 2x2 grid */
+  .cutaway-pointer-lines-svg {
+    display: none !important;
+  }
+
+  .cutaway-cards-column {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 14px !important;
+  }
+
+  .cutaway-floating-card {
+    width: 100% !important;
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Crust & Continents Stat Badges */
+  .continents-stats-badges {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Landforms Screen Mobile Grids & Rails */
+  .landforms-factors-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .landforms-cards-scroll-deck {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .landforms-cards-scroll-deck::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .landform-mini-card-item,
+  .landform-card-item {
+    flex: 0 0 80% !important;
+    min-width: 250px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+
+  /* Interactive Timelines with Mini 3D Spheres — Horizontal Swipeable Carousel */
+  .formation-timeline-track {
+    width: 100% !important;
+    overflow: hidden !important;
+    margin: 12px 0 !important;
+  }
+
+  .timeline-connecting-line {
+    display: none !important;
+  }
+
+  .timeline-nodes-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 14px !important;
+    padding: 6px 4px 12px !important;
+    scrollbar-width: none !important;
+  }
+
+  .timeline-nodes-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .timeline-node-bead {
+    flex: 0 0 72px !important;
+    min-width: 72px !important;
+    scroll-snap-align: center !important;
+  }
+
+  .timeline-sphere-orb-wrap {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .timeline-sphere-orb {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .node-step-title {
+    font-size: 9.5px !important;
+  }
+
+  /* Horizontal Snap-Scroll Card Rails */
+  .formation-cards-row,
+  .continents-scroll-strip {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .formation-cards-row::-webkit-scrollbar,
+  .continents-scroll-strip::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .formation-card-item,
+  .continent-chip-card {
+    flex: 0 0 78% !important;
+    min-width: 240px !important;
+    max-width: 300px !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* Interactive Before/After Comparison Sliders */
+  .deforest-hero-interactive,
+  [class*="comparison-slider"],
+  [class*="before-after"] {
+    height: 300px !important;
+    border-radius: 14px !important;
+    margin: 12px 0 16px !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .deforest-hero-copy {
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  .deforest-grand-title {
+    font-size: 24px !important;
+  }
+
+  .deforest-subtitle {
+    font-size: 12px !important;
+  }
+
+  .deforest-lead-desc {
+    display: none !important;
+  }
+
+  .deforest-pill-badge {
+    top: auto !important;
+    bottom: 14px !important;
+    padding: 4px 8px !important;
+  }
+
+  .badge-before {
+    left: 14px !important;
+  }
+
+  .badge-after {
+    right: 14px !important;
+  }
+
+  .deforest-pill-badge strong {
+    font-size: 10px !important;
+  }
+
+  .deforest-pill-badge span {
+    font-size: 8px !important;
+  }
+
+  /* Panels, Fact Cards, and Detail HUDs */
+  .layers-bottom-panels,
+  .continents-bottom-panels,
+  .resource-center-stage,
+  .curriculum-body-layout,
+  .deforest-middle-grid,
+  .causes-cards-row,
+  .impacts-cards-row,
+  .deforest-facts-grid,
+  .hotspots-card-content {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .deforest-glass-card,
+  .layers-interactive-panel,
+  .where-land-panel {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .explore-panel-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .layer-tab-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .layer-btn-pill {
+    padding: 8px 12px !important;
+    font-size: 11px !important;
+    justify-content: center !important;
+  }
+
+  /* Chapter Navigation Bottom Bar */
+  .screen-bottom-bar,
+  .deforest-bottom-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    padding: 16px 0 0 !important;
+    margin-top: 24px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    width: 100% !important;
+  }
+
+  .bar-prev-btn,
+  .bar-next-btn,
+  .deforest-nav-btn {
+    flex: 1 !important;
+    min-height: 44px !important;
+    padding: 10px 14px !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+
+  .bar-prev-btn {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .bar-next-btn {
+    background: rgba(222, 184, 122, 0.18) !important;
+    border: 1px solid rgba(222, 184, 122, 0.5) !important;
+    color: #deb87a !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 08: FLOATING MOBILE CHAPTER BAR (MOBILE APP DOCKED DYNAMIC PILL)
+   Docked at the bottom with safe-area insets and full chapter drawer.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .mobile-chapter-bar-wrap {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 85 !important;
+    padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    pointer-events: none !important;
+  }
+
+  .mobile-chapter-pill {
+    pointer-events: auto !important;
+    max-width: min(440px, 94vw) !important;
+    margin: 0 auto !important;
+    border-radius: 999px !important;
+    background: rgba(12, 16, 22, 0.94) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(var(--bar-accent-rgb, 222, 184, 122), 0.22) !important;
+    min-height: 48px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 09: STANDALONE PAGES (RESOURCES, MODULES INDEX, QUIZ, ABOUT)
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Resources Page */
+  .resources-page,
+  .modules-page,
+  .quiz-page,
+  .about-page {
+    padding-top: 64px !important;
+  }
+
+  .res-hero,
+  .about-hero {
+    padding: 32px 16px 20px !important;
+  }
+
+  .res-hero-title,
+  .about-title,
+  .quiz-hero-title {
+    font-size: clamp(30px, 8vw, 48px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .res-metrics-strip {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .res-filter-strip {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .res-module-tabs {
+    overflow-x: auto !important;
+    width: 100% !important;
+    padding-bottom: 4px !important;
+  }
+
+  .res-cards-grid,
+  .res-syllabus-grid,
+  .module-showcase-card,
+  .modules-pipeline-track,
+  .about-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .module-primary-btn,
+  .module-secondary-btn,
+  .module-quiz-link {
+    width: 100% !important;
+    justify-content: center !important;
+    margin-left: 0 !important;
+    min-height: 44px !important;
+  }
+
+  /* Cross-module Footer strip */
+  .module-strip {
+    padding: 40px 16px 64px !important;
+  }
+
+  .module-strip-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .module-strip-card {
+    min-height: 130px !important;
+    padding: 16px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 10: LAND MODULE DEEP-DIVE (ALL CHAPTER SCREENS 01-14)
+   Professional mobile layouts for Deforestation, Land Use, Soil Health,
+   Degradation, Soil Conservation, Land Planning, and Summary.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Common Container Reset for Land Sub-Screens */
+  .deforest-screen-container,
+  .landuse-screen-container,
+  .soilhealth-screen-container,
+  .degrade-screen-container,
+  .soilcons-screen-container,
+  .landplan-screen-container,
+  .modulesummary-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: clip !important;
+    gap: 14px !important;
+    min-height: auto !important;
+  }
+
+  /* Interactive Before/After Hero Containers */
+  .deforest-hero-interactive,
+  .landuse-hero-interactive,
+  .soilhealth-hero-wrap,
+  .degrade-hero-wrap,
+  .soilcons-hero-wrap,
+  .landplan-hero-wrap,
+  .summary-hero-wrap {
+    height: 290px !important;
+    min-height: 290px !important;
+    border-radius: 16px !important;
+    margin-bottom: 8px !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  /* Hero Copy Overlays */
+  .deforest-hero-copy,
+  .landuse-hero-copy,
+  .soilhealth-hero-copy {
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    right: 14px !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .deforest-grand-title,
+  .landuse-grand-title,
+  .soilhealth-grand-title {
+    font-size: clamp(22px, 6.2vw, 30px) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .deforest-subtitle,
+  .landuse-subtitle,
+  .soilhealth-subtitle {
+    font-size: 12.5px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Metric Strips -> Compact 2x2 Grid */
+  .deforest-metrics-strip,
+  .landuse-stats-grid,
+  .soilhealth-metrics-row,
+  .degrade-metrics-strip,
+  .soilcons-stats-strip,
+  .landplan-stats-strip {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .deforest-metric-item,
+  .landuse-stat-box,
+  .soilhealth-metric-box,
+  .degrade-metric-card {
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    background: rgba(10, 14, 20, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Multi-Column Content -> Clean Single Column Stack */
+  .deforest-content-columns,
+  .landuse-content-grid,
+  .landuse-matrix-section,
+  .soilhealth-content-grid,
+  .soilhealth-horizons-grid,
+  .degrade-content-grid,
+  .degrade-types-grid,
+  .soilcons-content-grid,
+  .landplan-content-grid,
+  .summary-cards-grid,
+  .summary-exam-tips {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Card Rows -> Modern Horizontal Swipe Rails */
+  .causes-cards-row,
+  .impacts-cards-row,
+  .landuse-cards-row,
+  .soilhealth-cards-row,
+  .degrade-cards-row,
+  .soilcons-methods-grid,
+  .soilcons-cards-row,
+  .landplan-cards-row {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .causes-cards-row::-webkit-scrollbar,
+  .impacts-cards-row::-webkit-scrollbar,
+  .landuse-cards-row::-webkit-scrollbar,
+  .soilhealth-cards-row::-webkit-scrollbar,
+  .degrade-cards-row::-webkit-scrollbar,
+  .soilcons-methods-grid::-webkit-scrollbar,
+  .landplan-cards-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .causes-card,
+  .impacts-card,
+  .landuse-card-item,
+  .soilhealth-card-item,
+  .degrade-card-item,
+  .soilcons-method-card,
+  .soilcons-card-item,
+  .landplan-card-item {
+    flex: 0 0 82% !important;
+    min-width: 250px !important;
+    max-width: 320px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+
+  /* Soil Horizons Profile Diagram on Mobile */
+  .horizons-profile-col,
+  .radar-chart-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 11: WATER MODULE DEEP-DIVE (ALL 18 CHAPTER SCREENS)
+   Mobile app layout for Hydrological Cycle, Rivers, Groundwater, etc.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* All Water Screen Sections */
+  .water-screen,
+  .water-cycle-chapter-section,
+  .water-sources-chapter-section,
+  .water-global-chapter-section,
+  .water-rivers-chapter-section,
+  .water-uses-chapter-section,
+  .water-cons-chapter-section,
+  .water-transfer-chapter-section,
+  .river-interlinking-screen,
+  .groundwater-screen,
+  .groundwater-potential-screen,
+  .conjunctive-screen,
+  .gw-mgmt-screen,
+  .gw-depletion-screen,
+  .gw-contam-screen,
+  .gw-recharge-screen,
+  .seawater-ingress-screen,
+  .water-summary-screen {
+    padding: 68px 16px 88px 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    overflow-x: clip !important;
+  }
+
+  /* Screen 02: Hydrological Cycle Master Section */
+  .water-cycle-canvas-bg {
+    height: 240px !important;
+    min-height: 240px !important;
+    border-radius: 16px !important;
+    position: relative !important;
+    margin-bottom: 12px !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide fixed coordinate flow arrows on mobile to prevent layout collision */
+  .water-flow-svg-overlay {
+    display: none !important;
+  }
+
+  /* Header & Insight cards in Hydrological Cycle - converted to static full width cards */
+  .water-cycle-header-card {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 12px !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    background: rgba(4, 15, 26, 0.88) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  }
+
+  .water-cycle-top-right {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 12px !important;
+  }
+
+  .water-cycle-insight-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hotspots Layer on Mobile: Converts to horizontal touch pill rail */
+  .water-hotspots-layer {
+    position: static !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 8px !important;
+    padding: 6px 2px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .water-hotspots-layer::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .water-hotspot-node {
+    position: static !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    scroll-snap-align: start !important;
+  }
+
+  .water-node-popover {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
+  }
+
+  /* Water Cycle Stage Bottom Deck */
+  .water-cycle-deck {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-top: 14px !important;
+  }
+
+  .water-deck-panel {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .water-stepper-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+  }
+
+  .cycle-stepper-row,
+  .water-stepper-track {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 8px !important;
+    padding: 6px 2px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .cycle-stepper-row::-webkit-scrollbar,
+  .water-stepper-track::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .cycle-stage-pill,
+  .water-step-node,
+  .water-stepper-item {
+    flex: 0 0 auto !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    border-radius: 999px !important;
+  }
+
+  /* Water Grid Layouts -> Single Column */
+  .water-chapter-grid,
+  .water-facts-grid,
+  .water-stats-row,
+  .rivers-grid,
+  .sources-grid,
+  .uses-breakdown-grid,
+  .groundwater-grid,
+  .recharge-grid,
+  .coastal-ingress-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Rivers in India (Screen 05) - Vertical stack & responsive map */
+  .water-rivers-middle-deck {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .water-rivers-left-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .water-rivers-center-map-col {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+
+  .water-map-stage-wrapper {
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    height: 280px !important;
+    max-height: 300px !important;
+  }
+
+  .water-river-details-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .water-basins-selector-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* River Interlinking Screen (Screen 09) - Mobile Column Layout */
+  .ilr-stage-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .ilr-left-col,
+  .ilr-center-col,
+  .ilr-right-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .ilr-map-viewport {
+    height: 280px !important;
+    max-height: 300px !important;
+    width: 100% !important;
+  }
+
+  .ilr-bottom-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .ilr-examples-grid,
+  .ilr-dir-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .ilr-facts-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Groundwater Stage & Aquifer Cards (Screen 10) */
+  .groundwater-stage-wrapper {
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .groundwater-cutaway-viewport {
+    height: 230px !important;
+    width: 100% !important;
+  }
+
+  .groundwater-key-facts-card {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .groundwater-bottom-grid,
+  .water-sources-grid,
+  .water-sectors-grid,
+  .water-cons-strategies-grid,
+  .water-carousel-slides-deck,
+  .conjunctive-bottom-grid,
+  .gw-recharge-dock-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .groundwater-bottom-grid::-webkit-scrollbar,
+  .water-sources-grid::-webkit-scrollbar,
+  .water-sectors-grid::-webkit-scrollbar,
+  .water-cons-strategies-grid::-webkit-scrollbar,
+  .water-carousel-slides-deck::-webkit-scrollbar,
+  .conjunctive-bottom-grid::-webkit-scrollbar,
+  .gw-recharge-dock-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .groundwater-glass-card,
+  .water-source-card,
+  .water-sector-card,
+  .water-strat-card,
+  .water-carousel-slide-item,
+  .glass-feature-card,
+  .gw-dock-card {
+    flex: 0 0 80% !important;
+    min-width: 250px !important;
+    max-width: 320px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+
+  .aquifer-subcards-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* 2x2 Takeaway, Approach, and Depletion Grids */
+  .water-takeaways-grid,
+  .water-approaches-columns,
+  .gw-depletion-causes-row,
+  .water-summary-dock-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* River Basin Chips & Groundwater State Potential Rails */
+  .river-chips-row,
+  .water-cards-rail,
+  .potential-zones-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .river-chips-row::-webkit-scrollbar,
+  .water-cards-rail::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .river-chip-card,
+  .water-card-item,
+  .potential-zone-card {
+    flex: 0 0 82% !important;
+    min-width: 250px !important;
+    max-width: 320px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+
+  /* Tables Wrapped for Touch Scroll */
+  .water-table-wrap,
+  .groundwater-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    border-radius: 12px !important;
+    background: rgba(8, 14, 20, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 12: BIODIVERSITY MODULE DEEP-DIVE (ALL 12 CHAPTER SCREENS)
+   Mobile app layout for Biodiversity Components, Hotspots, Threats & IUCN.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* All Bio Screen Sections - strictly removing 220px desktop rail padding */
+  .bio-screen,
+  .bio-intro-section,
+  .bio-levels-section,
+  .bio-values-section,
+  .bio-threats-section,
+  .bio-conservation-section,
+  .bio-ecosystem-section,
+  .bio-types-section,
+  .bio-significance-section,
+  .bio-economic-section,
+  .bio-summary-section {
+    padding: 68px 16px 88px 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    overflow-x: clip !important;
+  }
+
+  /* Chapter 01: Bio Intro Section */
+  .bio-intro-bg-wrap {
+    height: 240px !important;
+    border-radius: 16px !important;
+    margin-bottom: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .bio-intro-content-container {
+    padding: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .bio-intro-header-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .bio-intro-quote-card {
+    position: static !important;
+    width: 100% !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    margin: 8px 0 !important;
+    background: rgba(14, 24, 18, 0.85) !important;
+    border: 1px solid rgba(110, 231, 183, 0.25) !important;
+  }
+
+  .bio-intro-middle-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* 3 Inner Cards: Flora, Fauna, Microorganisms -> Horizontal Swipe Rail */
+  .bio-components-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .bio-components-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .bio-component-subcard {
+    flex: 0 0 82% !important;
+    min-width: 250px !important;
+    max-width: 320px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+
+  /* All Bio Chapter Grids -> Single Column */
+  .bio-cards-grid,
+  .bio-levels-grid,
+  .bio-levels-cards-grid,
+  .bio-values-grid,
+  .bio-zones-grid,
+  .bio-threats-grid,
+  .bio-iucn-grid,
+  .bio-conservation-grid,
+  .bio-cons-split-grid,
+  .bio-triad-grid,
+  .bio-biomes-grid,
+  .bio-significance-grid,
+  .bio-recap-grid,
+  .bio-levels-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .bio-species-count-strip {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .bio-definition-banner {
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Hotspots Grid */
+  .bio-hotspots-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 13: AIR MODULE DEEP-DIVE (ALL CHAPTER SCREENS)
+   Mobile app layout for Atmosphere Layers, AQI, Dispersion & Control Devices.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* All Air Screen Sections - strictly removing 260px desktop rail padding */
+  .air-screen,
+  .air-cover-section,
+  .air-intro-section,
+  .air-pollution-section,
+  .pollutant-classification-section,
+  .air-naaqs-section,
+  .air-aqi-section,
+  .aqi-section,
+  .health-effects-section,
+  .economic-effects-section,
+  .control-equipment-screen,
+  .control-equipment-section,
+  .smoke-control-section,
+  .ozone-depletion-section,
+  .photochemical-section,
+  .air-summary-section {
+    padding: 68px 16px 88px 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    overflow-x: clip !important;
+  }
+
+  /* Air Cover Section */
+  .air-cover-section {
+    padding: 68px 16px 88px 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .air-intro-bg {
+    height: 240px !important;
+    border-radius: 16px !important;
+    margin-bottom: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .air-intro-header-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Atmosphere Column Graphic on Mobile */
+  .air-layers-diagram,
+  .atmosphere-column-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 12px 0 !important;
+  }
+
+  /* Gas Chips Rows in Air Intro -> 2-Column Grid */
+  .air-gas-chips-row-1,
+  .air-gas-chips-row-2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Air Pollution Screen (Screen 03) */
+  .air-pollution-hero-banner {
+    height: 240px !important;
+    min-height: 240px !important;
+    border-radius: 16px !important;
+    position: relative !important;
+  }
+
+  .air-pollution-quote-card {
+    position: static !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+  }
+
+  .air-pollution-mid-grid,
+  .air-pollution-bottom-grid,
+  .air-sources-split-grid,
+  .air-chapter-grid,
+  .air-pollutants-grid,
+  .air-dispersion-grid,
+  .air-standards-grid,
+  .control-equipment-grid,
+  .health-effects-grid,
+  .ozone-diagram-layout,
+  .photochemical-grid,
+  .air-summary-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Real View Multi-Photo Row -> Horizontal Swipe Rail */
+  .air-real-view-row {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 10px !important;
+    padding: 4px 4px 10px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .air-real-view-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .air-real-view-item {
+    flex: 0 0 76% !important;
+    min-width: 230px !important;
+    scroll-snap-align: start !important;
+    border-radius: 12px !important;
+  }
+
+  /* NAAQS Standards Screen (Screen 05) */
+  .air-naaqs-header-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .air-naaqs-quote-card {
+    position: static !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+  }
+
+  .air-naaqs-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .air-naaqs-table-card {
+    width: 100% !important;
+    padding: 14px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .air-naaqs-card-head {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  /* NAAQS Table Horizontal Scroll wrapper */
+  .air-naaqs-table-wrap,
+  .naaqs-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    border-radius: 12px !important;
+  }
+
+  .air-naaqs-table {
+    min-width: 520px !important;
+  }
+
+  .air-naaqs-right-col {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* AQI Screen (Screen 06) */
+  .air-aqi-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .air-aqi-hero-stage {
+    height: 280px !important;
+    min-height: 280px !important;
+    border-radius: 16px !important;
+    position: relative !important;
+  }
+
+  .air-aqi-hero-content-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    padding: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .air-aqi-quote-card {
+    display: none !important;
+  }
+
+  .air-aqi-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .air-aqi-card {
+    width: 100% !important;
+    padding: 14px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .air-gauge-container {
+    max-width: 280px !important;
+    margin: 0 auto !important;
+  }
+
+  .air-advisory-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .aqi-band-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Control Equipment Screen (Screen 08) */
+  .control-equipment-screen {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .equipment-header-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .equipment-quote-box {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  .equipment-primary-grid,
+  .equipment-secondary-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Particulate Control Devices -> Horizontal Swipe Rail */
+  .air-control-devices-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 4px 12px !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .air-control-devices-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .air-device-card {
+    flex: 0 0 82% !important;
+    min-width: 250px !important;
+    max-width: 320px !important;
+    scroll-snap-align: start !important;
+    border-radius: 14px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 14: GLOBAL WARMING & EIA (MODULEPAGE FALLBACK CHAPTERS)
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .chapter-section {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .chapter-number-column {
+    display: none !important;
+  }
+
+  .chapter-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .chapter-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .chapter-copy h2 {
+    font-size: clamp(24px, 6.8vw, 32px) !important;
+    line-height: 1.15 !important;
+    margin: 0 0 10px !important;
+  }
+
+  .chapter-deck {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 14px !important;
+  }
+
+  .chapter-facts {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .chapter-fact {
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .chapter-visual-holder {
+    width: 100% !important;
+    height: clamp(260px, 40vh, 340px) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    margin-top: 12px !important;
+  }
+
+  .module-conclusion {
+    padding: 68px 16px 88px 16px !important;
+  }
+
+  .recap-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .conclusion-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .conclusion-actions .button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE: GLOBAL WARMING & EIA (MODULE 05 DEDICATED MOBILE APP EXPERIENCE)
+   Engineered for native mobile touch devices (<900px and <480px).
+   Guarantees zero horizontal overflow, comfortable touch targets,
+   stacked cards, readable typography, and responsive interactive simulators.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* ── 1. Module Viewport & Content Containers ── */
+  .warming-module-viewport {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+    padding-bottom: 74px !important;
+  }
+
+  .warming-main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    border-left: none !important;
+  }
+
+  /* Universal Chapter Screen Shell on Mobile */
+  .warming-chapter-screen,
+  .warming-screen {
+    padding: 68px 16px 88px 16px !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    box-sizing: border-box !important;
+    border-left: none !important;
+  }
+
+  .chapter-content-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .chapter-header-block {
+    margin-bottom: 20px !important;
+  }
+
+  .chapter-header-block h1,
+  .chapter-header-block h2 {
+    font-size: clamp(26px, 7.5vw, 36px) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .chapter-header-block p {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    color: rgba(245, 242, 237, 0.85) !important;
+  }
+
+  /* ── 2. Screen 01: Cover & Hero ── */
+  .warming-cover-section {
+    padding: 72px 16px 84px 16px !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  .warming-cover-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .warming-hero-eyebrow-row {
+    margin-bottom: 12px !important;
+    gap: 10px !important;
+  }
+
+  .warming-hero-eyebrow-pill {
+    font-size: 10.5px !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  .warming-hero-title {
+    font-size: clamp(34px, 10vw, 48px) !important;
+    line-height: 1.02 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .warming-hero-subtitle {
+    font-size: clamp(17px, 5vw, 22px) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .warming-hero-meta {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    font-size: 11px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .warming-hero-lead {
+    font-size: 13.5px !important;
+    line-height: 1.6 !important;
+    max-width: 100% !important;
+    margin-bottom: 22px !important;
+  }
+
+  .warming-hero-action-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .warming-hero-chevron-btn {
+    width: 44px !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .warming-hero-cta-link {
+    font-size: 1.15rem !important;
+  }
+
+  .warming-hero-guide-line {
+    display: none !important;
+  }
+
+  /* ── 3. Pinned Intro Transition Screen ── */
+  .warming-intro-transition {
+    min-height: 200vh !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .gwintro-sticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .gwintro-cover-copy,
+  .gwintro-chapter-copy {
+    padding: 24px 18px !important;
+    max-width: 92vw !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .gwintro-badge {
+    font-size: 10px !important;
+    letter-spacing: 0.16em !important;
+    margin-bottom: 6px !important;
+  }
+
+  .gwintro-chapter-num {
+    font-size: 9.5px !important;
+    letter-spacing: 0.18em !important;
+    margin-bottom: 6px !important;
+  }
+
+  .gwintro-chapter-title,
+  .gwintro-cover-title {
+    font-size: clamp(28px, 7.8vw, 40px) !important;
+    line-height: 1.08 !important;
+    margin: 0 0 10px !important;
+  }
+
+  .gwintro-chapter-lead,
+  .gwintro-cover-sub {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    max-width: 320px !important;
+    margin: 0 auto 18px !important;
+  }
+
+  .gwintro-enter-btn {
+    width: 100% !important;
+    max-width: 280px !important;
+    justify-content: center !important;
+    padding: 12px 24px !important;
+    font-size: 12px !important;
+    min-height: 48px !important;
+  }
+
+  .gwintro-scroll-hint {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 24px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  /* ── 4. Screen 02: Greenhouse Effect Simulator ── */
+  .gh-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+  }
+
+  .gh-main-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    width: 100% !important;
+  }
+
+  .gh-header-block {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .gh-header-title {
+    font-size: clamp(28px, 7.5vw, 38px) !important;
+  }
+
+  .gh-header-subtitle {
+    font-size: clamp(16px, 4.5vw, 20px) !important;
+  }
+
+  .gh-header-description {
+    font-size: 13px !important;
+    max-width: 100% !important;
+  }
+
+  .gh-controls-column {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .gh-master-slider-box {
+    padding: 14px 16px !important;
+  }
+
+  .gh-gas-readings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .gh-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .gh-canvas-overlay,
+  .gh-callout-reflected,
+  .gh-callout-absorbed,
+  .gh-callout-trapped-banner,
+  .gh-wavy-heat-cluster,
+  .gh-annotation-layer {
+    display: none !important;
+  }
+
+  .gh-temp-grid {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* ── 5. Screen 03: 10 Indicators Dashboard ── */
+  .indicators-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .indicators-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .indicators-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .indicators-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .indicator-glass-card {
+    padding: 12px 14px !important;
+    min-height: auto !important;
+    border-radius: 14px !important;
+  }
+
+  .indicator-card-stat {
+    font-size: clamp(18px, 5vw, 24px) !important;
+  }
+
+  /* ── 6. Screen 04: Causes & Drivers ── */
+  .causes-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .causes-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .causes-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .causes-tabs-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    padding-bottom: 4px !important;
+  }
+
+  .causes-tab-pill {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .causes-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .cause-glass-card {
+    width: 100% !important;
+    padding: 12px 14px !important;
+  }
+
+  .natural-vs-human-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .causes-bottom-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* ── 7. Screen 05: Planetary Effects ── */
+  .effects-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .effects-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .effects-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .effects-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .effect-glass-card {
+    padding: 12px 14px !important;
+    min-height: auto !important;
+    border-radius: 14px !important;
+  }
+
+  /* ── 8. Screen 06: Warming vs Climate Change ── */
+  .vs-climate-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .vs-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .vs-climate-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .vs-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .vs-divider-wrap {
+    margin: -4px auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .vs-vertical-line {
+    width: 60px !important;
+    height: 1.5px !important;
+  }
+
+  .vs-center-badge {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .vs-attr-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    padding: 8px 0 !important;
+  }
+
+  .vs-takeaways-col {
+    width: 100% !important;
+    padding: 16px !important;
+    margin-top: 8px !important;
+  }
+
+  .vs-takeaways-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* ── 9. Screen 07: 8 Climate Indicators ── */
+  .climate-ind-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .climate-ind-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .climate-ind-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .climate-ind-stage-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .climate-globe-center-col {
+    order: -1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 200px !important;
+  }
+
+  .climate-globe-wrapper {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  .climate-cards-col {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .climate-glass-card {
+    padding: 12px 14px !important;
+    min-height: auto !important;
+  }
+
+  .climate-ind-bottom-strip {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* ── 10. Screen 08: Human Health & Ecosystem ── */
+  .human-health-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .health-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .health-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .health-main-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .health-panel-wrap {
+    width: 100% !important;
+  }
+
+  .drivers-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .pathways-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .impacts-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .health-bottom-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .takeaways-columns {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* ── 11. Screens 09 to 15: EIA Framework Screens ── */
+  .eia-intro-screen-container,
+  .eia-values-screen-container,
+  .eia-history-screen-container,
+  .eia-process-screen-container,
+  .eia-flowchart-screen-container,
+  .eia-report-screen-container,
+  .eia-bf-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  /* Screen 09: EIA Intro */
+  .eia-intro-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .eia-intro-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .eia-intro-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .eia-grid-row.row-top,
+  .eia-grid-row.row-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .eia-card-panel {
+    width: 100% !important;
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .eia-stakeholders-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 10: EIA Values */
+  .values-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .values-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .values-main-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .values-triad-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .values-bottom-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 11: EIA History & Indian Genesis */
+  .eia-history-top-bar {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .eia-history-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .eia-history-middle-grid,
+  .eia-history-bottom-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .global-timeline-nodes-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .india-milestones-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .benefits-3x3-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 12: EIA Process (9-Phases) */
+  .eia-proc-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .eia-proc-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .eia-proc-cards-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .proc-step-card {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .eia-proc-bottom-strip {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 13: EIA Flowchart */
+  .eia-flowchart-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .eia-flowchart-quote-box {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .flowchart-steps-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .decision-grid-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .decision-svg-lines {
+    display: none !important;
+  }
+
+  .eia-flowchart-bottom-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .stakeholders-cols-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 14: EIA Report Components */
+  .eia-rep-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .eia-rep-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .eia-comp-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .eia-rep-duo-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .eia-rep-bottom-strip {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* Screen 15: EIA Benefits vs Flaws */
+  .eia-bf-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .eia-bf-quote-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .eia-bf-main-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .eia-bf-scales-center {
+    order: -1 !important;
+    min-height: 160px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .eia-bf-scales-svg-wrap {
+    height: 150px !important;
+    max-width: 200px !important;
+  }
+
+  .eia-bf-side-col.col-benefits,
+  .eia-bf-side-col.col-flaws {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .eia-bf-takeaways-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* ── 12. Screen 16: Module Summary & Review ── */
+  .warming-summary-screen-container {
+    padding: 68px 16px 88px 16px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .summary-top-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .summary-quote-box {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .summary-topics-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .summary-middle-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .summary-panel-card {
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .summary-numbers-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .summary-actions-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .summary-actions-row .button,
+  .summary-actions-row a {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Extra small devices (<480px / 320px - 479px) */
+@media (max-width: 480px) {
+  /* Module 01 Land Compact Grids */
+  .cutaway-cards-column,
+  .continents-stats-badges,
+  .landforms-factors-grid,
+  .deforest-metrics-strip,
+  .landuse-stats-grid,
+  .soilhealth-metrics-row,
+  .degrade-metrics-strip,
+  .soilcons-stats-strip,
+  .landplan-stats-strip,
+  .spec-meta-grid,
+  .layer-tab-buttons,
+  .cover-metrics-row,
+
+  /* Module 02 Water Compact Grids */
+  .water-basins-selector-grid,
+  .ilr-facts-grid,
+  .water-takeaways-grid,
+  .water-approaches-columns,
+  .gw-depletion-causes-row,
+  .water-summary-dock-grid,
+  .groundwater-key-facts-card,
+
+  /* Module 03 Air Compact Grids */
+  .air-gas-chips-row-1,
+  .air-gas-chips-row-2,
+  .air-advisory-grid,
+  .aqi-band-cards-grid,
+
+  /* Module 04 Biodiversity Compact Grids */
+  .bio-stats-strip-inner,
+  .bio-species-count-strip,
+  .bio-threats-grid,
+  .bio-hotspots-grid,
+
+  /* Module 05 Global Warming & EIA Compact Grids */
+  .indicators-cards-grid,
+  .causes-cards-grid,
+  .effects-cards-grid,
+  .climate-cards-col,
+  .drivers-grid,
+  .impacts-grid,
+  .eia-stakeholders-grid,
+  .india-milestones-row,
+  .benefits-3x3-grid,
+  .flowchart-steps-grid,
+  .stakeholders-cols-grid,
+  .eia-comp-cards-grid,
+  .summary-topics-grid,
+  .summary-numbers-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gh-gas-readings-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gh-temp-grid {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .gh-temp-arrow-divider {
+    transform: rotate(90deg) !important;
+  }
+
+  .vs-takeaways-cards-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 15: UNIVERSAL DETAIL MODALS & BOTTOM SHEETS
+   Converts all desktop popups into native-feeling touch bottom sheets.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Backdrops take full screen and dock to bottom */
+  .stage-detail-modal-overlay,
+  .layer-detail-modal-overlay,
+  .soil-detail-modal-overlay,
+  .ilr-modal-backdrop,
+  .bio-modal-backdrop,
+  [class*="modal-overlay"],
+  [class*="modal-backdrop"] {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 120 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.78) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Native Mobile Touch Bottom Sheet Dialog */
+  .stage-detail-modal,
+  .layer-detail-modal,
+  .soil-detail-modal-card,
+  .landforms-modal-card,
+  .ilr-modal-content,
+  .bio-modal-dialog,
+  .bio-modal-container,
+  [class*="detail-modal-card"],
+  [class*="detail-modal-container"],
+  [class*="modal-dialog-box"],
+  [class*="modal-dialog"],
+  [class*="modal-content"]:not(.search-modal-content) {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    max-height: 85dvh !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 22px 18px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(10, 14, 20, 0.98) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85) !important;
+    z-index: 125 !important;
+  }
+
+  .modal-close-btn,
+  .bio-modal-close-btn,
+  .modal-close-icon-btn,
+  .ilr-modal-close-btn {
+    top: 14px !important;
+    right: 14px !important;
+    width: 36px !important;
+    height: 36px !important;
+    position: absolute !important;
+    z-index: 20 !important;
+  }
+}
+
