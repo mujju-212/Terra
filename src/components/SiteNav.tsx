@@ -3,6 +3,7 @@ import { ArrowRight, Menu, X, Volume2, VolumeX, Sparkles, Layers, Droplet, Wind,
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toggleAudioAmbience } from '../utils/audioAmbience';
+import { prefetchModule } from '../utils/assetPrefetcher';
 import './MobileNav.css';
 
 const drawerModules = [
@@ -239,6 +240,8 @@ export default function SiteNav() {
                           to={m.path}
                           className={`mnd-module-card ${isActive ? 'is-active' : ''}`}
                           style={{ '--mod-accent': m.accent } as React.CSSProperties}
+                          onMouseEnter={() => prefetchModule(m.id)}
+                          onFocus={() => prefetchModule(m.id)}
                           onClick={close}
                         >
                           <span className="mnd-module-num">0{m.num}</span>
@@ -270,7 +273,13 @@ export default function SiteNav() {
                 </div>
 
                 {/* Begin Journey CTA */}
-                <Link to="/module/land" className="mnd-cta-btn" onClick={close}>
+                <Link
+                  to="/module/land"
+                  className="mnd-cta-btn"
+                  onMouseEnter={() => prefetchModule('land')}
+                  onFocus={() => prefetchModule('land')}
+                  onClick={close}
+                >
                   <span>Begin Field Journey</span>
                   <ArrowRight size={15} />
                 </Link>

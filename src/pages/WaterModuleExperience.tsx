@@ -5,6 +5,8 @@ import type { ModuleContent } from '../content/types';
 import '../water-module.css';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
 import MobileChapterBar from '../components/MobileChapterBar';
+import LazyScreen from '../components/LazyScreen';
+import { prefetchModule } from '../utils/assetPrefetcher';
 
 import {
   waterChaptersNav,
@@ -270,6 +272,8 @@ export default function WaterModuleExperience({ module }: WaterModuleProps) {
                     to={m.path}
                     className={`cover-rail-module-item ${isCurrent ? 'is-active' : ''}`}
                     aria-label={`Module ${m.num} ${m.title}`}
+                    onMouseEnter={() => prefetchModule(m.id)}
+                    onFocus={() => prefetchModule(m.id)}
                   >
                     <span className="cover-rail-bullet">
                       {isCurrent && <span className="cover-rail-bullet-inner" />}
@@ -329,56 +333,88 @@ export default function WaterModuleExperience({ module }: WaterModuleProps) {
         {/* PINNED CINEMATIC TRANSITION: COVER → CHAPTER 01 (mirrors LandIntroTransition) */}
         <WaterIntroTransition onEnter={() => scrollToChapter(1)} />
 
-        {/* SCREEN 02: HYDROLOGICAL CYCLE */}
+        {/* SCREEN 02: HYDROLOGICAL CYCLE (Always eager for instant entry) */}
         <HydrologicalCycleScreen />
 
         {/* SCREEN 03: SOURCES OF WATER */}
-        <WaterSourcesScreen onNext={() => scrollToChapter(3)} />
+        <LazyScreen id="ch-02">
+          <WaterSourcesScreen onNext={() => scrollToChapter(3)} />
+        </LazyScreen>
 
         {/* SCREEN 04: GLOBAL WATER RESOURCES */}
-        <GlobalWaterScreen />
+        <LazyScreen id="ch-03">
+          <GlobalWaterScreen />
+        </LazyScreen>
 
         {/* SCREEN 05: RIVERS IN INDIA */}
-        <RiversIndiaScreen />
+        <LazyScreen id="ch-04">
+          <RiversIndiaScreen />
+        </LazyScreen>
 
         {/* SCREEN 06: USES OF WATER */}
-        <WaterUsesScreen />
+        <LazyScreen id="ch-05">
+          <WaterUsesScreen />
+        </LazyScreen>
 
         {/* SCREEN 07: WATER CONSERVATION & MANAGEMENT */}
-        <WaterConservationScreen />
+        <LazyScreen id="ch-06">
+          <WaterConservationScreen />
+        </LazyScreen>
 
         {/* SCREEN 08: INTER-BASIN WATER TRANSFER */}
-        <InterBasinTransferScreen />
+        <LazyScreen id="ch-07">
+          <InterBasinTransferScreen />
+        </LazyScreen>
 
         {/* SCREEN 09: INTERLINKING OF RIVERS */}
-        <RiverInterlinkingScreen />
+        <LazyScreen id="ch-08">
+          <RiverInterlinkingScreen />
+        </LazyScreen>
 
         {/* SCREEN 10: GROUNDWATER */}
-        <GroundwaterScreen />
+        <LazyScreen id="ch-09">
+          <GroundwaterScreen />
+        </LazyScreen>
 
         {/* SCREEN 11: GROUNDWATER POTENTIAL IN INDIA */}
-        <GroundwaterPotentialScreen />
+        <LazyScreen id="ch-10">
+          <GroundwaterPotentialScreen />
+        </LazyScreen>
 
         {/* SCREEN 12: CONJUNCTIVE USE OF WATER */}
-        <ConjunctiveUseScreen />
+        <LazyScreen id="ch-11">
+          <ConjunctiveUseScreen />
+        </LazyScreen>
 
         {/* SCREEN 13: GROUNDWATER MANAGEMENT */}
-        <GroundwaterManagementScreen />
+        <LazyScreen id="ch-12">
+          <GroundwaterManagementScreen />
+        </LazyScreen>
 
         {/* SCREEN 14: GROUNDWATER DEPLETION */}
-        <GroundwaterDepletionScreen />
+        <LazyScreen id="ch-13">
+          <GroundwaterDepletionScreen />
+        </LazyScreen>
 
         {/* SCREEN 15: GROUNDWATER CONTAMINATION (ch-14) */}
-        <GroundwaterContaminationScreen />
+        <LazyScreen id="ch-14">
+          <GroundwaterContaminationScreen />
+        </LazyScreen>
 
         {/* SCREEN 16: GROUNDWATER RECHARGE (ch-15) */}
-        <GroundwaterRechargeScreen />
+        <LazyScreen id="ch-15">
+          <GroundwaterRechargeScreen />
+        </LazyScreen>
 
         {/* SCREEN 17: SEAWATER INGRESS (ch-16) */}
-        <SeawaterIngressScreen />
+        <LazyScreen id="ch-16">
+          <SeawaterIngressScreen />
+        </LazyScreen>
 
         {/* CHAPTER 18 / SUMMARY & RECAP */}
-        <WaterSummaryScreen module={module} />
+        <LazyScreen id="ch-summary">
+          <WaterSummaryScreen module={module} />
+        </LazyScreen>
 
         {/* CROSS-MODULE NAVIGATION CARD STRIP */}
         <ModuleCardsStrip currentSlug="water" />

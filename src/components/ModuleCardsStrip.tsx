@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { modules } from '../content';
+import { prefetchModule } from '../utils/assetPrefetcher';
 
 /**
  * A 5-card strip of every module so a reader can jump straight to any other
@@ -53,6 +54,8 @@ export default function ModuleCardsStrip({ currentSlug }: { currentSlug: string 
                   to={`/module/${mod.slug}`}
                   className="module-strip-card"
                   style={{ '--card-accent': mod.accent } as React.CSSProperties}
+                  onMouseEnter={() => prefetchModule(mod.slug)}
+                  onFocus={() => prefetchModule(mod.slug)}
                 >
                   <div className="module-strip-bg" style={{ backgroundImage: `url(${mod.image})` }} />
                   <div className="module-strip-overlay" />

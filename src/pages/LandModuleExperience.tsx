@@ -31,6 +31,8 @@ import LandIntroTransition from './land/LandIntroTransition';
 import { LAND_CHAPTERS } from './land/helpers/chapters';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
 import MobileChapterBar from '../components/MobileChapterBar';
+import LazyScreen from '../components/LazyScreen';
+import { prefetchModule } from '../utils/assetPrefetcher';
 
 interface LandModuleProps {
   module: ModuleContent;
@@ -209,6 +211,8 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
                   to={m.path}
                   className={`cover-rail-module-item ${isCurrent ? 'is-active' : ''}`}
                   aria-label={`Module ${m.num} ${m.title}`}
+                  onMouseEnter={() => prefetchModule(m.id)}
+                  onFocus={() => prefetchModule(m.id)}
                 >
                   <span className="cover-rail-bullet">
                     {isCurrent && <span className="cover-rail-bullet-inner" />}
@@ -269,7 +273,7 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
         {/* PINNED CINEMATIC TRANSITION: COVER → CHAPTER 01 (landing hero→motivation style) */}
         <LandIntroTransition onEnter={() => scrollToChapter(1)} />
 
-        {/* SCREEN 02: EARTH FORMATION */}
+        {/* SCREEN 02: EARTH FORMATION (Always eager for instant entry) */}
         <EarthFormationScreen
           onPrev={() => scrollToChapter(0)}
           onNext={() => scrollToChapter(2)}
@@ -277,94 +281,120 @@ export default function LandModuleExperience({ module: _module }: LandModuleProp
         />
 
         {/* SCREEN 03: EARTH LAYERS */}
-        <EarthLayersScreen
-          onPrev={() => scrollToChapter(1)}
-          onNext={() => scrollToChapter(3)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-layers">
+          <EarthLayersScreen
+            onPrev={() => scrollToChapter(1)}
+            onNext={() => scrollToChapter(3)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 04: CRUST & CONTINENTS */}
-        <CrustContinentsScreen
-          onPrev={() => scrollToChapter(2)}
-          onNext={() => scrollToChapter(4)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-continents">
+          <CrustContinentsScreen
+            onPrev={() => scrollToChapter(2)}
+            onNext={() => scrollToChapter(4)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 05: LAND AS A RESOURCE */}
-        <LandResourceScreen
-          onPrev={() => scrollToChapter(3)}
-          onNext={() => scrollToChapter(5)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-resource">
+          <LandResourceScreen
+            onPrev={() => scrollToChapter(3)}
+            onNext={() => scrollToChapter(5)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 06: SOIL FORMATION */}
-        <SoilFormationScreen
-          onPrev={() => scrollToChapter(4)}
-          onNext={() => scrollToChapter(6)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-soil">
+          <SoilFormationScreen
+            onPrev={() => scrollToChapter(4)}
+            onNext={() => scrollToChapter(6)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 07: LAND FORMS */}
-        <LandFormsScreen
-          onPrev={() => scrollToChapter(5)}
-          onNext={() => scrollToChapter(7)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-landforms">
+          <LandFormsScreen
+            onPrev={() => scrollToChapter(5)}
+            onNext={() => scrollToChapter(7)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 08: CONSERVATION OF LAND FORMS */}
-        <ConservationScreen
-          onPrev={() => scrollToChapter(6)}
-          onNext={() => scrollToChapter(8)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-conservation">
+          <ConservationScreen
+            onPrev={() => scrollToChapter(6)}
+            onNext={() => scrollToChapter(8)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 09: DEFORESTATION */}
-        <DeforestationScreen
-          onPrev={() => scrollToChapter(7)}
-          onNext={() => scrollToChapter(9)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-deforestation">
+          <DeforestationScreen
+            onPrev={() => scrollToChapter(7)}
+            onNext={() => scrollToChapter(9)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 10: LAND-USE CHANGE */}
-        <LandUseChangeScreen
-          onPrev={() => scrollToChapter(8)}
-          onNext={() => scrollToChapter(10)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-landuse">
+          <LandUseChangeScreen
+            onPrev={() => scrollToChapter(8)}
+            onNext={() => scrollToChapter(10)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 11: SOIL HEALTH & COMPOSITION */}
-        <SoilHealthScreen
-          onPrev={() => scrollToChapter(9)}
-          onNext={() => scrollToChapter(11)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-soilhealth">
+          <SoilHealthScreen
+            onPrev={() => scrollToChapter(9)}
+            onNext={() => scrollToChapter(11)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 12: LAND DEGRADATION */}
-        <LandDegradationScreen
-          onPrev={() => scrollToChapter(10)}
-          onNext={() => scrollToChapter(12)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-degradation">
+          <LandDegradationScreen
+            onPrev={() => scrollToChapter(10)}
+            onNext={() => scrollToChapter(12)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 13: SOIL CONSERVATION */}
-        <SoilConservationScreen
-          onPrev={() => scrollToChapter(11)}
-          onNext={() => scrollToChapter(13)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-soilconservation">
+          <SoilConservationScreen
+            onPrev={() => scrollToChapter(11)}
+            onNext={() => scrollToChapter(13)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 14: SUSTAINABLE LAND-USE PLANNING */}
-        <LandPlanningScreen
-          onPrev={() => scrollToChapter(12)}
-          onNext={() => scrollToChapter(14)}
-          onJumpChapter={scrollToChapter}
-        />
+        <LazyScreen id="ch-planning">
+          <LandPlanningScreen
+            onPrev={() => scrollToChapter(12)}
+            onNext={() => scrollToChapter(14)}
+            onJumpChapter={scrollToChapter}
+          />
+        </LazyScreen>
 
         {/* SCREEN 15: MODULE SUMMARY & QUIZ CALL TO ACTION */}
-        <ModuleSummaryScreen
-          onPrev={() => scrollToChapter(13)}
-          onSelectChapter={(idx) => scrollToChapter(idx)}
-        />
+        <LazyScreen id="ch-summary">
+          <ModuleSummaryScreen
+            onPrev={() => scrollToChapter(13)}
+            onSelectChapter={(idx) => scrollToChapter(idx)}
+          />
+        </LazyScreen>
 
         {/* Cross-module navigation cards (jump to Water / Air / Bio / Warming) */}
         <ModuleCardsStrip currentSlug="land" />
