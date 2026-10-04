@@ -25,6 +25,37 @@ interface GlobeSceneProps {
   globeGroupRef: React.RefObject<THREE.Group | null>;
 }
 
+/**
+ * Procedural lithospheric crust strata texture for the cut rim:
+ * Generates geological rock layers (sediment, continental granite, oceanic basalt)
+ * without stretching or distorting a world map over a thin rim.
+ */
+function createCrustStrataTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d')!;
+
+  const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  grad.addColorStop(0.0, '#44403c'); // Oceanic Basalt
+  grad.addColorStop(0.35, '#78716c'); // Gabbro/Lower Crust
+  grad.addColorStop(0.7, '#a8a29e'); // Continental Granite
+  grad.addColorStop(1.0, '#d6c7a1'); // Surface Sedimentary / Weathered Sandstone
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < 240; i++) {
+    const rx = Math.random() * canvas.width;
+    const ry = Math.random() * canvas.height;
+    ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.09)' : 'rgba(28, 25, 23, 0.1)';
+    ctx.fillRect(rx, ry, 1 + Math.random() * 2, 1);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
 function GlobeCutawayScene({
   selectedLayer,
   onSelectLayer,
@@ -60,7 +91,7 @@ function GlobeCutawayScene({
     return tex;
   }, [textureLoader]);
 
-  // Molten magma / mantle convective texture (outer core)
+  // Molten magma / convective cellular texture for outer core (restoring the cellular magma structure)
   const magmaTex = useMemo(() => {
     const tex = textureLoader.load('/textures/stage-03-magma-sphere.jpg', (t) => {
       t.needsUpdate = true;
@@ -71,7 +102,7 @@ function GlobeCutawayScene({
     return tex;
   }, [textureLoader]);
 
-  // Accretion / incandescent metallic texture (inner core)
+  // Incandescent crystalline iron-nickel texture for inner core
   const innerCoreTex = useMemo(() => {
     const tex = textureLoader.load('/textures/stage-02-accretion-sphere.jpg', (t) => {
       t.needsUpdate = true;
@@ -82,7 +113,7 @@ function GlobeCutawayScene({
     return tex;
   }, [textureLoader]);
 
-  // Cooling silicate / semi-solid rock texture (mantle)
+  // Cooling silicate tectonic / cracked magma texture for mantle (restoring the mantle fissure structure)
   const mantleTex = useMemo(() => {
     const tex = textureLoader.load('/textures/stage-04-cooling-sphere.jpg', (t) => {
       t.needsUpdate = true;
@@ -92,6 +123,9 @@ function GlobeCutawayScene({
     tex.wrapT = THREE.RepeatWrapping;
     return tex;
   }, [textureLoader]);
+
+  // Crust strata cross-section texture for the cut rim
+  const crustStrataTex = useMemo(() => createCrustStrataTexture(), []);
 
   // Accurately proportioned layer radii:
   // Globe Radius: 1.08 (fits comfortably in 340px viewport)
@@ -210,8 +244,8 @@ function GlobeCutawayScene({
         />
       </mesh>
 
-      {/* Internal Core Thermal Radiance Point Light — kept dim so it doesn't wash out other layers */}
-      <pointLight color="#f59e0b" intensity={activeLayer === 'inner' ? 1.0 : 0.6} distance={3} />
+      {/* Internal Core Thermal Radiance Point Light — localized to inner core cavity */}
+      <pointLight color="#fbbf24" intensity={activeLayer === 'inner' ? 0.6 : 0.3} distance={0.9} />
 
       {/* ── 2. OUTER CORE (3D Liquid Molten Shell with 270° Cutaway) ── */}
       <mesh
@@ -262,6 +296,7 @@ function GlobeCutawayScene({
       </mesh>
 
       {/* ── 4. CRUST & EARTH SURFACE (270° NASA Blue Marble Outer Shell with Continents) ── */}
+      {/* Kept 100% free of orange emissive tint so oceans remain vivid natural blue */}
       <mesh
         onClick={(e) => {
           e.stopPropagation();
@@ -273,17 +308,17 @@ function GlobeCutawayScene({
         }}
         onPointerOut={handlePointerOut}
       >
-        <sphereGeometry args={[globeRadius, 44, 44, cutStart, cutAngle]} />
+        <sphereGeometry args={[globeRadius, 48, 48, cutStart, cutAngle]} />
         <meshStandardMaterial
           map={earthAlbedo}
           bumpMap={earthBump}
-          bumpScale={0.035}
-          roughness={0.5}
-          metalness={0.05}
+          bumpScale={0.025}
+          roughness={0.45}
+          metalness={0.02}
           color="#ffffff"
-          emissive={activeLayer === 'crust' ? '#deb87a' : '#000000'}
-          emissiveIntensity={activeLayer === 'crust' ? 0.18 : 0.0}
-          side={THREE.DoubleSide}
+          emissive="#000000"
+          emissiveIntensity={0}
+          side={THREE.FrontSide}
         />
       </mesh>
 
@@ -301,12 +336,12 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <circleGeometry args={[rInner, 32, -Math.PI * 0.5, Math.PI]} />
+          <circleGeometry args={[rInner, 36, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={innerCoreTex}
             color={activeLayer === 'inner' ? '#ffffff' : '#fffbe6'}
             emissive={activeLayer === 'inner' ? '#ffaa00' : '#f59e0b'}
-            emissiveIntensity={activeLayer === 'inner' ? 2.6 : 1.5}
+            emissiveIntensity={activeLayer === 'inner' ? 2.4 : 1.2}
             roughness={0.2}
             metalness={0.8}
             side={THREE.DoubleSide}
@@ -325,7 +360,7 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rInner, rOuter, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rInner, rOuter, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={magmaTex}
             color={activeLayer === 'outer' ? '#fbbf24' : '#ea580c'}
@@ -349,7 +384,7 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rOuter, rMantle, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rOuter, rMantle, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={mantleTex}
             color={activeLayer === 'mantle' ? '#ea580c' : '#991b1b'}
@@ -373,13 +408,13 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rMantle, globeRadius, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rMantle, globeRadius, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
-            map={earthAlbedo}
-            color={activeLayer === 'crust' ? '#fef08a' : '#a8a29e'}
+            map={crustStrataTex}
+            color={activeLayer === 'crust' ? '#fef08a' : '#d6d3d1'}
             emissive={activeLayer === 'crust' ? '#deb87a' : '#44403c'}
-            emissiveIntensity={activeLayer === 'crust' ? 0.9 : 0.22}
-            roughness={0.85}
+            emissiveIntensity={activeLayer === 'crust' ? 0.8 : 0.15}
+            roughness={0.7}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -399,12 +434,12 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <circleGeometry args={[rInner, 32, -Math.PI * 0.5, Math.PI]} />
+          <circleGeometry args={[rInner, 36, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={innerCoreTex}
             color={activeLayer === 'inner' ? '#ffffff' : '#fffbe6'}
             emissive={activeLayer === 'inner' ? '#ffaa00' : '#f59e0b'}
-            emissiveIntensity={activeLayer === 'inner' ? 2.6 : 1.5}
+            emissiveIntensity={activeLayer === 'inner' ? 2.4 : 1.2}
             roughness={0.2}
             metalness={0.8}
             side={THREE.DoubleSide}
@@ -423,7 +458,7 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rInner, rOuter, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rInner, rOuter, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={magmaTex}
             color={activeLayer === 'outer' ? '#fbbf24' : '#ea580c'}
@@ -447,7 +482,7 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rOuter, rMantle, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rOuter, rMantle, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
             map={mantleTex}
             color={activeLayer === 'mantle' ? '#ea580c' : '#991b1b'}
@@ -471,13 +506,13 @@ function GlobeCutawayScene({
           }}
           onPointerOut={handlePointerOut}
         >
-          <ringGeometry args={[rMantle, globeRadius, 32, 1, -Math.PI * 0.5, Math.PI]} />
+          <ringGeometry args={[rMantle, globeRadius, 48, 1, -Math.PI * 0.5, Math.PI]} />
           <meshStandardMaterial
-            map={earthAlbedo}
-            color={activeLayer === 'crust' ? '#fef08a' : '#a8a29e'}
+            map={crustStrataTex}
+            color={activeLayer === 'crust' ? '#fef08a' : '#d6d3d1'}
             emissive={activeLayer === 'crust' ? '#deb87a' : '#44403c'}
-            emissiveIntensity={activeLayer === 'crust' ? 0.9 : 0.22}
-            roughness={0.85}
+            emissiveIntensity={activeLayer === 'crust' ? 0.8 : 0.15}
+            roughness={0.7}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -627,10 +662,10 @@ export default function InteractiveCutawayEarth({
           dpr={[1, 1.25]}
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         >
-          <ambientLight intensity={0.55} />
-          <directionalLight position={[5, 4, 5]} intensity={1.4} color="#fff8f0" />
-          <directionalLight position={[-3, 1, 3]} intensity={0.5} color="#ffffff" />
-          <directionalLight position={[0, -3, 1]} intensity={0.25} color="#ffffff" />
+          <ambientLight intensity={0.7} color="#f0f9ff" />
+          <directionalLight position={[5, 4, 5]} intensity={1.5} color="#ffffff" />
+          <directionalLight position={[-3, 1, 3]} intensity={0.6} color="#e0f2fe" />
+          <directionalLight position={[0, -3, 1]} intensity={0.3} color="#ffffff" />
 
           <GlobeCutawayScene
             selectedLayer={selectedLayer}

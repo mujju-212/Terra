@@ -50,7 +50,7 @@ html.lenis, html.lenis body {
 
 * { box-sizing: border-box; }
 html { min-width: 320px; background: var(--bg); scroll-padding-top: 92px; }
-body { margin: 0; min-width: 320px; color: var(--text); background: var(--bg); overflow-x: hidden; font-size: 15px; }
+body { margin: 0; min-width: 320px; color: var(--text); background: var(--bg); overflow-x: clip; font-size: 15px; }
 button, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; }
@@ -464,10 +464,59 @@ img, svg { max-width: 100%; }
 
 @media (max-width: 768px) {
   .preloader-left-col {
-    display: none;
+    display: none !important;
   }
   .preloader-mantra {
+    display: none !important;
+  }
+  .preloader-topbar {
+    padding: 12px 16px;
+  }
+  .preloader-brand .brand-title {
     display: none;
+  }
+  .preloader-orbital-ring-wrap {
+    width: min(88vw, 340px);
+    height: min(88vw, 340px);
+  }
+  .preloader-center-content {
+    max-width: 280px;
+    padding: 10px;
+  }
+  .preloader-grand-title {
+    font-size: clamp(22px, 6.2vw, 30px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    word-break: normal;
+  }
+  .preloader-subtitle {
+    font-size: 7.5px;
+    letter-spacing: 0.16em;
+    margin: 0 0 14px;
+    max-width: 240px;
+    line-height: 1.35;
+  }
+  .preloader-percent-badge {
+    top: 12%;
+    right: 14%;
+  }
+  .preloader-percent-badge .percent-num {
+    font-size: 24px;
+  }
+  .preloader-percent-badge .percent-sym {
+    font-size: 13px;
+  }
+  .preloader-course-badge {
+    margin-bottom: 14px;
+    gap: 10px;
+  }
+  .preloader-course-badge .badge-rule {
+    width: 24px;
+  }
+  .preloader-enter-btn {
+    padding: 9px 20px;
+    font-size: 10px;
   }
 }
 
@@ -3847,53 +3896,8 @@ button.step-resource-item {
   .land-screen [class*="backdrop"] { transform: none !important; }
 }
 
-/* ─── LAND MODULE · mobile chapter nav (left rail is hidden below 900px) ─── */
-.land-mobile-chapternav { display: none; }
-@media (max-width: 900px) {
-  .land-mobile-chapternav {
-    display: block;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 95;
-    background: rgba(6, 5, 5, 0.88);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .lmn-track {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 8px 12px;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-  }
-  .lmn-track::-webkit-scrollbar { display: none; }
-  .lmn-item {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #cbbfae;
-    font-family: var(--sans), sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-  }
-  .lmn-item .lmn-num { font-weight: 700; opacity: 0.7; }
-  .lmn-item.is-active {
-    background: rgba(241, 203, 116, 0.15);
-    border-color: rgba(241, 203, 116, 0.5);
-    color: #f1cb74;
-  }
-  .land-screens-container { padding-top: 52px; }
-}
+/* ─── LAND MODULE · mobile chapter nav (Replaced by floating MobileChapterBar) ─── */
+.land-mobile-chapternav { display: none !important; }
 
 /* ─── LAND MODULE · pinned cover→chapter-01 cinematic transition ─── */
 .land-intro-transition {
@@ -5774,6 +5778,39 @@ button.step-resource-item {
   border-color: #deb87a;
   box-shadow: 0 0 12px rgba(222, 184, 122, 0.75);
   transform: scale(1.15);
+}
+
+@media (max-width: 768px) {
+  .stage-modal-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .stage-modal-container {
+    width: 100% !important;
+    max-height: 90vh !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+  .stage-modal-hero {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 10px 14px !important;
+  }
+  .modal-hero-thumb {
+    width: 100% !important;
+    height: 120px !important;
+  }
+  .stage-modal-header {
+    padding: 10px 14px !important;
+  }
+  .stage-modal-footer {
+    padding: 10px 14px !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .modal-footer-nav-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 }
 
 /* ─── SCREEN 03: EARTH LAYERS CUTAWAY (Image Reference: media_1790686074600.jpg) ─── */
@@ -8182,13 +8219,22 @@ button.step-resource-item {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .land-left-rail {
-    display: none;
+    display: none !important;
   }
   .land-screens-container {
-    margin-left: 0;
-    width: 100%;
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .land-screens-container > section:not(.land-cover-screen):not(.land-intro-transition),
+  .land-screen:not(.land-cover-screen) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    border-left: none !important;
+  }
+  .cover-script-accent {
+    display: none !important;
   }
   .formation-cards-row, .timeline-nodes-row {
     grid-template-columns: repeat(2, 1fr);
@@ -8197,10 +8243,19 @@ button.step-resource-item {
     grid-template-columns: 1fr;
   }
   .continents-scroll-strip {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
   .cover-bottom-strip {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+  .cover-bottom-strip .cover-preview-card {
+    flex: 0 0 82%;
+    min-width: 250px;
+    scroll-snap-align: start;
   }
 }
 
@@ -10402,14 +10457,12 @@ button, a, [role="button"] {
   touch-action: manipulation;
 }
 
-/* ── 7. Pop-up / Modal Scroll Lock Safety ────────────────────────────────── 
-   When a modal or info panel is open, body scroll is locked.
-   Prevents the gap/jump that appears when scrollbar disappears.
+/* ── 7. Pop-up / Modal Dual-Scroll Support ────────────────────────────────── 
+   Allows both modal and background page to be scrolled simultaneously.
    ────────────────────────────────────────────────────────────────────────── */
 body.modal-open,
 body.scroll-locked {
-  overflow: hidden;
-  padding-right: var(--scrollbar-width, 0px); /* compensate for lost scrollbar */
+  overflow-y: auto;
 }
 
 /* ── 8. Scrollbar Width Detection ────────────────────────────────────────── */

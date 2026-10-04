@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import type { Chapter, ModuleContent } from '../content/types';
 import ChapterVisual from '../visuals/ChapterVisual';
 import ModuleCardsStrip from '../components/ModuleCardsStrip';
+import MobileChapterBar from '../components/MobileChapterBar';
 
 function useNearViewport() {
   const [visible, setVisible] = useState(false);
@@ -102,6 +103,7 @@ const LandModuleExperience  = lazy(() => import('./LandModuleExperience'));
 const WaterModuleExperience = lazy(() => import('./WaterModuleExperience'));
 const AirModuleExperience   = lazy(() => import('./AirModuleExperience'));
 const BioModuleExperience   = lazy(() => import('./BioModuleExperience'));
+const WarmingModuleExperience = lazy(() => import('./WarmingModuleExperience'));
 
 function ModuleExperienceShell({ children }: { children: React.ReactNode }) {
   return (
@@ -147,6 +149,14 @@ export default function ModulePage({ module }: { module: ModuleContent }) {
       </ModuleExperienceShell>
     );
   }
+  if (module.slug === 'warming') {
+    return (
+      <ModuleExperienceShell>
+        <WarmingModuleExperience module={module} />
+      </ModuleExperienceShell>
+    );
+  }
+
 
   const reducedMotion = useReducedMotion();
   const [active, setActive] = useState(0);
@@ -181,5 +191,12 @@ export default function ModulePage({ module }: { module: ModuleContent }) {
       </div>
     </div>
     <ModuleCardsStrip currentSlug={module.slug} />
+    <MobileChapterBar
+      chapters={chapters}
+      activeChapterIndex={active}
+      onSelectChapter={selectChapter}
+      accentColor={module.accent}
+      moduleName={`Module 0${module.id}: ${module.shortName}`}
+    />
   </main>;
 }

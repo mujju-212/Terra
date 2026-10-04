@@ -114,17 +114,6 @@ export default function Resources() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [fullscreen]);
 
-  // Lock body scroll in fullscreen
-  useEffect(() => {
-    if (fullscreen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [fullscreen]);
 
   // Filter modules based on search query
   const filteredModules = MODULE_RESOURCES.filter((mod) => {

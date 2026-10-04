@@ -43,7 +43,7 @@ function NotFound() {
  * Delivers buttery, 60fps inertia scrolling across the entire landing page and app.
  */
 function SmoothScrollManager() {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = false;
   const { pathname, hash } = useLocation();
 
   useEffect(() => {

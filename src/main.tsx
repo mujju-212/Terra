@@ -9,6 +9,7 @@ import './bio-visuals.css';
 import './warming-visuals.css';
 import './responsive-visuals.css';
 import './conservation-visuals.css';
+import './mobile-responsive.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

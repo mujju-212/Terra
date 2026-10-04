@@ -292,10 +292,11 @@ const howResources = [
 export default function Landing() {
   const [preloaderDone, setPreloaderDone] = useState(false);
   const [activeHeroWorldIndex, setActiveHeroWorldIndex] = useState(0);
+  const [selectedHowResource, setSelectedHowResource] = useState(0);
   const [isMotivationActive, setIsMotivationActive] = useState(false);
   const [metricsStarted, setMetricsStarted] = useState(false);
-  const [selectedHowResource, setSelectedHowResource] = useState(0);
-  const reduced = useReducedMotion();
+  // Ensure the showcase cinematic scrollytelling always runs on both mobile and desktop
+  const reduced = false;
 
   const universeRef = useRef<HTMLDivElement>(null);
   const modulesRef = useRef<HTMLElement>(null);
